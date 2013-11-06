@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D336E22D182AE174009271CD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E22C182AE174009271CD /* Cocoa.framework */; };
 		D336E237182AE174009271CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D336E235182AE174009271CD /* InfoPlist.strings */; };
 		D336E23B182AE174009271CD /* GSSKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E23A182AE174009271CD /* GSSKit.m */; };
 		D336E242182AE174009271CD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E241182AE174009271CD /* XCTest.framework */; };
@@ -15,6 +14,12 @@
 		D336E246182AE174009271CD /* GSSKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E229182AE174009271CD /* GSSKit.framework */; };
 		D336E24C182AE174009271CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D336E24A182AE174009271CD /* InfoPlist.strings */; };
 		D336E24E182AE174009271CD /* GSSKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E24D182AE174009271CD /* GSSKitTests.m */; };
+		D336E258182AE1C8009271CD /* GSSItem.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E257182AE1C8009271CD /* GSSItem.h */; };
+		D336E25E182AE283009271CD /* GSSPlaceholderItem.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E25C182AE283009271CD /* GSSPlaceholderItem.h */; };
+		D336E25F182AE283009271CD /* GSSPlaceholderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E25D182AE283009271CD /* GSSPlaceholderItem.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D336E260182AE3B5009271CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E22F182AE174009271CD /* Foundation.framework */; };
+		D336E262182AE3B5009271CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E261182AE3B5009271CD /* CoreFoundation.framework */; };
+		D336E264182AE3D1009271CD /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E263182AE3D1009271CD /* GSS.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +48,11 @@
 		D336E249182AE174009271CD /* GSSKitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GSSKitTests-Info.plist"; sourceTree = "<group>"; };
 		D336E24B182AE174009271CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D336E24D182AE174009271CD /* GSSKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSSKitTests.m; sourceTree = "<group>"; };
+		D336E257182AE1C8009271CD /* GSSItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSItem.h; sourceTree = "<group>"; };
+		D336E25C182AE283009271CD /* GSSPlaceholderItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSPlaceholderItem.h; sourceTree = "<group>"; };
+		D336E25D182AE283009271CD /* GSSPlaceholderItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSPlaceholderItem.m; sourceTree = "<group>"; };
+		D336E261182AE3B5009271CD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		D336E263182AE3D1009271CD /* GSS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GSS.framework; path = System/Library/Frameworks/GSS.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +60,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D336E22D182AE174009271CD /* Cocoa.framework in Frameworks */,
+				D336E264182AE3D1009271CD /* GSS.framework in Frameworks */,
+				D336E262182AE3B5009271CD /* CoreFoundation.framework in Frameworks */,
+				D336E260182AE3B5009271CD /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +101,8 @@
 		D336E22B182AE174009271CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D336E263182AE3D1009271CD /* GSS.framework */,
+				D336E261182AE3B5009271CD /* CoreFoundation.framework */,
 				D336E22C182AE174009271CD /* Cocoa.framework */,
 				D336E241182AE174009271CD /* XCTest.framework */,
 				D336E22E182AE174009271CD /* Other Frameworks */,
@@ -109,6 +123,9 @@
 		D336E232182AE174009271CD /* GSSKit */ = {
 			isa = PBXGroup;
 			children = (
+				D336E25C182AE283009271CD /* GSSPlaceholderItem.h */,
+				D336E25D182AE283009271CD /* GSSPlaceholderItem.m */,
+				D336E257182AE1C8009271CD /* GSSItem.h */,
 				D336E239182AE174009271CD /* GSSKit.h */,
 				D336E23A182AE174009271CD /* GSSKit.m */,
 				D336E233182AE174009271CD /* Supporting Files */,
@@ -151,6 +168,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D336E258182AE1C8009271CD /* GSSItem.h in Headers */,
+				D336E25E182AE283009271CD /* GSSPlaceholderItem.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D336E25F182AE283009271CD /* GSSPlaceholderItem.m in Sources */,
 				D336E23B182AE174009271CD /* GSSKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
