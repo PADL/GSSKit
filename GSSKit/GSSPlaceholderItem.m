@@ -105,12 +105,12 @@
     return res;
 }
 
-- (BOOL)performOperation:(GSSOperation)op
-             withOptions:(NSDictionary *)options
-           dispatchQueue:(dispatch_queue_t)queue
-           callbackBlock:(GSSItemOperationCallbackBlock)fun
+- (BOOL)_performOperation:(NSObject *)op
+              withOptions:(NSDictionary *)options
+            dispatchQueue:(dispatch_queue_t)queue
+            callbackBlock:(void (^)(NSObject *, NSError *))fun
 {
-    return GSSItemOperation((GSSItemRef)self, op, (CFDictionaryRef)options, queue, fun);
+    return GSSItemOperation((GSSItemRef)self, (CFTypeRef)op, (CFDictionaryRef)options, queue, (GSSItemOperationCallbackBlock)fun);
 }
 
 - (id)valueForKey:(NSString *)key
