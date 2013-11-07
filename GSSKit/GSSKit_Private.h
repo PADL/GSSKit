@@ -8,4 +8,11 @@
 
 #import "GSSKit.h"
 #import "GSSPlaceholderItem.h"
+#import "GSSPlaceholderName.h"
+#import "GSSPlaceholderCredential.h"
 #import "GSSItem_Private.h"
+
+@interface NSError (GSSKit)
++ (NSError *)gssError:(OM_uint32)majorStatus :(OM_uint32)minorStatus;
++ (NSError *)gssError:(OM_uint32)majorStatus;
+@end

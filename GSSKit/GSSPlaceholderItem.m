@@ -9,6 +9,7 @@
 #import "GSSKit_Private.h"
 
 // GSSPlaceholderItem concrete CF class wrapper
+// not built with ARC
 
 @implementation GSSPlaceholderItem
 

@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+#import <GSS/gssapi.h>
+#import <GSS/gssapi_apple.h>
+
 #import <GSSKit/GSSItem.h>
 #import <GSSKit/GSSItem+AsyncOperations.h>
 #import <GSSKit/GSSItem+SyncOperations.h>
+#import <GSSKit/GSSName.h>
+#import <GSSKit/GSSCredential.h>

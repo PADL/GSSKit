@@ -73,15 +73,6 @@ static GSSItem *placeholderItem;
     return nil;
 }
 
-- (BOOL)_performOperation:(NSObject *)op
-              withOptions:(NSDictionary *)options
-                    queue:(dispatch_queue_t)queue
-        completionHandler:(void (^)(NSObject *, NSError *))fun
-{
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return NO;
-}
-
 - (id)valueForKey:(NSString *)key
 {
     NSAssert(NO, @"Must implement a complete subclass of GSSItem");

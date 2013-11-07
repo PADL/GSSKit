@@ -14,17 +14,25 @@
 		D336E246182AE174009271CD /* GSSKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E229182AE174009271CD /* GSSKit.framework */; };
 		D336E24C182AE174009271CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D336E24A182AE174009271CD /* InfoPlist.strings */; };
 		D336E24E182AE174009271CD /* GSSKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E24D182AE174009271CD /* GSSKitTests.m */; };
-		D336E258182AE1C8009271CD /* GSSItem.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E257182AE1C8009271CD /* GSSItem.h */; };
+		D336E258182AE1C8009271CD /* GSSItem.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E257182AE1C8009271CD /* GSSItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D336E25E182AE283009271CD /* GSSPlaceholderItem.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E25C182AE283009271CD /* GSSPlaceholderItem.h */; };
 		D336E25F182AE283009271CD /* GSSPlaceholderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E25D182AE283009271CD /* GSSPlaceholderItem.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D336E260182AE3B5009271CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E22F182AE174009271CD /* Foundation.framework */; };
 		D336E262182AE3B5009271CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E261182AE3B5009271CD /* CoreFoundation.framework */; };
 		D336E264182AE3D1009271CD /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E263182AE3D1009271CD /* GSS.framework */; };
-		D336E267182AF7DA009271CD /* GSSItem+SyncOperations.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E265182AF7D9009271CD /* GSSItem+SyncOperations.h */; };
+		D336E267182AF7DA009271CD /* GSSItem+SyncOperations.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E265182AF7D9009271CD /* GSSItem+SyncOperations.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D336E268182AF7DA009271CD /* GSSItem+SyncOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E266182AF7D9009271CD /* GSSItem+SyncOperations.m */; };
 		D336E26A182B4CF2009271CD /* GSSItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E269182B4CF2009271CD /* GSSItem.m */; };
-		D336E26E182B4E7E009271CD /* GSSItem+AsyncOperations.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E26C182B4E7E009271CD /* GSSItem+AsyncOperations.h */; };
+		D336E26E182B4E7E009271CD /* GSSItem+AsyncOperations.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E26C182B4E7E009271CD /* GSSItem+AsyncOperations.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D336E26F182B4E7E009271CD /* GSSItem+AsyncOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E26D182B4E7E009271CD /* GSSItem+AsyncOperations.m */; };
+		D336E2B3182BA713009271CD /* GSSName.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2B1182BA713009271CD /* GSSName.h */; };
+		D336E2B4182BA713009271CD /* GSSName.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2B2182BA713009271CD /* GSSName.m */; };
+		D336E2B7182BA733009271CD /* GSSCredential.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2B5182BA733009271CD /* GSSCredential.h */; };
+		D336E2B8182BA733009271CD /* GSSCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2B6182BA733009271CD /* GSSCredential.m */; };
+		D336E2BB182BA748009271CD /* GSSPlaceholderName.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2B9182BA748009271CD /* GSSPlaceholderName.h */; };
+		D336E2BC182BA748009271CD /* GSSPlaceholderName.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2BA182BA748009271CD /* GSSPlaceholderName.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D336E2BF182BA75B009271CD /* GSSPlaceholderCredential.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2BD182BA75B009271CD /* GSSPlaceholderCredential.h */; };
+		D336E2C0182BA75B009271CD /* GSSPlaceholderCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2BE182BA75B009271CD /* GSSPlaceholderCredential.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +73,14 @@
 		D336E26C182B4E7E009271CD /* GSSItem+AsyncOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GSSItem+AsyncOperations.h"; sourceTree = "<group>"; };
 		D336E26D182B4E7E009271CD /* GSSItem+AsyncOperations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GSSItem+AsyncOperations.m"; sourceTree = "<group>"; };
 		D336E2AB182B52BF009271CD /* GSSItem_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSSItem_Private.h; sourceTree = "<group>"; };
+		D336E2B1182BA713009271CD /* GSSName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSName.h; sourceTree = "<group>"; };
+		D336E2B2182BA713009271CD /* GSSName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSName.m; sourceTree = "<group>"; };
+		D336E2B5182BA733009271CD /* GSSCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSCredential.h; sourceTree = "<group>"; };
+		D336E2B6182BA733009271CD /* GSSCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSCredential.m; sourceTree = "<group>"; };
+		D336E2B9182BA748009271CD /* GSSPlaceholderName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSPlaceholderName.h; sourceTree = "<group>"; };
+		D336E2BA182BA748009271CD /* GSSPlaceholderName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSPlaceholderName.m; sourceTree = "<group>"; };
+		D336E2BD182BA75B009271CD /* GSSPlaceholderCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSPlaceholderCredential.h; sourceTree = "<group>"; };
+		D336E2BE182BA75B009271CD /* GSSPlaceholderCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSPlaceholderCredential.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,16 +152,24 @@
 			isa = PBXGroup;
 			children = (
 				D336E25C182AE283009271CD /* GSSPlaceholderItem.h */,
+				D336E25D182AE283009271CD /* GSSPlaceholderItem.m */,
+				D336E2B9182BA748009271CD /* GSSPlaceholderName.h */,
+				D336E2BA182BA748009271CD /* GSSPlaceholderName.m */,
+				D336E2BD182BA75B009271CD /* GSSPlaceholderCredential.h */,
+				D336E2BE182BA75B009271CD /* GSSPlaceholderCredential.m */,
 				D336E26B182B4D21009271CD /* GSSKit_Private.h */,
 				D336E265182AF7D9009271CD /* GSSItem+SyncOperations.h */,
 				D336E266182AF7D9009271CD /* GSSItem+SyncOperations.m */,
-				D336E25D182AE283009271CD /* GSSPlaceholderItem.m */,
 				D336E269182B4CF2009271CD /* GSSItem.m */,
 				D336E257182AE1C8009271CD /* GSSItem.h */,
 				D336E2AB182B52BF009271CD /* GSSItem_Private.h */,
 				D336E26C182B4E7E009271CD /* GSSItem+AsyncOperations.h */,
 				D336E26D182B4E7E009271CD /* GSSItem+AsyncOperations.m */,
 				D336E239182AE174009271CD /* GSSKit.h */,
+				D336E2B1182BA713009271CD /* GSSName.h */,
+				D336E2B2182BA713009271CD /* GSSName.m */,
+				D336E2B5182BA733009271CD /* GSSCredential.h */,
+				D336E2B6182BA733009271CD /* GSSCredential.m */,
 				D336E23A182AE174009271CD /* GSSKit.m */,
 				D336E233182AE174009271CD /* Supporting Files */,
 			);
@@ -187,10 +211,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D336E2B3182BA713009271CD /* GSSName.h in Headers */,
+				D336E2B7182BA733009271CD /* GSSCredential.h in Headers */,
 				D336E26E182B4E7E009271CD /* GSSItem+AsyncOperations.h in Headers */,
+				D336E2BF182BA75B009271CD /* GSSPlaceholderCredential.h in Headers */,
 				D336E258182AE1C8009271CD /* GSSItem.h in Headers */,
-				D336E25E182AE283009271CD /* GSSPlaceholderItem.h in Headers */,
+				D336E2BB182BA748009271CD /* GSSPlaceholderName.h in Headers */,
 				D336E267182AF7DA009271CD /* GSSItem+SyncOperations.h in Headers */,
+				D336E25E182AE283009271CD /* GSSPlaceholderItem.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,8 +317,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D336E2BC182BA748009271CD /* GSSPlaceholderName.m in Sources */,
+				D336E2B8182BA733009271CD /* GSSCredential.m in Sources */,
 				D336E26F182B4E7E009271CD /* GSSItem+AsyncOperations.m in Sources */,
 				D336E26A182B4CF2009271CD /* GSSItem.m in Sources */,
+				D336E2C0182BA75B009271CD /* GSSPlaceholderCredential.m in Sources */,
+				D336E2B4182BA713009271CD /* GSSName.m in Sources */,
 				D336E268182AF7DA009271CD /* GSSItem+SyncOperations.m in Sources */,
 				D336E25F182AE283009271CD /* GSSPlaceholderItem.m in Sources */,
 				D336E23B182AE174009271CD /* GSSKit.m in Sources */,
