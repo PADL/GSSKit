@@ -8,6 +8,3 @@
 
 #import "GSSKit.h"
 
-@implementation GSSKit
-
-@end

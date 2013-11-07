@@ -18,10 +18,14 @@
 
 - (id)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error;
 - (BOOL)delete:(NSError **)error;
-- (BOOL)_performOperation:(NSObject *)op
+- (BOOL)_performOperation:(const NSObject *)op
               withOptions:(NSDictionary *)options
             dispatchQueue:(dispatch_queue_t)queue
             callbackBlock:(void (^)(NSObject *, NSError *))fun;
 - (id)valueForKey:(NSString *)key;
+
+@end
+
+@interface GSSPlaceholderItem : GSSItem
 
 @end
