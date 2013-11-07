@@ -10,4 +10,6 @@
 
 #import "GSSItem.h"
 #import "GSSItem+SyncOperations.h"
+#import "GSSItem+AsyncOperations.h"
+
 #import "GSSPlaceholderItem.h"
