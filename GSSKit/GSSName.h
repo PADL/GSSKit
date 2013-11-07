@@ -11,8 +11,9 @@
                  nameType:(gss_const_OID)nameType
                     error:(NSError **)error;
 
-- (id)initWithName:(GSSName *)name
-         mechanism:(gss_const_OID)desiredMech
-        attributes:(NSDictionary *)attributes
-             error:(NSError **)error;
++ (GSSName *)nameWithHostBasedService: (NSString *)service withHostName: (NSString *)hostname;
++ (GSSName *)nameWithUserName: (NSString *)username;
+- (NSData *)exportName;
+- (NSString *)description;
+
 @end

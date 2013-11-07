@@ -43,4 +43,35 @@ static GSSName *placeholderName;
     return nil;
 }
 
++ (GSSName *)nameWithHostBasedService:(NSString *)service withHostName:(NSString *)hostname
+{
+    NSString *name;
+    NSError *error;
+    
+    name = [NSString stringWithFormat:@"%@@%@", service, hostname];
+    
+    return [self nameWithData:[name dataUsingEncoding:NSUTF8StringEncoding]
+                     nameType:GSS_C_NT_HOSTBASED_SERVICE error:&error];
+}
+
++ (GSSName *)nameWithUserName:(NSString *)username
+{
+    NSError *error;
+    
+    return [self nameWithData:[username dataUsingEncoding:NSUTF8StringEncoding]
+                     nameType:GSS_C_NT_USER_NAME error:&error];
+}
+
+- (NSData *)exportName
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSName");
+    return nil;
+}
+
+- (NSString *)description
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSName");
+    return nil;
+}
+
 @end

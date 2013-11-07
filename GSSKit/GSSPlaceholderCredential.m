@@ -8,6 +8,8 @@
 
 #import "GSSKit_Private.h"
 
+// ARC disabled
+
 @implementation GSSPlaceholderCredential
 
 #pragma mark Initialization

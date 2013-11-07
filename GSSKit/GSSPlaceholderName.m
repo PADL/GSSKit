@@ -8,6 +8,8 @@
 
 #import "GSSKit_Private.h"
 
+// ARC disabled
+
 @implementation GSSPlaceholderName
 
 #pragma mark Initialization
@@ -54,6 +56,44 @@
 - (NSUInteger)retainCount
 {
     return CFGetRetainCount((CFTypeRef)self);
+}
+
+#pragma make Concrete
+
+- (NSData *)exportName
+{
+    OM_uint32 major, minor;
+    gss_buffer_desc exportedName = GSS_C_EMPTY_BUFFER;
+    NSData *data;
+    
+    major = gss_export_name(&minor, (gss_name_t)self, &exportedName);
+    if (GSS_ERROR(major))
+        return nil;
+    
+    data = [NSData dataWithBytes:exportedName.value length:exportedName.length];
+    
+    gss_release_buffer(&minor, &exportedName);
+    
+    return data;
+}
+
+- (NSString *)description
+{
+    OM_uint32 major, minor;
+    gss_buffer_desc displayName = GSS_C_EMPTY_BUFFER;
+    NSString *desc;
+    gss_OID oid;
+    
+    major = gss_display_name(&minor, (gss_name_t)self, &displayName, &oid);
+    if (GSS_ERROR(major))
+        return nil;
+    
+    // hope this is NUL terminated
+    desc = [NSString stringWithUTF8String:displayName.value];
+    
+    gss_release_buffer(&minor, &displayName);
+    
+    return desc;
 }
 
 @end
