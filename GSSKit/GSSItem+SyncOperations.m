@@ -3,11 +3,10 @@
 //  GSSKit
 //
 //  Created by Luke Howard on 7/11/2013.
-//  Copyright (c) 2013 PADL. All rights reserved.
+//  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
-#import "GSSItem+SyncOperations.h"
-#import "GSSItem.h"
+#import "GSSKit_Private.h"
 
 @implementation GSSItem (SyncOperations)
 - (id)_performOperationSynchronously:(const NSObject *)op
@@ -16,13 +15,14 @@
 {
     BOOL bResult;
     __block id object = nil;
+    dispatch_queue_t queue = dispatch_queue_create("com.padl.GSSItemOperationQueue", NULL);
     
     *error = nil;
     
     bResult = [self _performOperation:op
                           withOptions:options
-                        dispatchQueue:dispatch_get_current_queue()
-                        callbackBlock:^(NSObject *o, NSError *e) {
+                                queue:queue
+                    completionHandler:^(NSObject *o, NSError *e) {
                             object = o;
                             *error = e;
                         }];

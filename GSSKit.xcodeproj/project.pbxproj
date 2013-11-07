@@ -22,6 +22,7 @@
 		D336E264182AE3D1009271CD /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E263182AE3D1009271CD /* GSS.framework */; };
 		D336E267182AF7DA009271CD /* GSSItem+SyncOperations.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E265182AF7D9009271CD /* GSSItem+SyncOperations.h */; };
 		D336E268182AF7DA009271CD /* GSSItem+SyncOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E266182AF7D9009271CD /* GSSItem+SyncOperations.m */; };
+		D336E26A182B4CF2009271CD /* GSSItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E269182B4CF2009271CD /* GSSItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,8 @@
 		D336E263182AE3D1009271CD /* GSS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GSS.framework; path = System/Library/Frameworks/GSS.framework; sourceTree = SDKROOT; };
 		D336E265182AF7D9009271CD /* GSSItem+SyncOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GSSItem+SyncOperations.h"; sourceTree = "<group>"; };
 		D336E266182AF7D9009271CD /* GSSItem+SyncOperations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GSSItem+SyncOperations.m"; sourceTree = "<group>"; };
+		D336E269182B4CF2009271CD /* GSSItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSItem.m; sourceTree = "<group>"; };
+		D336E26B182B4D21009271CD /* GSSKit_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSSKit_Private.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,9 +131,11 @@
 			isa = PBXGroup;
 			children = (
 				D336E25C182AE283009271CD /* GSSPlaceholderItem.h */,
+				D336E26B182B4D21009271CD /* GSSKit_Private.h */,
 				D336E265182AF7D9009271CD /* GSSItem+SyncOperations.h */,
 				D336E266182AF7D9009271CD /* GSSItem+SyncOperations.m */,
 				D336E25D182AE283009271CD /* GSSPlaceholderItem.m */,
+				D336E269182B4CF2009271CD /* GSSItem.m */,
 				D336E257182AE1C8009271CD /* GSSItem.h */,
 				D336E239182AE174009271CD /* GSSKit.h */,
 				D336E23A182AE174009271CD /* GSSKit.m */,
@@ -226,7 +231,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0500;
-				ORGANIZATIONNAME = PADL;
+				ORGANIZATIONNAME = "PADL Software Pty Ltd";
 				TargetAttributes = {
 					D336E23F182AE174009271CD = {
 						TestTargetID = D336E228182AE174009271CD;
@@ -275,6 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D336E26A182B4CF2009271CD /* GSSItem.m in Sources */,
 				D336E268182AF7DA009271CD /* GSSItem+SyncOperations.m in Sources */,
 				D336E25F182AE283009271CD /* GSSPlaceholderItem.m in Sources */,
 				D336E23B182AE174009271CD /* GSSKit.m in Sources */,
@@ -476,6 +482,7 @@
 				D336E253182AE174009271CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D336E254182AE174009271CD /* Build configuration list for PBXNativeTarget "GSSKitTests" */ = {
 			isa = XCConfigurationList;
@@ -484,6 +491,7 @@
 				D336E256182AE174009271CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

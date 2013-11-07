@@ -3,10 +3,10 @@
 //  GSSKit
 //
 //  Created by Luke Howard on 7/11/2013.
-//  Copyright (c) 2013 PADL. All rights reserved.
+//  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
-#import "GSSPlaceholderItem.h"
+#import "GSSKit_Private.h"
 
 @interface GSSItem (SyncOperations)
 
