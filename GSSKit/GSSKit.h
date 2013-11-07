@@ -14,5 +14,7 @@
 #import <GSSKit/GSSItem.h>
 #import <GSSKit/GSSItem+AsyncOperations.h>
 #import <GSSKit/GSSItem+SyncOperations.h>
+
+#import <GSSKit/GSSMechanism.h>
 #import <GSSKit/GSSName.h>
 #import <GSSKit/GSSCredential.h>

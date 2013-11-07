@@ -16,3 +16,25 @@
 + (NSError *)gssError:(OM_uint32)majorStatus :(OM_uint32)minorStatus;
 + (NSError *)gssError:(OM_uint32)majorStatus;
 @end
+
+@interface NSString (GSSKit)
++ (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer;
+- (gss_buffer_desc)GSSBuffer;
+@end
+
+@interface NSData (GSSKit)
++ (NSData *)dataWithGSSBuffer:(gss_buffer_t)buffer;
+- (gss_buffer_desc)GSSBuffer;
+@end
+
+GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
+gss_inquire_mech_for_saslname(OM_uint32 *minor_status,
+                              const gss_buffer_t sasl_mech_name,
+                              gss_OID *mech_type);
+
+GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
+gss_inquire_saslname_for_mech(OM_uint32 *minor_status,
+                              const gss_OID desired_mech,
+                              gss_buffer_t sasl_mech_name,
+                              gss_buffer_t mech_name,
+                              gss_buffer_t mech_description);

@@ -22,3 +22,39 @@
 }
 
 @end
+
+@implementation NSString (GSSKit)
++ (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer
+{
+    NSData *data = [NSData dataWithGSSBuffer:buffer];
+    
+    return [[self alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
+- (gss_buffer_desc)GSSBuffer
+{
+    gss_buffer_desc buffer;
+    
+    buffer.length = [self lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    buffer.value = (void *)[self UTF8String];
+    
+    return buffer;
+}
+@end
+
+@implementation NSData (GSSKit)
++ (NSData *)dataWithGSSBuffer:(gss_buffer_t)buffer
+{
+    return [NSData dataWithBytes:buffer->value length:buffer->length];
+}
+
+- (gss_buffer_desc)GSSBuffer
+{
+    gss_buffer_desc buffer;
+    
+    buffer.length = [self length];
+    buffer.value = (void *)[self bytes];
+    
+    return buffer;
+}
+@end

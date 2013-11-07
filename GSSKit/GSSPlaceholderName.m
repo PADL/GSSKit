@@ -70,7 +70,7 @@
     if (GSS_ERROR(major))
         return nil;
     
-    data = [NSData dataWithBytes:exportedName.value length:exportedName.length];
+    data = [NSData dataWithGSSBuffer:&exportedName];
     
     gss_release_buffer(&minor, &exportedName);
     
@@ -88,8 +88,7 @@
     if (GSS_ERROR(major))
         return nil;
     
-    // hope this is NUL terminated
-    desc = [NSString stringWithUTF8String:displayName.value];
+    desc = [NSString stringWithGSSBuffer:&displayName];
     
     gss_release_buffer(&minor, &displayName);
     

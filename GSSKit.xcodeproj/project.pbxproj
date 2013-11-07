@@ -33,6 +33,8 @@
 		D336E2BC182BA748009271CD /* GSSPlaceholderName.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2BA182BA748009271CD /* GSSPlaceholderName.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D336E2BF182BA75B009271CD /* GSSPlaceholderCredential.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2BD182BA75B009271CD /* GSSPlaceholderCredential.h */; };
 		D336E2C0182BA75B009271CD /* GSSPlaceholderCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2BE182BA75B009271CD /* GSSPlaceholderCredential.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D336E2C3182C54AD009271CD /* GSSMechanism.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2C1182C54AD009271CD /* GSSMechanism.h */; };
+		D336E2C4182C54AD009271CD /* GSSMechanism.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2C2182C54AD009271CD /* GSSMechanism.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +83,8 @@
 		D336E2BA182BA748009271CD /* GSSPlaceholderName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSPlaceholderName.m; sourceTree = "<group>"; };
 		D336E2BD182BA75B009271CD /* GSSPlaceholderCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSPlaceholderCredential.h; sourceTree = "<group>"; };
 		D336E2BE182BA75B009271CD /* GSSPlaceholderCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSPlaceholderCredential.m; sourceTree = "<group>"; };
+		D336E2C1182C54AD009271CD /* GSSMechanism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSMechanism.h; sourceTree = "<group>"; };
+		D336E2C2182C54AD009271CD /* GSSMechanism.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSMechanism.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +172,8 @@
 				D336E239182AE174009271CD /* GSSKit.h */,
 				D336E2B1182BA713009271CD /* GSSName.h */,
 				D336E2B2182BA713009271CD /* GSSName.m */,
+				D336E2C1182C54AD009271CD /* GSSMechanism.h */,
+				D336E2C2182C54AD009271CD /* GSSMechanism.m */,
 				D336E2B5182BA733009271CD /* GSSCredential.h */,
 				D336E2B6182BA733009271CD /* GSSCredential.m */,
 				D336E23A182AE174009271CD /* GSSKit.m */,
@@ -215,6 +221,7 @@
 				D336E2B7182BA733009271CD /* GSSCredential.h in Headers */,
 				D336E26E182B4E7E009271CD /* GSSItem+AsyncOperations.h in Headers */,
 				D336E2BF182BA75B009271CD /* GSSPlaceholderCredential.h in Headers */,
+				D336E2C3182C54AD009271CD /* GSSMechanism.h in Headers */,
 				D336E258182AE1C8009271CD /* GSSItem.h in Headers */,
 				D336E2BB182BA748009271CD /* GSSPlaceholderName.h in Headers */,
 				D336E267182AF7DA009271CD /* GSSItem+SyncOperations.h in Headers */,
@@ -324,6 +331,7 @@
 				D336E2C0182BA75B009271CD /* GSSPlaceholderCredential.m in Sources */,
 				D336E2B4182BA713009271CD /* GSSName.m in Sources */,
 				D336E268182AF7DA009271CD /* GSSItem+SyncOperations.m in Sources */,
+				D336E2C4182C54AD009271CD /* GSSMechanism.m in Sources */,
 				D336E25F182AE283009271CD /* GSSPlaceholderItem.m in Sources */,
 				D336E23B182AE174009271CD /* GSSKit.m in Sources */,
 			);
