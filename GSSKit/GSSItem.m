@@ -10,22 +10,18 @@
 
 // GSSItem abstract class
 
-@implementation GSSItem
+static GSSItem *placeholderItem;
 
-+ (id)alloc
-{
-    if ([self isEqual:[GSSItem class]])
-        return [GSSPlaceholderItem alloc];
-    else
-        return [super alloc];
-}
+@implementation GSSItem
 
 + (id)allocWithZone:(NSZone *)zone
 {
-    if ([self isEqual:[GSSItem class]])
-        return [GSSPlaceholderItem allocWithZone:zone];
-    else
-        return [super allocWithZone:zone];
+    @synchronized(self) {
+        if (placeholderItem == nil)
+            placeholderItem = [super allocWithZone:zone];
+    }
+    
+    return placeholderItem;
 }
 
 #pragma mark GSSItem primitive methods
@@ -33,6 +29,12 @@
 + (GSSItem *)itemWithAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
     return [[self alloc] initWithAttributes:attributes error:error];
+}
+
+- init
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
+    return nil;
 }
 
 - (id)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error
