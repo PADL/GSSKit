@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
-#import "GSSItem+AsyncOperations.h"
+#import "GSSKit_Private.h"
 
 @implementation GSSItem (AsyncOperations)
 

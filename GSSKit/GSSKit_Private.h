@@ -7,9 +7,5 @@
 //
 
 #import "GSSKit.h"
-
-#import "GSSItem.h"
-#import "GSSItem+SyncOperations.h"
-#import "GSSItem+AsyncOperations.h"
-
 #import "GSSPlaceholderItem.h"
+#import "GSSItem_Private.h"

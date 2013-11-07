@@ -9,29 +9,6 @@
 #import "GSSKit_Private.h"
 
 @implementation GSSItem (SyncOperations)
-- (id)_performOperationSynchronously:(const NSObject *)op
-                         withOptions:(NSDictionary *)options
-                               error:(NSError **)error
-{
-    BOOL bResult;
-    __block id object = nil;
-    dispatch_queue_t queue = dispatch_queue_create("com.padl.GSSItemOperationQueue", NULL);
-    
-    *error = nil;
-    
-    bResult = [self _performOperation:op
-                          withOptions:options
-                                queue:queue
-                    completionHandler:^(NSObject *o, NSError *e) {
-                            object = o;
-                            *error = e;
-                        }];
-    
-    if (bResult == NO)
-        return nil;
-    
-    return object;
-}
 
 - (id)acquire:(NSDictionary *)options error:(NSError **)error
 {

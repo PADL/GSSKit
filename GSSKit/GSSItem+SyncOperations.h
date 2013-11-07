@@ -6,13 +6,7 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
-#import "GSSKit_Private.h"
-
 @interface GSSItem (SyncOperations)
-
-- (id)_performOperationSynchronously:(const NSObject *)op
-                         withOptions:(NSDictionary *)options
-                               error:(NSError **)error;
 
 - (id)acquire:(NSDictionary *)options error:(NSError **)error;
 - (void)renewCredential:(NSDictionary *)options error:(NSError **)error;

@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
-#import "GSSKit_Private.h"
-
 @interface GSSItem (AsyncOperations)
 
 - (BOOL)acquire:(NSDictionary *)options

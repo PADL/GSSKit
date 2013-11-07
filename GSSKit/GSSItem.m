@@ -85,5 +85,39 @@
     NSAssert(NO, @"Must implement a complete subclass of GSSItem");
     return nil;
 }
+@end
 
+@implementation GSSItem (Private)
+- (BOOL)_performOperation:(NSObject *)op
+              withOptions:(NSDictionary *)options
+                    queue:(dispatch_queue_t)queue
+        completionHandler:(void (^)(NSObject *, NSError *))fun
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
+    return NO;
+}
+
+- (id)_performOperationSynchronously:(const NSObject *)op
+                         withOptions:(NSDictionary *)options
+                               error:(NSError **)error
+{
+    BOOL bResult;
+    __block id object = nil;
+    dispatch_queue_t queue = dispatch_queue_create("com.padl.GSSItemOperationQueue", NULL);
+    
+    *error = nil;
+    
+    bResult = [self _performOperation:op
+                          withOptions:options
+                                queue:queue
+                    completionHandler:^(NSObject *o, NSError *e) {
+                        object = o;
+                        *error = e;
+                    }];
+    
+    if (bResult == NO)
+        return nil;
+    
+    return object;
+}
 @end
