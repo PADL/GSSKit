@@ -10,8 +10,6 @@
 
 static GSSCredential *placeholderCred;
 
-
-
 @implementation GSSCredential
 
 + (id)allocWithZone:(NSZone *)zone
@@ -82,6 +80,16 @@ static GSSCredential *placeholderCred;
     return self;
 }
 
+- (id)init
+{
+    return [self initWithName:nil mechanism:[GSSMechanism mechanismSPNEGO] attributes:nil error:NULL];
+}
+
+- (void)destroy
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
+}
+
 + (GSSCredential *)credentialWithExportedData:(NSData *)data
 {
     OM_uint32 major, minor;
@@ -105,25 +113,14 @@ static GSSCredential *placeholderCred;
     NSError *error = nil;
     
     if ([urlCred hasPassword])
-        attributes[(__bridge NSString *)kGSSICPassword] = [urlCred password];
+        attributes[(__bridge const NSString *)kGSSICPassword] = [urlCred password];
     else if ([urlCred identity])
-        attributes[(__bridge NSString *)kGSSICCertificate] = (__bridge id)[urlCred identity];
+        attributes[(__bridge const NSString *)kGSSICCertificate] = (__bridge id)[urlCred identity];
 
     return [self credentialWithName:[GSSName nameWithUserName:[urlCred user]]
                           mechanism:mech
                          attributes:attributes
                               error:&error];
-}
-
-- (id)init
-{
-    NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
-    return nil;
-}
-
-- (void)destroy
-{
-    NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
 }
 
 - (GSSName *)name

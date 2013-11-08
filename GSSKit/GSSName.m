@@ -12,6 +12,23 @@ static GSSName *placeholderName;
 
 @implementation GSSName
 
+#pragma Primitive methods
+
+- (instancetype)initWithGSSName:(gss_name_t)name
+                   freeWhenDone:(BOOL)flag
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSName");
+    return nil;
+}
+
+- (gss_name_t)_gssName
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSName");
+    return GSS_C_NO_NAME;
+}
+
+#pragma Concrete methods
+
 + (id)allocWithZone:(NSZone *)zone
 {
     @synchronized(self) {
@@ -36,23 +53,27 @@ static GSSName *placeholderName;
 
 - (id)init
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSName");
-    return nil;
+    return [self initWithGSSName:GSS_C_NO_NAME freeWhenDone:YES];
 }
 
-- (instancetype)initWithData:(NSData *)data
-                    nameType:(gss_const_OID)nameType
-                       error:(NSError **)error
+- (id)initWithData:(NSData *)data
+          nameType:(gss_const_OID)nameType
+             error:(NSError **)error
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSName");
-    return nil;
-}
+    gss_name_t name = GSS_C_NO_NAME;
+    gss_buffer_desc nameBuf = GSS_C_EMPTY_BUFFER;
+    OM_uint32 major, minor;
 
-- (instancetype)initWithGSSName:(gss_name_t)name
-                   freeWhenDone:(BOOL)flag
-{
-    NSAssert(NO, @"Must implement a complete subclass of GSSName");
-    return nil;
+    *error = nil;
+    
+    nameBuf.length = [data length];
+    nameBuf.value = (void *)[data bytes];
+    
+    major = gss_import_name(&minor, &nameBuf, nameType, &name);
+    if (GSS_ERROR(major))
+        *error = [NSError GSSError:major :minor];
+    
+    return [self initWithGSSName:name freeWhenDone:YES];
 }
 
 + (GSSName *)nameWithHostBasedService:(NSString *)service withHostName:(NSString *)hostname
@@ -76,20 +97,29 @@ static GSSName *placeholderName;
 
 - (NSData *)exportName
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSName");
-    return nil;
+    OM_uint32 major, minor;
+    gss_buffer_desc exportedName = GSS_C_EMPTY_BUFFER;
+    NSData *data;
+    
+    major = gss_export_name(&minor, [self _gssName], &exportedName);
+    if (GSS_ERROR(major))
+        return nil;
+    
+    data = [GSSBuffer dataWithGSSBufferNoCopy:&exportedName freeWhenDone:YES];
+    
+    return data;
 }
 
 - (NSString *)description
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSName");
-    return nil;
+    OM_uint32 major, minor;
+    gss_buffer_desc displayName = GSS_C_EMPTY_BUFFER;
+    gss_OID oid;
+    
+    major = gss_display_name(&minor, [self _gssName], &displayName, &oid);
+    if (GSS_ERROR(major))
+        return nil;
+    
+    return [NSString stringWithGSSBuffer:&displayName freeWhenDone:YES];
 }
-
-- (gss_name_t)_gssName
-{
-    NSAssert(NO, @"Must implement a complete subclass of GSSName");
-    return nil;
-}
-
 @end

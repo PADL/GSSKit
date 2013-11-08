@@ -133,7 +133,6 @@
 - (void)_initSecContext:(NSData *)reqData
                        :(NSData **)retData
 {
-    gss_const_OID mechType = GSS_SPNEGO_MECHANISM;
     gss_buffer_desc inputToken = GSS_C_EMPTY_BUFFER;
     struct gss_channel_bindings_struct channelBindingsStruct;
     gss_OID actualMechType = GSS_C_NO_OID;
@@ -145,16 +144,14 @@
     
     if (reqData)
         inputToken = [self _decodeToken:reqData cookie:&cookie];
-    if (self.mechanism)
-        mechType = [self.mechanism oid];
     if (self.channelBindings)
         channelBindingsStruct = [self.channelBindings _gssChannelBindings];
 
     _major = gss_init_sec_context(&_minor,
-                                  [self.credential _gssCred],
+                                  self.credential ? [self.credential _gssCred] : GSS_C_NO_CREDENTIAL,
                                   &_ctx,
-                                  [self.targetName _gssName],
-                                  (gss_OID)mechType,
+                                  self.targetName ? [self.targetName _gssName] : GSS_C_NO_NAME,
+                                  self.mechanism ? (gss_OID)[self.mechanism oid] : GSS_C_NO_OID,
                                   self.requestFlags,
                                   GSS_C_INDEFINITE,
                                   self.channelBindings ? &channelBindingsStruct : GSS_C_NO_CHANNEL_BINDINGS,
@@ -193,7 +190,7 @@
     
     _major = gss_accept_sec_context(&_minor,
                                     &_ctx,
-                                    [self.credential _gssCred],
+                                    self.credential ? [self.credential _gssCred] : GSS_C_NO_CREDENTIAL,
                                     reqData ? &inputToken : GSS_C_NO_BUFFER,
                                     self.channelBindings ? &channelBindingsStruct : GSS_C_NO_CHANNEL_BINDINGS,
                                     &sourceName,

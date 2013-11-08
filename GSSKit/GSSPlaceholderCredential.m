@@ -81,11 +81,11 @@ GSSAcquireCredExtWrapper(OM_uint32 *minor,
                          GSSCredential **pCredHandle)
 {
     return gss_acquire_cred_ext(minor,
-                                [desiredName _gssName],
+                                desiredName ? [desiredName _gssName] : GSS_C_NO_NAME,
                                 credType,
                                 credData,
                                 timeReq,
-                                [desiredMech oid],
+                                desiredMech ? [desiredMech oid] : GSS_C_NO_OID,
                                 credUsage,
                                 (gss_cred_id_t *)pCredHandle);
 }

@@ -83,10 +83,6 @@ GSSAcquireCred(GSSName *desiredName,
         major = GSS_S_BAD_MECH;
         goto cleanup;
     }
-    if (desiredName == nil) {
-        major = GSS_S_BAD_NAME;
-        goto cleanup;
-    }
     
     major = GSSUsageFromAttributeDictionary(attributes, &credUsage);
     if (GSS_ERROR(major))

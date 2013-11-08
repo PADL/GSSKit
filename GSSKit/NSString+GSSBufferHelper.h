@@ -12,5 +12,7 @@
 
 @interface NSString (GSSBufferHelper)
 + (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer;
++ (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer freeWhenDone:(BOOL)flag;
+
 - (gss_buffer_desc)_gssBuffer;
 @end

@@ -56,7 +56,6 @@
     return [self initWithCredentials:nil];
 }
 
-
 - (void) URLSession:(NSURLSession *)session
 didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
   completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler

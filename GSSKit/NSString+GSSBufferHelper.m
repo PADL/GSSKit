@@ -11,7 +11,12 @@
 @implementation NSString (GSSBufferHelper)
 + (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer
 {
-    NSData *data = [GSSBuffer dataWithGSSBufferNoCopy:buffer freeWhenDone:NO];
+    return [self stringWithGSSBuffer:buffer freeWhenDone:NO];
+}
+
++ (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer freeWhenDone:(BOOL)flag
+{
+    NSData *data = [GSSBuffer dataWithGSSBufferNoCopy:buffer freeWhenDone:flag];
     
     return [[self alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
