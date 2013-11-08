@@ -46,10 +46,7 @@
 
 - (NSError *)lastError
 {
-    if (GSS_ERROR(_major))
-        return [NSError GSSError:_major :_minor];
-    
-    return nil;
+    return [NSError GSSError:_major :_minor];
 }
 
 - (BOOL)isContextEstablished
