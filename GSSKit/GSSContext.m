@@ -87,15 +87,16 @@
 
 - (instancetype)init
 {
-    return [self initWithRequestFlags:0
-                                queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0)
-                          isInitiator:YES];
+    return [self initWithRequestFlags:0 queue:nil isInitiator:YES];
 }
 
 - (instancetype)initWithRequestFlags:(OM_uint32)flags queue: (dispatch_queue_t)queue isInitiator:(BOOL)initiator
 {
     if ((self = [super init]) == nil)
         return nil;
+    
+    if (!queue)
+        queue = dispatch_queue_create("com.padl.GSSContextQueue", NULL);
     
     _requestFlags = flags;
     _queue = queue;
