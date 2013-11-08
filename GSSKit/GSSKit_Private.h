@@ -6,6 +6,10 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
+#import <GSS/gssapi.h>
+#import <GSS/gssapi_krb5.h>
+#import <GSS/gssapi_spnego.h>
+
 #import "GSSKit.h"
 #import "GSSPlaceholderItem.h"
 #import "GSSPlaceholderName.h"
