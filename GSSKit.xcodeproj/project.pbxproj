@@ -44,6 +44,8 @@
 		D336E2D2182CA2DC009271CD /* GSSChannelBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2D0182CA2DC009271CD /* GSSChannelBindings.m */; };
 		D336E2D5182CA4C8009271CD /* GSSContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2D3182CA4C8009271CD /* GSSContext.h */; };
 		D336E2D6182CA4C8009271CD /* GSSContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2D4182CA4C8009271CD /* GSSContext.m */; };
+		D336E2DD182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2DB182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h */; };
+		D336E2DE182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2DC182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,8 @@
 		D336E2D0182CA2DC009271CD /* GSSChannelBindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSChannelBindings.m; sourceTree = "<group>"; };
 		D336E2D3182CA4C8009271CD /* GSSContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSContext.h; sourceTree = "<group>"; };
 		D336E2D4182CA4C8009271CD /* GSSContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSContext.m; sourceTree = "<group>"; };
+		D336E2DB182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSURLSessionAuthenticationDelegate.h; sourceTree = "<group>"; };
+		D336E2DC182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSURLSessionAuthenticationDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +181,8 @@
 			children = (
 				D336E2D3182CA4C8009271CD /* GSSContext.h */,
 				D336E2D4182CA4C8009271CD /* GSSContext.m */,
+				D336E2DB182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h */,
+				D336E2DC182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m */,
 				D336E257182AE1C8009271CD /* GSSItem.h */,
 				D336E269182B4CF2009271CD /* GSSItem.m */,
 				D336E2AB182B52BF009271CD /* GSSItem_Private.h */,
@@ -249,6 +255,7 @@
 				D336E2B7182BA733009271CD /* GSSCredential.h in Headers */,
 				D336E2D1182CA2DC009271CD /* GSSChannelBindings.h in Headers */,
 				D336E2D5182CA4C8009271CD /* GSSContext.h in Headers */,
+				D336E2DD182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h in Headers */,
 				D336E26E182B4E7E009271CD /* GSSItem+AsyncOperations.h in Headers */,
 				D336E2BF182BA75B009271CD /* GSSPlaceholderCredential.h in Headers */,
 				D336E2C3182C54AD009271CD /* GSSMechanism.h in Headers */,
@@ -357,6 +364,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D336E2BC182BA748009271CD /* GSSPlaceholderName.m in Sources */,
+				D336E2DE182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m in Sources */,
 				D336E2B8182BA733009271CD /* GSSCredential.m in Sources */,
 				D336E26F182B4E7E009271CD /* GSSItem+AsyncOperations.m in Sources */,
 				D336E26A182B4CF2009271CD /* GSSItem.m in Sources */,

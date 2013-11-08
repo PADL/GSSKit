@@ -16,6 +16,7 @@ typedef OM_uint32 GSSEncoding;
 
 @interface GSSContext : NSObject
 
+@property(nonatomic, retain) dispatch_queue_t queue;
 @property(nonatomic, retain) GSSMechanism *mechanism;
 @property(nonatomic, assign) OM_uint32 requestFlags;
 @property(nonatomic, retain) GSSName *targetName;

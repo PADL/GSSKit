@@ -34,6 +34,7 @@
 @synthesize credential;
 @synthesize channelBindings;
 @synthesize encoding;
+@synthesize queue;
 
 @synthesize finalMechanism;
 @synthesize finalFlags;
@@ -90,16 +91,18 @@
     return [self initWithRequestFlags:0 queue:nil isInitiator:YES];
 }
 
-- (instancetype)initWithRequestFlags:(OM_uint32)flags queue: (dispatch_queue_t)queue isInitiator:(BOOL)initiator
+- (instancetype)initWithRequestFlags:(OM_uint32)flags
+                               queue:(dispatch_queue_t)someQueue
+                         isInitiator:(BOOL)initiator
 {
     if ((self = [super init]) == nil)
         return nil;
     
-    if (!queue)
-        queue = dispatch_queue_create("com.padl.GSSContextQueue", NULL);
+    if (!someQueue)
+        someQueue = dispatch_queue_create("com.padl.GSSContextQueue", NULL);
     
     _requestFlags = flags;
-    _queue = queue;
+    _queue = someQueue;
     _isInitiator = initiator;
     _major = GSS_S_FAILURE;
     
@@ -116,7 +119,8 @@
     return data;
 }
 
-- (gss_buffer_desc)_decodeToken:(NSData *)data cookie:(id *)pData
+- (gss_buffer_desc)_decodeToken:(NSData *)data
+                         cookie:(id *)pData
 {
     if (self.encoding == GSS_C_ENC_BASE64) {
         data = [[NSData alloc] initWithBase64EncodedData:data options:0];
@@ -126,7 +130,8 @@
     return [data _gssBuffer];
 }
 
-- (void)_initSecContext:(NSData *)reqData :(NSData **)retData
+- (void)_initSecContext:(NSData *)reqData
+                       :(NSData **)retData
 {
     gss_const_OID mechType = GSS_SPNEGO_MECHANISM;
     gss_buffer_desc inputToken = GSS_C_EMPTY_BUFFER;
@@ -167,7 +172,8 @@
         _expiryTime = time(NULL) + timeRec;
 }
 
-- (void)_acceptSecContext:(NSData *)reqData :(NSData **)retData
+- (void)_acceptSecContext:(NSData *)reqData
+                         :(NSData **)retData
 {
     id cookie = nil;
     gss_buffer_desc inputToken = GSS_C_EMPTY_BUFFER;
@@ -224,7 +230,9 @@
     });
 }
 
-- (NSData *)wrapData:(NSData *)data encrypt:(OM_uint32)confState qopState:(gss_qop_t)qopState;
+- (NSData *)wrapData:(NSData *)data
+             encrypt:(OM_uint32)confState
+            qopState:(gss_qop_t)qopState;
 {
     gss_buffer_desc inputMessageBuffer = [data _gssBuffer];
     int actualConfState;
@@ -243,12 +251,15 @@
     return [self _encodeToken:&outputMessageBuffer];
 }
 
-- (NSData *)wrapData:(NSData *)data encrypt:(OM_uint32)confState
+- (NSData *)wrapData:(NSData *)data
+             encrypt:(OM_uint32)confState
 {
     return [self wrapData:data encrypt:confState qopState:GSS_C_QOP_DEFAULT];
 }
 
-- (NSData *)unwrapData:(NSData *)data didEncrypt:(OM_uint32 *)didEncrypt qopState:(gss_qop_t *)qopState;
+- (NSData *)unwrapData:(NSData *)data
+            didEncrypt:(OM_uint32 *)didEncrypt
+              qopState:(gss_qop_t *)qopState;
 {
     id cookie = nil;
     gss_buffer_desc inputMessageBuffer = [self _decodeToken:data cookie:&cookie];
@@ -269,14 +280,16 @@
     return [GSSBuffer dataWithGSSBufferNoCopy:&outputMessageBuffer freeWhenDone:YES];
 }
 
-- (NSData *)unwrapData:(NSData *)data didEncrypt:(OM_uint32 *)confState
+- (NSData *)unwrapData:(NSData *)data
+            didEncrypt:(OM_uint32 *)confState
 {
     gss_qop_t qopState;
     
     return [self unwrapData:data didEncrypt:confState qopState:&qopState];
 }
 
-- (NSData *)messageIntegrityCodeFromData:(NSData *)data qopState:(gss_qop_t)qopState
+- (NSData *)messageIntegrityCodeFromData:(NSData *)data
+                                qopState:(gss_qop_t)qopState
 {
     gss_buffer_desc messageBuffer = [data _gssBuffer];
     gss_buffer_desc messageToken = GSS_C_EMPTY_BUFFER;
@@ -298,7 +311,9 @@
     return [self messageIntegrityCodeFromData:data qopState:GSS_C_QOP_DEFAULT];
 }
 
-- (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data withCode:(NSData *)mic qopState:(gss_qop_t *)qopState
+- (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data
+                                  withCode:(NSData *)mic
+                                  qopState:(gss_qop_t *)qopState
 {
     id cookie = nil;
     gss_buffer_desc messageBuffer = [data _gssBuffer];
@@ -315,7 +330,8 @@
     return YES;
 }
 
-- (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data withCode:(NSData *)mic
+- (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data
+                                  withCode:(NSData *)mic
 {
     gss_qop_t qopState;
     

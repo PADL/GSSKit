@@ -9,10 +9,6 @@
 @interface GSSCredential : NSObject
 
 // primitive methods
-- (instancetype)initWithName:(GSSName *)name
-                   mechanism:(GSSMechanism *)desiredMech
-                  attributes:(NSDictionary *)attributes
-                       error:(NSError **)error;
 
 - (void)destroy;
 
@@ -30,6 +26,9 @@
                                 error:(NSError **)error;
 
 + (GSSCredential *)credentialWithExportedData: (NSData *)exportedData;
+
++ (GSSCredential *)credentialWithURLCredential:(NSURLCredential *)urlCred
+                                     mechanism:(GSSMechanism *)mech;
 
 - (GSSName *)name;
 - (OM_uint32)lifetime;

@@ -15,3 +15,10 @@
 - (instancetype)initWithGSSCred:(gss_cred_id_t)cred freeWhenDone:(BOOL)flag;
 
 @end
+
+
+OM_uint32
+GSSChangePasswordWrapper(GSSName *desiredName,
+                         GSSMechanism *desiredMech,
+                         NSDictionary *attributes,
+                         NSError **pError);

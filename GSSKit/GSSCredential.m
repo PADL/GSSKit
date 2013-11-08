@@ -10,6 +10,8 @@
 
 static GSSCredential *placeholderCred;
 
+
+
 @implementation GSSCredential
 
 + (id)allocWithZone:(NSZone *)zone
@@ -68,6 +70,18 @@ static GSSCredential *placeholderCred;
 
 }
 
+- (instancetype)initWithName:(GSSName *)name
+                   mechanism:(GSSMechanism *)desiredMech
+                  attributes:(NSDictionary *)attributes
+                       error:(NSError **)error
+{
+    self = nil;
+    
+    GSSAcquireCred(name, desiredMech, attributes, &self, error);
+    
+    return self;
+}
+
 + (GSSCredential *)credentialWithExportedData:(NSData *)data
 {
     OM_uint32 major, minor;
@@ -84,16 +98,24 @@ static GSSCredential *placeholderCred;
     return gssCred;
 }
 
-- (id)init
++ (GSSCredential *)credentialWithURLCredential:(NSURLCredential *)urlCred
+                                     mechanism:(GSSMechanism *)mech
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
-    return nil;
+    NSMutableDictionary *attributes = nil;
+    NSError *error = nil;
+    
+    if ([urlCred hasPassword])
+        attributes[(__bridge NSString *)kGSSICPassword] = [urlCred password];
+    else if ([urlCred identity])
+        attributes[(__bridge NSString *)kGSSICCertificate] = (__bridge id)[urlCred identity];
+
+    return [self credentialWithName:[GSSName nameWithUserName:[urlCred user]]
+                          mechanism:mech
+                         attributes:attributes
+                              error:&error];
 }
 
-- (id)initWithName:(GSSName *)name
-         mechanism:(GSSMechanism *)desiredMech
-        attributes:(NSDictionary *)attributes
-             error:(NSError **)error
+- (id)init
 {
     NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
     return nil;
