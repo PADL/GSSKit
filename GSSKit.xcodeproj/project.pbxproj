@@ -39,6 +39,7 @@
 		D336E2C8182C622F009271CD /* GSSBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2C6182C622F009271CD /* GSSBuffer.m */; };
 		D336E2CB182C686C009271CD /* GSSCredential+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2C9182C686C009271CD /* GSSCredential+Private.h */; };
 		D336E2CC182C686C009271CD /* GSSCredential+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2CA182C686C009271CD /* GSSCredential+Private.m */; };
+		D336E2CE182C9999009271CD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E2CD182C9999009271CD /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 		D336E2C6182C622F009271CD /* GSSBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSBuffer.m; sourceTree = "<group>"; };
 		D336E2C9182C686C009271CD /* GSSCredential+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GSSCredential+Private.h"; sourceTree = "<group>"; };
 		D336E2CA182C686C009271CD /* GSSCredential+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GSSCredential+Private.m"; sourceTree = "<group>"; };
+		D336E2CD182C9999009271CD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D336E2CE182C9999009271CD /* Security.framework in Frameworks */,
 				D336E264182AE3D1009271CD /* GSS.framework in Frameworks */,
 				D336E262182AE3B5009271CD /* CoreFoundation.framework in Frameworks */,
 				D336E260182AE3B5009271CD /* Foundation.framework in Frameworks */,
@@ -141,6 +144,7 @@
 		D336E22B182AE174009271CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D336E2CD182C9999009271CD /* Security.framework */,
 				D336E263182AE3D1009271CD /* GSS.framework */,
 				D336E261182AE3B5009271CD /* CoreFoundation.framework */,
 				D336E22C182AE174009271CD /* Cocoa.framework */,

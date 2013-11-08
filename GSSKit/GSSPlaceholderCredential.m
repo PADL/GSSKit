@@ -10,6 +10,121 @@
 
 // ARC disabled
 
+/*
+ * this is a variant of gss_aapl_initial_cred() that is more generalised
+ */
+
+static OM_uint32
+GSSUsageFromAttributeDictionary(NSDictionary *attributes,
+                                gss_cred_usage_t *pCredUsage)
+{
+    gss_cred_usage_t credUsage;
+    NSString *usage;
+    
+    usage = [attributes objectForKey:(NSString *)kGSSCredentialUsage];
+    if ([usage isEqualToString:(NSString *)kGSS_C_INITIATE])
+        credUsage = GSS_C_INITIATE;
+    else if ([usage isEqualToString:(NSString *)kGSS_C_ACCEPT])
+        credUsage = GSS_C_ACCEPT;
+    else if ([usage isEqualToString:(NSString *)kGSS_C_BOTH])
+        credUsage = GSS_C_BOTH;
+    else
+        return GSS_S_FAILURE;
+    
+    *pCredUsage = credUsage;
+    return GSS_S_COMPLETE;
+}
+
+static OM_uint32
+GSSAcquireCredExtWrapper(OM_uint32 *minor,
+                         GSSName *desiredName,
+                         gss_const_OID credType,
+                         const void *credData,
+                         OM_uint32 timeReq,
+                         GSSMechanism *desiredMech,
+                         gss_cred_usage_t credUsage,
+                         gss_cred_id_t *pCredHandle)
+{
+    return __ApplePrivate_gss_acquire_cred_ext(minor,
+                                               [desiredName _gssName],
+                                               credType,
+                                               credData,
+                                               timeReq,
+                                               [desiredMech oid],
+                                               credUsage,
+                                               pCredHandle);
+}
+
+static OM_uint32
+GSSInitialCred(GSSName *desiredName,
+               GSSMechanism *desiredMech,
+               NSDictionary *attributes,
+               GSSCredential **pCredential,
+               NSError **pError)
+{
+    OM_uint32 major, minor;
+    gss_cred_usage_t credUsage = GSS_C_INITIATE;
+    gss_cred_id_t credHandle = GSS_C_NO_CREDENTIAL;
+    
+    if (pError != NULL)
+        *pError = nil;
+    *pCredential = nil;
+    
+    if (desiredMech == nil) {
+        major = GSS_S_BAD_MECH;
+        goto cleanup;
+    }
+    if (desiredName == nil) {
+        major = GSS_S_BAD_NAME;
+        goto cleanup;
+    }
+
+    major = GSSUsageFromAttributeDictionary(attributes, &credUsage);
+    if (GSS_ERROR(major))
+        goto cleanup;
+
+    major = GSSAcquireCredExtWrapper(&minor, desiredName,
+                                     GSS_C_CRED_CFDictionary, attributes,
+                                     GSS_C_INDEFINITE, desiredMech,
+                                     credUsage, &credHandle);
+    if (major == GSS_S_FAILURE || major == GSS_S_UNAVAILABLE) {
+        /* try password or certificate fallback */
+        id password = [attributes objectForKey:(NSString *)kGSSICPassword];
+        id certificate = [attributes objectForKey:(NSString *)kGSSICCertificate];
+        gss_buffer_desc credBuffer = GSS_C_EMPTY_BUFFER;
+        void *credData = NULL;
+        gss_OID credOid = GSS_C_NO_OID;
+        
+        if (password && [password respondsToSelector:@selector(_gssBuffer)]) {
+            credBuffer = [password _gssBuffer];
+            credOid = GSS_C_CRED_PASSWORD;
+            credData = &credBuffer;
+        } else if (certificate && CFGetTypeID((CFTypeRef)certificate) == SecIdentityGetTypeID()) {
+            credOid = GSS_C_CRED_SecIdentity;
+            credData = certificate;
+        }
+
+        if (credOid == GSS_C_NO_OID) {
+            major = GSS_S_UNAVAILABLE;
+            goto cleanup;
+        }
+        major = GSSAcquireCredExtWrapper(&minor, desiredName,
+                                         credOid, credData,
+                                         GSS_C_INDEFINITE, desiredMech,
+                                         credUsage, &credHandle);
+    }
+    if (GSS_ERROR(major))
+        goto cleanup;
+
+    *pCredential = (GSSCredential *)credHandle;
+    
+cleanup:
+    if (GSS_ERROR(major) && pError != NULL)
+        *pError = [NSError GSSError:major :minor];
+    
+    return major;
+}
+
 @implementation GSSPlaceholderCredential
 
 #pragma mark Initialization
@@ -19,20 +134,12 @@
                   attributes:(NSDictionary *)attributes
                        error:(NSError **)error
 {
-    OM_uint32 major;
-    gss_cred_id_t cred;
-    
     [self release];
+    self = nil;
     
-    *error = nil;
+    GSSInitialCred(name, desiredMech, attributes, &self, error);
     
-    major = gss_aapl_initial_cred((gss_name_t)name, [desiredMech oid], (CFDictionaryRef)attributes, &cred, (CFErrorRef *)error);
-    if (GSS_ERROR(major) && *error == nil)
-        *error = [NSError GSSError:major];
-    
-    [*error autorelease];
-    
-    return (id)cred;
+    return self;
 }
 
 - (instancetype)initWithGSSCred:(gss_cred_id_t)cred
@@ -70,6 +177,11 @@
 - (NSUInteger)retainCount
 {
     return CFGetRetainCount((CFTypeRef)self);
+}
+
+- (BOOL)isEqual:(id)anObject
+{
+    return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
 }
 
 - (gss_cred_id_t)_gssCred

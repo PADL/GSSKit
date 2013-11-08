@@ -89,7 +89,7 @@
     return [self mechanismWithOID:mechType];
 }
 
-- (gss_OID)oid
+- (gss_const_OID)oid
 {
     return _oid;
 }

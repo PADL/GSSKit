@@ -8,6 +8,18 @@
 
 #import "GSSKit_Private.h"
 
+/* GSS_C_CRED_CFDictionary - 1.3.6.1.4.1.5322.25.1.1 */
+gss_OID_desc __gss_c_cred_cfdictionary_oid_desc = { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x19\x01\x01" };
+
+/* GSS_C_CRED_PASSWORD - 1.2.752.43.13.200 */
+gss_OID_desc GSSAPI_LIB_VARIABLE __gss_c_cred_password_oid_desc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x48" };
+
+/* GSS_C_CRED_CERTIFICATE - 1.2.752.43.13.201 */
+gss_OID_desc GSSAPI_LIB_VARIABLE __gss_c_cred_certificate_oid_desc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x49" };
+
+/* GSS_C_CRED_SecIdentity - 1.2.752.43.13.202 */
+gss_OID_desc GSSAPI_LIB_VARIABLE __gss_c_cred_secidentity_oid_desc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x4a" };
+
 @implementation NSError (GSSKit)
 
 + (NSError *)GSSError:(OM_uint32)majorStatus

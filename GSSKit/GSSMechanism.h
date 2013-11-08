@@ -23,7 +23,7 @@
 + (GSSMechanism *)mechanismWithDERData:(NSData *)data;
 + (GSSMechanism *)mechanismWithSASLName:(NSString *)name;
 
-- (gss_OID)oid;
+- (gss_const_OID)oid;
 - (NSString *)name;
 - (NSString *)SASLName;
 

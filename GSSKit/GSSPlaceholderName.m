@@ -72,6 +72,11 @@
     return CFGetRetainCount((CFTypeRef)self);
 }
 
+- (BOOL)isEqual:(id)anObject
+{
+    return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
+}
+
 #pragma make Concrete
 
 - (NSData *)exportName

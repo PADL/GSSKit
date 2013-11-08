@@ -23,4 +23,6 @@
 - (NSData *)exportName;
 - (NSString *)description;
 
+- (gss_name_t)_gssName;
+
 @end

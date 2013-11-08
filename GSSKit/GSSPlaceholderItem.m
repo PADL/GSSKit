@@ -50,6 +50,11 @@
     return CFGetRetainCount((GSSItemRef)self);
 }
 
+- (BOOL)isEqual:(id)anObject
+{
+    return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
+}
+
 - (CFTypeID)_cfTypeID
 {
     return GSSItemGetTypeID();
@@ -111,6 +116,8 @@
     
     return res;
 }
+
+
 
 - (BOOL)_performOperation:(NSObject *)op
               withOptions:(NSDictionary *)options
