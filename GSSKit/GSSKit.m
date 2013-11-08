@@ -90,6 +90,7 @@ gss_OID_desc GSSAPI_LIB_VARIABLE __gss_c_cred_secidentity_oid_desc = { 7, "\x2a\
 }
 @end
 
+#if 0
 GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
 gss_inquire_mech_for_saslname(OM_uint32 *minor_status,
                               const gss_buffer_t sasl_mech_name,
@@ -107,3 +108,4 @@ gss_inquire_saslname_for_mech(OM_uint32 *minor_status,
 {
     return GSS_S_UNAVAILABLE;
 }
+#endif

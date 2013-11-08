@@ -76,6 +76,8 @@
 
 + (GSSMechanism *)mechanismWithSASLName: (NSString *)name
 {
+#if 0
+    // XXX why are these not exported from GSS.framework
     OM_uint32 major, minor;
     gss_buffer_desc saslName;
     gss_OID mechType;
@@ -87,6 +89,14 @@
         return nil;
     
     return [self mechanismWithOID:mechType];
+#else
+    if ([name isEqualToString:@"GSSAPI"])
+        return [self mechanismKerberos];
+    else if ([name isEqualToString:@"GSS-SPNEGO"])
+        return [self mechanismSPNEGO];
+    else
+        return nil;
+#endif
 }
 
 - (gss_const_OID)oid
@@ -96,6 +106,7 @@
 
 - (NSString *)name
 {
+#if 0
     OM_uint32 major, minor;
     gss_buffer_desc buffer = GSS_C_EMPTY_BUFFER;
     
@@ -105,10 +116,19 @@
         return nil;
     
     return [NSString stringWithGSSBuffer:&buffer];
+#else
+    if ([self isKerberosMechanism])
+        return @"KRB5";
+    else if ([self isSPNEGOMechanism])
+        return @"SPNEGO";
+    else
+        return nil;
+#endif
 }
 
 - (NSString *)SASLName
 {
+#if 0
     OM_uint32 major, minor;
     gss_buffer_desc buffer = GSS_C_EMPTY_BUFFER;
     
@@ -118,8 +138,17 @@
         return nil;
     
     return [NSString stringWithGSSBuffer:&buffer];
+#else
+    if ([self isKerberosMechanism])
+        return @"GSSAPI";
+    else if ([self isSPNEGOMechanism])
+        return @"GSS-SPNEGO";
+    else
+        return nil;
+#endif
 }
 
+#if 0
 - (NSString *)description
 {
     OM_uint32 major, minor;
@@ -131,6 +160,17 @@
         return nil;
     
     return [NSString stringWithGSSBuffer:&buffer];
+}
+#endif
+
+- (BOOL)isSPNEGOMechanism
+{
+    return gss_oid_equal(_oid, GSS_SPNEGO_MECHANISM);
+}
+
+- (BOOL)isKerberosMechanism
+{
+    return gss_oid_equal(_oid, GSS_KRB5_MECHANISM);
 }
 
 @end

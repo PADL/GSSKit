@@ -27,4 +27,7 @@
 - (NSString *)name;
 - (NSString *)SASLName;
 
+- (BOOL)isSPNEGOMechanism;
+- (BOOL)isKerberosMechanism;
+
 @end
