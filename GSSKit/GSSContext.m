@@ -226,7 +226,7 @@
     });
 }
 
-- (NSData *)wrapData:(NSData *)data encrypt:(BOOL)confState qopState:(gss_qop_t)qopState;
+- (NSData *)wrapData:(NSData *)data encrypt:(OM_uint32)confState qopState:(gss_qop_t)qopState;
 {
     gss_buffer_desc inputMessageBuffer = [data _gssBuffer];
     int actualConfState;
@@ -234,7 +234,7 @@
     
     _major = gss_wrap(&_minor,
                       _ctx,
-                      confState,
+                      !!(confState & GSS_C_CONF_FLAG),
                       qopState,
                       &inputMessageBuffer,
                       &actualConfState,
@@ -245,12 +245,12 @@
     return [self _encodeToken:&outputMessageBuffer];
 }
 
-- (NSData *)wrapData:(NSData *)data encrypt:(BOOL)confState
+- (NSData *)wrapData:(NSData *)data encrypt:(OM_uint32)confState
 {
     return [self wrapData:data encrypt:confState qopState:GSS_C_QOP_DEFAULT];
 }
 
-- (NSData *)unwrapData:(NSData *)data didEncrypt:(BOOL *)didEncrypt qopState:(gss_qop_t *)qopState;
+- (NSData *)unwrapData:(NSData *)data didEncrypt:(OM_uint32 *)didEncrypt qopState:(gss_qop_t *)qopState;
 {
     id cookie = nil;
     gss_buffer_desc inputMessageBuffer = [self _decodeToken:data cookie:&cookie];
@@ -266,12 +266,12 @@
     if (GSS_ERROR(_major))
         return nil;
     
-    *didEncrypt = !!confState;
+    *didEncrypt = confState ? GSS_C_CONF_FLAG : GSS_C_INTEG_FLAG;
     
     return [GSSBuffer dataWithGSSBufferNoCopy:&outputMessageBuffer freeWhenDone:YES];
 }
 
-- (NSData *)unwrapData:(NSData *)data didEncrypt:(BOOL *)confState
+- (NSData *)unwrapData:(NSData *)data didEncrypt:(OM_uint32 *)confState
 {
     gss_qop_t qopState;
     

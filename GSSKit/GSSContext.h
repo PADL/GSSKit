@@ -33,11 +33,11 @@ typedef OM_uint32 GSSEncoding;
 
 - (id)initWithRequestFlags:(OM_uint32)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator;
 
-- (NSData *)wrapData:(NSData *)data encrypt:(BOOL)confState;
-- (NSData *)wrapData:(NSData *)data encrypt:(BOOL)confState qopState:(gss_qop_t)qopState;
+- (NSData *)wrapData:(NSData *)data encrypt:(OM_uint32)confState;
+- (NSData *)wrapData:(NSData *)data encrypt:(OM_uint32)confState qopState:(gss_qop_t)qopState;
 
-- (NSData *)unwrapData:(NSData *)data didEncrypt:(BOOL *)confState;
-- (NSData *)unwrapData:(NSData *)data didEncrypt:(BOOL *)confState qopState:(gss_qop_t *)qopState;
+- (NSData *)unwrapData:(NSData *)data didEncrypt:(OM_uint32 *)confState;
+- (NSData *)unwrapData:(NSData *)data didEncrypt:(OM_uint32 *)confState qopState:(gss_qop_t *)qopState;
 
 - (NSData *)messageIntegrityCodeFromData:(NSData *)data;
 - (NSData *)messageIntegrityCodeFromData:(NSData *)data qopState:(gss_qop_t)qopState;
