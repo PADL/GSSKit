@@ -11,7 +11,7 @@
 @interface GSSCredential (Private)
 
 - (gss_cred_id_t)_gssCred;
-+ (GSSCredential *)credentialWithGSSCred:(gss_cred_id_t)cred;
-- (instancetype)initWithGSSCred:(gss_cred_id_t)cred;
++ (GSSCredential *)credentialWithGSSCred:(gss_cred_id_t)cred freeWhenDone:(BOOL)flag;
+- (instancetype)initWithGSSCred:(gss_cred_id_t)cred freeWhenDone:(BOOL)flag;
 
 @end

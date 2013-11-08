@@ -35,7 +35,7 @@ GSSUsageFromAttributeDictionary(NSDictionary *attributes,
     return GSS_S_COMPLETE;
 }
 
-static OM_uint32
+OM_uint32
 GSSAcquireCredExtWrapper(OM_uint32 *minor,
                          GSSName *desiredName,
                          gss_const_OID credType,
@@ -43,7 +43,7 @@ GSSAcquireCredExtWrapper(OM_uint32 *minor,
                          OM_uint32 timeReq,
                          GSSMechanism *desiredMech,
                          gss_cred_usage_t credUsage,
-                         gss_cred_id_t *pCredHandle)
+                         GSSCredential **pCredHandle)
 {
     return __ApplePrivate_gss_acquire_cred_ext(minor,
                                                [desiredName _gssName],
@@ -52,7 +52,7 @@ GSSAcquireCredExtWrapper(OM_uint32 *minor,
                                                timeReq,
                                                [desiredMech oid],
                                                credUsage,
-                                               pCredHandle);
+                                               (gss_cred_id_t *)pCredHandle);
 }
 
 static OM_uint32
@@ -64,7 +64,7 @@ GSSInitialCred(GSSName *desiredName,
 {
     OM_uint32 major, minor;
     gss_cred_usage_t credUsage = GSS_C_INITIATE;
-    gss_cred_id_t credHandle = GSS_C_NO_CREDENTIAL;
+    GSSCredential *credHandle = nil;
     
     if (pError != NULL)
         *pError = nil;
@@ -116,11 +116,28 @@ GSSInitialCred(GSSName *desiredName,
     if (GSS_ERROR(major))
         goto cleanup;
 
-    *pCredential = (GSSCredential *)credHandle;
+    *pCredential = credHandle;
     
 cleanup:
     if (GSS_ERROR(major) && pError != NULL)
         *pError = [NSError GSSError:major :minor];
+    
+    return major;
+}
+
+OM_uint32
+GSSChangePasswordWrapper(GSSName *desiredName,
+                         GSSMechanism *desiredMech,
+                         NSDictionary *attributes,
+                         NSError **pError)
+{
+    OM_uint32 major;
+    CFErrorRef error = NULL;
+    
+    major = gss_aapl_change_password([desiredName _gssName],
+                                     [desiredMech oid],
+                                     (CFDictionaryRef)attributes,
+                                     &error);
     
     return major;
 }
@@ -143,9 +160,12 @@ cleanup:
 }
 
 - (instancetype)initWithGSSCred:(gss_cred_id_t)cred
+                   freeWhenDone:(BOOL)flag
 {
     [self release];
-    self = CFRetain((CFTypeRef)cred);
+    if (!flag)
+        CFRetain((CFTypeRef)cred);
+    self = (id)cred;
     return self;
 }
 

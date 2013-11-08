@@ -11,11 +11,13 @@
 @implementation GSSCredential (Private)
 
 + (GSSCredential *)credentialWithGSSCred:(gss_cred_id_t)cred
+                            freeWhenDone:(BOOL)flag
 {
-    return [[self alloc] initWithGSSCred:cred];
+    return [[self alloc] initWithGSSCred:cred freeWhenDone:flag];
 }
 
 - (instancetype)initWithGSSCred:(gss_cred_id_t)cred
+                   freeWhenDone:(BOOL)flag
 {
     NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
     return nil;

@@ -29,6 +29,8 @@
                              password:(NSString *)password
                                 error:(NSError **)error;
 
++ (GSSCredential *)credentialWithExportedData: (NSData *)exportedData;
+
 - (GSSName *)name;
 - (OM_uint32)lifetime;
 - (OM_uint32)credUsage;
