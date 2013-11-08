@@ -17,8 +17,10 @@
 @end
 
 
+
 OM_uint32
-GSSChangePasswordWrapper(GSSName *desiredName,
-                         GSSMechanism *desiredMech,
-                         NSDictionary *attributes,
-                         NSError **pError);
+GSSAcquireCred(GSSName *desiredName,
+               GSSMechanism *desiredMech,
+               NSDictionary *attributes,
+               GSSCredential **pCredential,
+               NSError **pError);
