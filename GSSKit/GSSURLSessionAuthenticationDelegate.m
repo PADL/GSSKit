@@ -8,34 +8,12 @@
 
 #import "GSSKit_Private.h"
 
-/*
- 
- @property(nonatomic, retain) GSSMechanism *mechanism;
- @property(nonatomic, assign) OM_uint32 requestFlags;
- @property(nonatomic, retain) GSSName *targetName;
- @property(nonatomic, retain) GSSCredential *credential;
- @property(nonatomic, retain) GSSChannelBindings *channelBindings;
- @property(nonatomic, assign) GSSEncoding encoding;
- 
- @property(nonatomic, readonly) GSSMechanism *finalMechanism;
- @property(nonatomic, readonly) OM_uint32 finalFlags;
- @property(nonatomic, readonly) GSSCredential *delegatedCredentials;
- @property(nonatomic, readonly) NSError *lastError;
- 
- @property(nonatomic, readonly) GSSName *initiatorName;
- @property(nonatomic, readonly) GSSName *acceptorName;
- 
- - (void)stepWithData:(NSData *)reqData
- completionHandler:(void (^)(NSData *, NSError *))handler;
-*/
-
-
-@implementation GSSURLSessionAuthenticationDelegate
+@implementation GSSURLSessionAuthenticationTaskDelegate
 {
     GSSContext *_context;
 }
 
-- (instancetype)initWithCredentials:(GSSCredential *)credential
+- (instancetype)initWithCredential:(GSSCredential *)credential
 {
     if ((self = [super init]) == nil)
         return nil;
@@ -53,29 +31,78 @@
 
 - (instancetype)init
 {
-    return [self initWithCredentials:nil];
+    return [self initWithCredential:nil];
 }
 
-- (void) URLSession:(NSURLSession *)session
-didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
-  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+- (NSData *)_gssTokenFromURLSession:(NSURLSession *)session
+                               task:(NSURLSessionTask *)task
 {
-    NSData *inputToken = nil;
+#if 0
+    NSString *challenge = [[task response] valueForHTTPHeaderField:@"WWW-Authenticate"];
+    NSArray *challengeComps = [challenge componentsSeparatedByString:@" "];
+    
+    if (challengeComps.count != 2)
+        return nil;
+    
+    if (![challengeComps[0] isEqualToString:@"Negotiate"])
+        return nil;
+    
+    return [challengeComps[1] dataUsingEncoding:NSUTF8StringEncoding];
+#else
+    return nil;
+#endif
+}
+
+- (void)_gssTokenToURLSession:(NSURLSession *)session
+                         task:(NSURLSessionTask *)task
+                        token:(NSData *)token
+{
+//    NSString *response = [NSString stringWithFormat:@"Negotiate %@",
+//                          [[NSString alloc] initWithData:token encoding:NSUTF8StringEncoding]];
+    
+//    [[task currentRequest] setValue:response forHTTPHeaderField:@"Authenticate"];
+    
+}
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler;
+{
     NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
+    NSData *inputToken = [self _gssTokenFromURLSession:session task:task];
     
     if (![[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodNegotiate]) {
         completionHandler(NSURLSessionAuthChallengeRejectProtectionSpace, nil);
         return;
     }
 
-    [_context stepWithData:inputToken completionHandler:^(NSData *outputToken, NSError *error) {
-        NSURLCredential *cred;
+    if ([_context.lastError _gssContinueNeeded] && ![inputToken length]) {
+        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+        return;
+    }
 
-        if ([error _gssCompleteOrContinueNeeded]) {
-            completionHandler(NSURLSessionAuthChallengeUseCredential, cred);
-        } else {
-            completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
-        }
+    if (_context.credential == nil)
+        _context.credential = [GSSCredential credentialWithURLCredential:[challenge proposedCredential]
+                                                               mechanism:[GSSMechanism mechanismSPNEGO]];
+    if (_context.targetName == nil)
+        _context.targetName = [GSSName nameWithHostBasedService:@"http"
+                                                   withHostName:[protectionSpace host]];
+
+    if ([[protectionSpace protocol] isEqualToString:NSURLProtectionSpaceHTTPS] ||
+        [[protectionSpace protocol] isEqualToString:NSURLProtectionSpaceHTTPProxy])
+        ;    // TODO channel bindings
+
+    [_context stepWithData:inputToken
+         completionHandler:^(NSData *outputToken, NSError *error) {
+             NSURLCredential *cred = [challenge proposedCredential];
+             
+             if ([error _gssCompleteOrContinueNeeded]) {
+                 [self _gssTokenToURLSession:session task:task token:outputToken];
+                 completionHandler(NSURLSessionAuthChallengeUseCredential, cred);
+             } else {
+                 completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+             }
     }];
 }
 

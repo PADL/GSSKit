@@ -6,6 +6,10 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
-@interface GSSURLSessionAuthenticationDelegate : NSObject
+@class GSSCredential;
+
+@interface GSSURLSessionAuthenticationTaskDelegate : NSObject
+
+- (instancetype)initWithCredential:(GSSCredential *)credential;
 
 @end
