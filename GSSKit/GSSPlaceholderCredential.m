@@ -45,14 +45,14 @@ GSSAcquireCredExtWrapper(OM_uint32 *minor,
                          gss_cred_usage_t credUsage,
                          GSSCredential **pCredHandle)
 {
-    return __ApplePrivate_gss_acquire_cred_ext(minor,
-                                               [desiredName _gssName],
-                                               credType,
-                                               credData,
-                                               timeReq,
-                                               [desiredMech oid],
-                                               credUsage,
-                                               (gss_cred_id_t *)pCredHandle);
+    return gss_acquire_cred_ext(minor,
+                                [desiredName _gssName],
+                                credType,
+                                credData,
+                                timeReq,
+                                [desiredMech oid],
+                                credUsage,
+                                (gss_cred_id_t *)pCredHandle);
 }
 
 static OM_uint32

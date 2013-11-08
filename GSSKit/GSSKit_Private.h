@@ -55,3 +55,15 @@ __ApplePrivate_gss_acquire_cred_ext (
                      gss_const_OID /*desired_mech*/,
                      gss_cred_usage_t /*cred_usage*/,
                      gss_cred_id_t */*output_cred_handle*/);
+
+#define gss_acquire_cred_ext __ApplePrivate_gss_acquire_cred_ext
+
+OM_uint32
+__ApplePrivate_gss_cred_hold(OM_uint32 *min_stat, gss_cred_id_t cred_handle);
+
+#define gss_cred_hold __ApplePrivate_gss_cred_hold
+
+OM_uint32
+__ApplePrivate_gss_cred_unhold(OM_uint32 *min_stat, gss_cred_id_t cred_handle);
+
+#define gss_cred_unhold __ApplePrivate_gss_cred_unhold

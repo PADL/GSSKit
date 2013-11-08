@@ -179,4 +179,18 @@ static GSSCredential *placeholderCred;
     });
 }
 
+- (void)retainCredential
+{
+    OM_uint32 major, minor;
+    
+    major = gss_cred_hold(&minor, [self _gssCred]);
+}
+
+- (void)releaseCredential
+{
+    OM_uint32 major, minor;
+    
+    major = gss_cred_unhold(&minor, [self _gssCred]);
+}
+
 @end
