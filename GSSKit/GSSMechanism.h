@@ -33,5 +33,6 @@
 - (BOOL)isKerberosMechanism;
 
 - (BOOL)isEqual:(id)anObject;
+- (BOOL)isEqualToOID:(gss_const_OID)someOid;
 
 @end

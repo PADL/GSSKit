@@ -187,20 +187,25 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 #endif
 }
 
+- (BOOL)isEqualToOID:(gss_const_OID)someOid
+{
+    return gss_oid_equal(_oid, someOid);
+}
+
 - (BOOL)isSPNEGOMechanism
 {
-    return gss_oid_equal(_oid, GSS_SPNEGO_MECHANISM);
+    return [self isEqualToOID:GSS_SPNEGO_MECHANISM];
 }
 
 - (BOOL)isKerberosMechanism
 {
-    return gss_oid_equal(_oid, GSS_KRB5_MECHANISM);
+    return [self isEqualToOID:GSS_KRB5_MECHANISM];
 }
 
 - (BOOL)isEqual:(id)anObject
 {
     if ([anObject isKindOfClass:[GSSMechanism class]])
-        return gss_oid_equal(_oid, [anObject oid]);
+        return [self isEqualToOID:[anObject oid]];
     else
         return NO;
 }
