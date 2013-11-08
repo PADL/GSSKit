@@ -19,7 +19,7 @@
 + (GSSMechanism *)mechanismSASLDigestMD5;
 #endif
 
-+ (GSSMechanism *)mechanismWithOID:(gss_OID)oid;
++ (GSSMechanism *)mechanismWithOID:(gss_const_OID)oid;
 + (GSSMechanism *)mechanismWithDERData:(NSData *)data;
 + (GSSMechanism *)mechanismWithSASLName:(NSString *)name;
 

@@ -8,9 +8,21 @@
 
 #import "GSSKit_Private.h"
 
+static const gss_OID_desc GSSBrowserIDAes128MechDesc =
+{ 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x18\x01\x11" };
+
+static const gss_OID_desc GSSBrowserIDAes256MechDesc =
+{ 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x18\x01\x12" };
+
+static const gss_OID_desc GSSEapAes128MechDesc =
+{ 9, "\x2B\x06\x01\x05\x05\x0f\x01\x01\x11" };
+
+static const gss_OID_desc GSSEapAes256MechDesc =
+{ 9, "\x2B\x06\x01\x05\x05\x0f\x01\x01\x12" };
+
 @implementation GSSMechanism
 {
-    gss_OID _oid;
+    gss_const_OID _oid;
     gss_OID_desc _oidBuffer;
     NSData *_data;
 }
@@ -23,6 +35,16 @@
 + (GSSMechanism *)mechanismKerberos
 {
     return [self mechanismWithOID:GSS_KRB5_MECHANISM];
+}
+
++ (GSSMechanism *)mechanismBrowserID
+{
+    return [self mechanismWithOID:&GSSBrowserIDAes128MechDesc];
+}
+
++ (GSSMechanism *)mechanismEap
+{
+    return [self mechanismWithOID:&GSSEapAes128MechDesc];
 }
 
 #if 0
@@ -47,7 +69,7 @@
 }
 #endif
 
-- (GSSMechanism *)initWithOID:(gss_OID)oid
+- (GSSMechanism *)initWithOID:(gss_const_OID)oid
 {
     if ((self = [super init]) != nil)
         _oid = oid;
@@ -64,7 +86,7 @@
     return [self initWithOID:&_oidBuffer];
 }
 
-+ (GSSMechanism *)mechanismWithOID:(gss_OID)oid
++ (GSSMechanism *)mechanismWithOID:(gss_const_OID)oid
 {
     return [[self alloc] initWithOID: oid];
 }
@@ -109,7 +131,7 @@
     OM_uint32 major, minor;
     gss_buffer_desc oidString = GSS_C_EMPTY_BUFFER;
     
-    major = gss_oid_to_str(&minor, _oid, &oidString);
+    major = gss_oid_to_str(&minor, (gss_OID)_oid, &oidString);
     if (GSS_ERROR(major))
         return nil;
     
