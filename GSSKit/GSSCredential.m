@@ -30,6 +30,44 @@ static GSSCredential *placeholderCred;
     return [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:error];
 }
 
++ (NSString *)usageFlagsToString:(OM_uint32)flags
+{
+    NSString *credUsage = nil;
+    
+    flags &= GSS_C_OPTION_MASK;
+    
+    switch (flags) {
+        case GSS_C_ACCEPT:
+            credUsage = (__bridge NSString *)kGSS_C_ACCEPT;
+            break;
+        case GSS_C_BOTH:
+            credUsage = (__bridge NSString *)kGSS_C_BOTH;
+            break;
+        case GSS_C_INITIATE:
+        default:
+            credUsage = (__bridge NSString *)kGSS_C_INITIATE;
+            break;
+    }
+    
+    return credUsage;
+}
+
++ (GSSCredential *)credentialWithName:(GSSName *)name
+                            mechanism:(GSSMechanism *)desiredMech
+                           usageFlags:(OM_uint32)flags
+                             password:(NSString *)password
+                                error:(NSError **)error
+{
+    NSDictionary *attributes = @{
+                                 (__bridge NSString *)kGSSCredentialUsage : [self usageFlagsToString:flags],
+                                 (__bridge NSString *)kGSSICPassword : password
+                                 };
+    
+    return [self credentialWithName:name mechanism:desiredMech
+                         attributes:attributes error:error];
+
+}
+
 - (id)init
 {
     NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
@@ -43,6 +81,11 @@ static GSSCredential *placeholderCred;
 {
     NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
     return nil;
+}
+
+- (void)destroy
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
 }
 
 - (GSSName *)name

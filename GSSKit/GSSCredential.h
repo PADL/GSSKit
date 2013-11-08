@@ -9,18 +9,25 @@
 @interface GSSCredential : NSObject
 
 // primitive methods
+- (instancetype)initWithName:(GSSName *)name
+                   mechanism:(GSSMechanism *)desiredMech
+                  attributes:(NSDictionary *)attributes
+                       error:(NSError **)error;
+
+- (void)destroy;
+
+// category methods
 
 + (GSSCredential *)credentialWithName:(GSSName *)name
                             mechanism:(GSSMechanism *)desiredMech
                            attributes:(NSDictionary *)attributes
                                 error:(NSError **)error;
 
-- (instancetype)initWithName:(GSSName *)name
-                   mechanism:(GSSMechanism *)desiredMech
-                  attributes:(NSDictionary *)attributes
-                       error:(NSError **)error;
-
-// category methods
++ (GSSCredential *)credentialWithName:(GSSName *)name
+                            mechanism:(GSSMechanism *)desiredMech
+                           usageFlags:(OM_uint32)flags
+                             password:(NSString *)password
+                                error:(NSError **)error;
 
 - (GSSName *)name;
 - (OM_uint32)lifetime;

@@ -44,6 +44,14 @@
 
 #pragma mark Bridging
 
+- (void)destroy
+{
+    OM_uint32 minor;
+    gss_cred_id_t cred = (gss_cred_id_t)[self retain];
+    
+    gss_destroy_cred(&minor, &cred);
+}
+
 - (id)retain
 {
     return CFRetain((CFTypeRef)self);
