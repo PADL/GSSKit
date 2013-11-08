@@ -14,7 +14,7 @@
 + (BOOL)delete:(NSDictionary *)query error:(NSError **)error;
 + (NSArray *)copyMatching:(NSDictionary *)query error:(NSError **)error;
 
-- (id)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error;
+- (instancetype)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error;
 - (BOOL)delete:(NSError **)error;
 - (id)valueForKey:(NSString *)key;
 

@@ -14,7 +14,7 @@
 
 #pragma mark Initialization
 
-- (id)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error
+- (instancetype)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
     GSSItemRef item;
 

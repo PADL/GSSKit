@@ -9,6 +9,7 @@
 #import "GSSKit.h"
 #import "GSSPlaceholderItem.h"
 #import "GSSPlaceholderName.h"
+#import "GSSCredential+Private.h"
 #import "GSSPlaceholderCredential.h"
 #import "GSSItem_Private.h"
 #import "GSSBuffer.h"

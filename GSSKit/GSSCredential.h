@@ -10,12 +10,15 @@
 
 // primitive methods
 
-- (id)initWithName:(GSSName *)name
-         mechanism:(GSSMechanism *)desiredMech
-        attributes:(NSDictionary *)attributes
-             error:(NSError **)error;
++ (GSSCredential *)credentialWithName:(GSSName *)name
+                            mechanism:(GSSMechanism *)desiredMech
+                           attributes:(NSDictionary *)attributes
+                                error:(NSError **)error;
 
-- (gss_cred_id_t)_gssCred;
+- (instancetype)initWithName:(GSSName *)name
+                   mechanism:(GSSMechanism *)desiredMech
+                  attributes:(NSDictionary *)attributes
+                       error:(NSError **)error;
 
 // category methods
 
@@ -25,5 +28,7 @@
 - (NSArray *)mechanisms;
 - (NSData *)export;
 
+- (void)iterateWithFlags:(OM_uint32)flags ofMechanism:(GSSMechanism *)mech
+                callback:(void (^)(GSSMechanism *, GSSCredential *))fun;
 
 @end

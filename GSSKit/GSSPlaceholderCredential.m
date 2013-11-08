@@ -14,10 +14,10 @@
 
 #pragma mark Initialization
 
-- (id)initWithName:(GSSName *)name
-         mechanism:(GSSMechanism *)desiredMech
-        attributes:(NSDictionary *)attributes
-             error:(NSError **)error
+- (instancetype)initWithName:(GSSName *)name
+                   mechanism:(GSSMechanism *)desiredMech
+                  attributes:(NSDictionary *)attributes
+                       error:(NSError **)error
 {
     OM_uint32 major;
     gss_cred_id_t cred;
@@ -33,6 +33,13 @@
     [*error autorelease];
     
     return (id)cred;
+}
+
+- (instancetype)initWithGSSCred:(gss_cred_id_t)cred
+{
+    [self release];
+    self = CFRetain((CFTypeRef)cred);
+    return self;
 }
 
 #pragma mark Bridging

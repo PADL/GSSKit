@@ -37,7 +37,7 @@ static GSSItem *placeholderItem;
     return nil;
 }
 
-- (id)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error
+- (instancetype)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
     NSAssert(NO, @"Must implement a complete subclass of GSSItem");
     return nil;

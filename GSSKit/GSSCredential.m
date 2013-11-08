@@ -106,10 +106,18 @@ static GSSCredential *placeholderCred;
     return [GSSBuffer dataWithGSSBufferNoCopy:&exportedCred freeWhenDone:YES];
 }
 
-- (gss_cred_id_t)_gssCred
+
+- (void)iterateWithFlags:(OM_uint32)flags ofMechanism:(GSSMechanism *)mech
+                callback:(void (^)(GSSMechanism *, GSSCredential *))fun
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
-    return GSS_C_NO_CREDENTIAL;
+    OM_uint32 major, minor;
+    
+    major = gss_iter_creds(&minor, flags, [mech oid],
+                           ^(gss_iter_OID mechOid, gss_cred_id_t mechCred){
+                               GSSMechanism *m = [GSSMechanism mechanismWithOID:mechOid];
+                               GSSCredential *c = [GSSCredential credentialWithGSSCred:mechCred];
+                               fun(m, c);
+    });
 }
 
 @end
