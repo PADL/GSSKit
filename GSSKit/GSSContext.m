@@ -108,6 +108,26 @@
     return self;
 }
 
+- (NSData *)_encodeToken:(gss_buffer_t)buffer
+{
+    NSData *data = [GSSBuffer dataWithGSSBufferNoCopy:buffer freeWhenDone:YES];
+    
+    if (self.encoding == GSS_C_ENC_BASE64)
+        data = [data base64EncodedDataWithOptions:0];
+    
+    return data;
+}
+
+- (gss_buffer_desc)_decodeToken:(NSData *)data cookie:(id *)pData
+{
+    if (self.encoding == GSS_C_ENC_BASE64) {
+        data = [[NSData alloc] initWithBase64EncodedData:data options:0];
+        *pData = data;
+    }
+
+    return [data _gssBuffer];
+}
+
 - (void)_initSecContext:(NSData *)reqData :(NSData **)retData
 {
     gss_const_OID mechType = GSS_SPNEGO_MECHANISM;
@@ -116,11 +136,12 @@
     gss_OID actualMechType = GSS_C_NO_OID;
     gss_buffer_desc outputToken = GSS_C_EMPTY_BUFFER;
     OM_uint32 timeRec = 0;
+    id cookie = nil;
     
     *retData = nil;
     
     if (reqData)
-        inputToken = [reqData _gssBuffer];
+        inputToken = [self _decodeToken:reqData cookie:&cookie];
     if (self.mechanism)
         mechType = [self.mechanism oid];
     if (self.channelBindings)
@@ -143,14 +164,15 @@
     if (actualMechType != GSS_C_NO_OID)
         _finalMechanism = [GSSMechanism mechanismWithOID:actualMechType];
     if (outputToken.value != NULL)
-        *retData = [GSSBuffer dataWithGSSBufferNoCopy:&outputToken freeWhenDone:YES];
+        *retData = [self _encodeToken:&outputToken];
     if (timeRec)
         _expiryTime = time(NULL) + timeRec;
 }
 
 - (void)_acceptSecContext:(NSData *)reqData :(NSData **)retData
 {
-    gss_buffer_desc inputToken = [reqData _gssBuffer];
+    id cookie = nil;
+    gss_buffer_desc inputToken = GSS_C_EMPTY_BUFFER;
     struct gss_channel_bindings_struct channelBindingsStruct;
     gss_name_t sourceName = GSS_C_NO_NAME;
     gss_OID actualMechType = GSS_C_NO_OID;
@@ -161,7 +183,7 @@
     *retData = nil;
 
     if (reqData)
-        inputToken = [reqData _gssBuffer];
+        inputToken = [self _decodeToken:reqData cookie:&cookie];
     if (self.channelBindings)
         channelBindingsStruct = [self.channelBindings _gssChannelBindings];
     
@@ -180,7 +202,7 @@
     if (actualMechType != GSS_C_NO_OID)
         _finalMechanism = [GSSMechanism mechanismWithOID:actualMechType];
     if (outputToken.value != NULL)
-        *retData = [GSSBuffer dataWithGSSBufferNoCopy:&outputToken freeWhenDone:YES];
+        *retData = [self _encodeToken:&outputToken];
     if (timeRec)
         _expiryTime = time(NULL) + timeRec;
     if (delegCred)
@@ -220,7 +242,7 @@
     if (GSS_ERROR(_major) || actualConfState != confState)
         return nil;
 
-    return [GSSBuffer dataWithGSSBufferNoCopy:&outputMessageBuffer freeWhenDone:YES];
+    return [self _encodeToken:&outputMessageBuffer];
 }
 
 - (NSData *)wrapData:(NSData *)data encrypt:(BOOL)confState
@@ -230,7 +252,8 @@
 
 - (NSData *)unwrapData:(NSData *)data didEncrypt:(BOOL *)didEncrypt qopState:(gss_qop_t *)qopState;
 {
-    gss_buffer_desc inputMessageBuffer = [data _gssBuffer];
+    id cookie = nil;
+    gss_buffer_desc inputMessageBuffer = [self _decodeToken:data cookie:&cookie];
     gss_buffer_desc outputMessageBuffer = GSS_C_EMPTY_BUFFER;
     int confState;
     
@@ -269,7 +292,7 @@
     if (GSS_ERROR(_major))
         return nil;
     
-    return [GSSBuffer dataWithGSSBufferNoCopy:&messageToken freeWhenDone:YES];
+    return [self _encodeToken:&messageToken];
 }
 
 - (NSData *)messageIntegrityCodeFromData:(NSData *)data
@@ -279,8 +302,9 @@
 
 - (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data withCode:(NSData *)mic qopState:(gss_qop_t *)qopState
 {
+    id cookie = nil;
     gss_buffer_desc messageBuffer = [data _gssBuffer];
-    gss_buffer_desc messageToken = [mic _gssBuffer];
+    gss_buffer_desc messageToken = [self _decodeToken:mic cookie:&cookie];
     
     _major = gss_verify_mic(&_minor,
                             _ctx,
@@ -289,7 +313,6 @@
                             qopState);
     if (GSS_ERROR(_major))
         return NO;
-
     
     return YES;
 }
