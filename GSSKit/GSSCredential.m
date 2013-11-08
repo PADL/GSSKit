@@ -81,24 +81,17 @@ static GSSCredential *placeholderCred;
 {
     OM_uint32 major, minor;
     gss_OID_set oids = GSS_C_NO_OID_SET;
-    NSMutableArray *mechs;
+    NSArray *mechanisms;
     
     major = gss_inquire_cred(&minor, [self _gssCred], NULL, NULL, NULL, &oids);
     if (GSS_ERROR(major) || oids == GSS_C_NO_OID_SET)
         return nil;
     
-    mechs = [NSMutableArray arrayWithCapacity:oids->count];
+    mechanisms = [NSArray arrayWithGSSOIDSet:oids];
     
-    for (OM_uint32 i = 0; i < oids->count; i++) {
-        gss_OID thisOid = &oids->elements[i];
-        NSData *derData = [NSData dataWithBytes:thisOid->elements length:thisOid->length];
-        GSSMechanism *mech = [GSSMechanism mechanismWithDERData:derData];
-        
-        [mechs addObject:mech];
+    gss_release_oid_set(&minor, &oids);
     
-    }
-    
-    return mechs;
+    return mechanisms;
 }
 
 - (NSData *)export

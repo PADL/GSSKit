@@ -27,6 +27,10 @@
 - (gss_buffer_desc)_gssBuffer;
 @end
 
+@interface NSArray (GSSKit)
++ (NSArray *)arrayWithGSSOIDSet:(gss_OID_set)oids;
+@end
+
 GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
 gss_inquire_mech_for_saslname(OM_uint32 *minor_status,
                               const gss_buffer_t sasl_mech_name,
