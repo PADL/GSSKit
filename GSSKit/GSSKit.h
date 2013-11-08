@@ -23,3 +23,6 @@
 
 extern gss_OID_desc __gss_c_cred_cfdictionary_oid_desc;
 #define GSS_C_CRED_CFDictionary (&__gss_c_cred_cfdictionary_oid_desc)
+
+extern NSString * const GSSMajorStatusErrorKey;
+extern NSString * const GSSMinorStatusErrorKey;

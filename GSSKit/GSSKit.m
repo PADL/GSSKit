@@ -20,13 +20,20 @@ gss_OID_desc GSSAPI_LIB_VARIABLE __gss_c_cred_certificate_oid_desc = { 7, "\x2a\
 /* GSS_C_CRED_SecIdentity - 1.2.752.43.13.202 */
 gss_OID_desc GSSAPI_LIB_VARIABLE __gss_c_cred_secidentity_oid_desc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x4a" };
 
+NSString * const GSSMajorStatusErrorKey = @"GSSMajorStatusErrorKey";
+NSString * const GSSMinorStatusErrorKey = @"GSSMinorStatusErrorKey";
 
 @implementation NSError (GSSKit)
 
 + (NSError *)GSSError:(OM_uint32)majorStatus
                      :(OM_uint32)minorStatus
 {
-    return [NSError errorWithDomain:@"org.h5l.GSS" code:(NSInteger)majorStatus userInfo:nil];
+    NSDictionary *userInfo = @{
+                               GSSMajorStatusErrorKey : [NSNumber numberWithUnsignedInt:majorStatus],
+                               GSSMinorStatusErrorKey : [NSNumber numberWithUnsignedInt:minorStatus]
+                               };
+    
+    return [NSError errorWithDomain:@"org.h5l.GSS" code:(NSInteger)majorStatus userInfo:userInfo];
 }
 
 + (NSError *)GSSError:(OM_uint32)majorStatus
@@ -34,8 +41,14 @@ gss_OID_desc GSSAPI_LIB_VARIABLE __gss_c_cred_secidentity_oid_desc = { 7, "\x2a\
     return [self GSSError:majorStatus :0];
 }
 
-@end
+- (BOOL)_gssContinueNeeded
+{
+    NSNumber *major = [[self userInfo] objectForKey:GSSMajorStatusErrorKey];
+    
+    return ([major unsignedIntValue] == GSS_S_CONTINUE_NEEDED);
+}
 
+@end
 
 @implementation NSData (GSSKit)
 - (gss_buffer_desc)_gssBuffer

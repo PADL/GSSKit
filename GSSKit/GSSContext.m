@@ -212,7 +212,7 @@
 }
 
 - (void)stepWithData:(NSData *)reqData
-   completionHandler:(void (^)(OM_uint32, OM_uint32, NSData *))handler
+   completionHandler:(void (^)(NSError *, NSData *))handler
 {
     dispatch_async(_queue, ^{
         NSData *retData = nil;
@@ -222,7 +222,7 @@
         else
             [self _acceptSecContext:reqData :&retData];
         
-        handler(_major, _minor, retData);
+        handler(self.lastError, retData);
     });
 }
 

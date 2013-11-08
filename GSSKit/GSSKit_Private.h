@@ -21,6 +21,7 @@
 @interface NSError (GSSKit)
 + (NSError *)GSSError:(OM_uint32)majorStatus :(OM_uint32)minorStatus;
 + (NSError *)GSSError:(OM_uint32)majorStatus;
+- (BOOL)_gssContinueNeeded;
 @end
 
 @interface NSData (GSSKit)
