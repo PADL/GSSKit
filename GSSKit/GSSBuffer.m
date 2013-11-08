@@ -59,3 +59,15 @@
 }
 
 @end
+
+@implementation NSData (GSSBufferHelper)
+- (gss_buffer_desc)_gssBuffer
+{
+    gss_buffer_desc buffer;
+    
+    buffer.length = [self length];
+    buffer.value = (void *)[self bytes];
+    
+    return buffer;
+}
+@end

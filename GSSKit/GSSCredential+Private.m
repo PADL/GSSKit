@@ -8,6 +8,18 @@
 
 #import "GSSCredential+Private.h"
 
+/* GSS_C_CRED_PASSWORD - 1.2.752.43.13.200 */
+static const gss_OID_desc GSSCredPasswordDesc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x48" };
+
+/* GSS_C_CRED_CERTIFICATE - 1.2.752.43.13.201 */
+static const gss_OID_desc GSSCredCertificateDesc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x49" };
+
+/* GSS_C_CRED_SecIdentity - 1.2.752.43.13.202 */
+static const gss_OID_desc GSSCredSecIdentityDesc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x4a" };
+
+/* GSS_C_CRED_CFDictionary - 1.3.6.1.4.1.5322.25.1.1 */
+static const gss_OID_desc GSSCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x19\x01\x01" };
+
 @implementation GSSCredential (Private)
 
 + (GSSCredential *)credentialWithGSSCred:(gss_cred_id_t)cred
@@ -82,7 +94,7 @@ GSSAcquireCred(GSSName *desiredName,
     
     major = GSSAcquireCredExtWrapper(&minor,
                                      desiredName,
-                                     GSS_C_CRED_CFDictionary,
+                                     &GSSCredCFDictionary,
                                      (__bridge const void *)attributes,
                                      GSS_C_INDEFINITE,
                                      desiredMech,
@@ -94,14 +106,14 @@ GSSAcquireCred(GSSName *desiredName,
         id certificate = [attributes objectForKey:(NSString *)kGSSICCertificate];
         gss_buffer_desc credBuffer = GSS_C_EMPTY_BUFFER;
         void *credData = NULL;
-        gss_OID credOid = GSS_C_NO_OID;
+        gss_const_OID credOid = GSS_C_NO_OID;
         
         if (password && [password respondsToSelector:@selector(_gssBuffer)]) {
             credBuffer = [password _gssBuffer];
-            credOid = GSS_C_CRED_PASSWORD;
+            credOid = &GSSCredPasswordDesc;
             credData = &credBuffer;
         } else if (certificate && CFGetTypeID((CFTypeRef)certificate) == SecIdentityGetTypeID()) {
-            credOid = GSS_C_CRED_SecIdentity;
+            credOid = &GSSCredSecIdentityDesc;
             credData = (__bridge void *)certificate;
         }
         

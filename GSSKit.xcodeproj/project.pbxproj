@@ -46,6 +46,12 @@
 		D336E2D6182CA4C8009271CD /* GSSContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2D4182CA4C8009271CD /* GSSContext.m */; };
 		D336E2DD182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2DB182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h */; };
 		D336E2DE182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2DC182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m */; };
+		D336E2E1182D0A9A009271CD /* NSError+GSSErrorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2DF182D0A9A009271CD /* NSError+GSSErrorHelper.h */; };
+		D336E2E2182D0A9A009271CD /* NSError+GSSErrorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2E0182D0A9A009271CD /* NSError+GSSErrorHelper.m */; };
+		D336E2E5182D0B16009271CD /* NSString+GSSBufferHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2E3182D0B16009271CD /* NSString+GSSBufferHelper.h */; };
+		D336E2E6182D0B16009271CD /* NSString+GSSBufferHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2E4182D0B16009271CD /* NSString+GSSBufferHelper.m */; };
+		D336E2E9182D0B6E009271CD /* NSArray+GSSOIDHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2E7182D0B6E009271CD /* NSArray+GSSOIDHelper.h */; };
+		D336E2EA182D0B6E009271CD /* NSArray+GSSOIDHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2E8182D0B6E009271CD /* NSArray+GSSOIDHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +113,12 @@
 		D336E2D4182CA4C8009271CD /* GSSContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSContext.m; sourceTree = "<group>"; };
 		D336E2DB182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSURLSessionAuthenticationDelegate.h; sourceTree = "<group>"; };
 		D336E2DC182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSURLSessionAuthenticationDelegate.m; sourceTree = "<group>"; };
+		D336E2DF182D0A9A009271CD /* NSError+GSSErrorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+GSSErrorHelper.h"; sourceTree = "<group>"; };
+		D336E2E0182D0A9A009271CD /* NSError+GSSErrorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+GSSErrorHelper.m"; sourceTree = "<group>"; };
+		D336E2E3182D0B16009271CD /* NSString+GSSBufferHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+GSSBufferHelper.h"; sourceTree = "<group>"; };
+		D336E2E4182D0B16009271CD /* NSString+GSSBufferHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+GSSBufferHelper.m"; sourceTree = "<group>"; };
+		D336E2E7182D0B6E009271CD /* NSArray+GSSOIDHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+GSSOIDHelper.h"; sourceTree = "<group>"; };
+		D336E2E8182D0B6E009271CD /* NSArray+GSSOIDHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+GSSOIDHelper.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +207,12 @@
 				D336E239182AE174009271CD /* GSSKit.h */,
 				D336E26B182B4D21009271CD /* GSSKit_Private.h */,
 				D336E23A182AE174009271CD /* GSSKit.m */,
+				D336E2E7182D0B6E009271CD /* NSArray+GSSOIDHelper.h */,
+				D336E2E8182D0B6E009271CD /* NSArray+GSSOIDHelper.m */,
+				D336E2E3182D0B16009271CD /* NSString+GSSBufferHelper.h */,
+				D336E2E4182D0B16009271CD /* NSString+GSSBufferHelper.m */,
+				D336E2DF182D0A9A009271CD /* NSError+GSSErrorHelper.h */,
+				D336E2E0182D0A9A009271CD /* NSError+GSSErrorHelper.m */,
 				D336E2B1182BA713009271CD /* GSSName.h */,
 				D336E2B2182BA713009271CD /* GSSName.m */,
 				D336E2B9182BA748009271CD /* GSSPlaceholderName.h */,
@@ -254,12 +272,15 @@
 				D336E2B3182BA713009271CD /* GSSName.h in Headers */,
 				D336E2B7182BA733009271CD /* GSSCredential.h in Headers */,
 				D336E2D1182CA2DC009271CD /* GSSChannelBindings.h in Headers */,
+				D336E2E1182D0A9A009271CD /* NSError+GSSErrorHelper.h in Headers */,
 				D336E2D5182CA4C8009271CD /* GSSContext.h in Headers */,
 				D336E2DD182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h in Headers */,
 				D336E26E182B4E7E009271CD /* GSSItem+AsyncOperations.h in Headers */,
 				D336E2BF182BA75B009271CD /* GSSPlaceholderCredential.h in Headers */,
 				D336E2C3182C54AD009271CD /* GSSMechanism.h in Headers */,
 				D336E258182AE1C8009271CD /* GSSItem.h in Headers */,
+				D336E2E9182D0B6E009271CD /* NSArray+GSSOIDHelper.h in Headers */,
+				D336E2E5182D0B16009271CD /* NSString+GSSBufferHelper.h in Headers */,
 				D336E2BB182BA748009271CD /* GSSPlaceholderName.h in Headers */,
 				D336E267182AF7DA009271CD /* GSSItem+SyncOperations.h in Headers */,
 				D336E2C7182C622F009271CD /* GSSBuffer.h in Headers */,
@@ -363,15 +384,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D336E2E2182D0A9A009271CD /* NSError+GSSErrorHelper.m in Sources */,
 				D336E2BC182BA748009271CD /* GSSPlaceholderName.m in Sources */,
 				D336E2DE182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m in Sources */,
 				D336E2B8182BA733009271CD /* GSSCredential.m in Sources */,
 				D336E26F182B4E7E009271CD /* GSSItem+AsyncOperations.m in Sources */,
 				D336E26A182B4CF2009271CD /* GSSItem.m in Sources */,
+				D336E2E6182D0B16009271CD /* NSString+GSSBufferHelper.m in Sources */,
 				D336E2C8182C622F009271CD /* GSSBuffer.m in Sources */,
 				D336E2C0182BA75B009271CD /* GSSPlaceholderCredential.m in Sources */,
 				D336E2B4182BA713009271CD /* GSSName.m in Sources */,
 				D336E2D6182CA4C8009271CD /* GSSContext.m in Sources */,
+				D336E2EA182D0B6E009271CD /* NSArray+GSSOIDHelper.m in Sources */,
 				D336E2D2182CA2DC009271CD /* GSSChannelBindings.m in Sources */,
 				D336E268182AF7DA009271CD /* GSSItem+SyncOperations.m in Sources */,
 				D336E2CC182C686C009271CD /* GSSCredential+Private.m in Sources */,

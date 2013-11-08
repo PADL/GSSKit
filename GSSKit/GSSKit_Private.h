@@ -18,24 +18,10 @@
 #import "GSSItem_Private.h"
 #import "GSSBuffer.h"
 
-@interface NSError (GSSKit)
-+ (NSError *)GSSError:(OM_uint32)majorStatus :(OM_uint32)minorStatus;
-+ (NSError *)GSSError:(OM_uint32)majorStatus;
-- (BOOL)_gssContinueNeeded;
-@end
+#import "NSError+GSSErrorHelper.h"
+#import "NSString+GSSBufferHelper.h"
+#import "NSArray+GSSOIDHelper.h"
 
-@interface NSData (GSSKit)
-- (gss_buffer_desc)_gssBuffer;
-@end
-
-@interface NSString (GSSKit)
-+ (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer;
-- (gss_buffer_desc)_gssBuffer;
-@end
-
-@interface NSArray (GSSKit)
-+ (NSArray *)arrayWithGSSOIDSet:(gss_OID_set)oids;
-@end
 
 GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
 gss_inquire_mech_for_saslname(OM_uint32 *minor_status,

@@ -57,9 +57,9 @@
 }
 
 
-- (void)URLSession:(NSURLSession *)session
+- (void) URLSession:(NSURLSession *)session
 didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
- completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
     NSData *inputToken = nil;
     NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
@@ -72,7 +72,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     [_context stepWithData:inputToken completionHandler:^(NSData *outputToken, NSError *error) {
         NSURLCredential *cred;
 
-        if ([error code] == GSS_S_COMPLETE || [error _gssContinueNeeded]) {
+        if ([error _gssCompleteOrContinueNeeded]) {
             completionHandler(NSURLSessionAuthChallengeUseCredential, cred);
         } else {
             completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);

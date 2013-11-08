@@ -13,3 +13,7 @@
 - (instancetype)initWithGSSBufferNoCopy:(gss_buffer_t)buffer freeWhenDone:(BOOL)flag;
 - (gss_buffer_desc)_gssBuffer;
 @end
+
+@interface NSData (GSSBufferHelper)
+- (gss_buffer_desc)_gssBuffer;
+@end
