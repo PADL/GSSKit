@@ -34,7 +34,7 @@ typedef OM_uint32 GSSEncoding;
 - (id)initWithRequestFlags:(OM_uint32)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator;
 
 - (void)stepWithData:(NSData *)reqData
-   completionHandler:(void (^)(NSError *, NSData *))handler;
+   completionHandler:(void (^)(NSData *, NSError *))handler;
 
 - (NSData *)wrapData:(NSData *)data encrypt:(OM_uint32)confState;
 - (NSData *)wrapData:(NSData *)data encrypt:(OM_uint32)confState qopState:(gss_qop_t)qopState;

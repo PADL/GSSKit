@@ -32,8 +32,7 @@
     cb.acceptor_addrtype = self.acceptorAddressType;
     cb.acceptor_address = [self.acceptorAddress _gssBuffer];
     cb.application_data = [self.applicationData _gssBuffer];
-    
-    
+        
     return cb;
 }
 
