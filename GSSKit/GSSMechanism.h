@@ -11,6 +11,8 @@
 @interface GSSMechanism : NSObject
 + (GSSMechanism *)mechanismSPNEGO;
 + (GSSMechanism *)mechanismKerberos;
++ (GSSMechanism *)mechanismBrowserID;
++ (GSSMechanism *)mechanismEap;
 
 #if 0
 + (GSSMechanism *)mechanismPKU2U;

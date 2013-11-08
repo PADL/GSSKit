@@ -37,6 +37,28 @@ static const gss_OID_desc GSSEapAes256MechDesc =
     return [self mechanismWithOID:GSS_KRB5_MECHANISM];
 }
 
++ (GSSMechanism *)mechanismNTLM
+{
+    return [self mechanismWithOID:GSS_NTLM_MECHANISM];
+}
+
++ (GSSMechanism *)mechanismPKU2U
+{
+    return [self mechanismWithOID:GSS_PKU2U_MECHANISM];
+}
+
+#if 0
++ (GSSMechanism *)mechanismSCRAM
+{
+    return [self mechanismWithOID:GSS_SCRAM_MECHANISM];
+}
+#endif
+
++ (GSSMechanism *)mechanismSASLDigestMD5
+{
+    return [self mechanismWithOID:GSS_SASL_DIGEST_MD5_MECHANISM];
+}
+
 + (GSSMechanism *)mechanismBrowserID
 {
     return [self mechanismWithOID:&GSSBrowserIDAes128MechDesc];
@@ -46,28 +68,6 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 {
     return [self mechanismWithOID:&GSSEapAes128MechDesc];
 }
-
-#if 0
-+ (GSSMechanism *)mechanismPKU2U
-{
-    return [self mechanismWithOID:GSS_PKU2U_MECHANISM];
-}
-
-+ (GSSMechanism *)mechanismSCRAM
-{
-    return [self mechanismWithOID:GSS_SCRAM_MECHANISM];
-}
-
-+ (GSSMechanism *)mechanismNTLM
-{
-    return [self mechanismWithOID:GSS_NTLM_MECHANISM];
-}
-
-+ (GSSMechanism *)mechanismSASLDigestMD5
-{
-    return [self mechanismWithOID:GSS_DIGEST_MD5_MECHANISM];
-}
-#endif
 
 - (GSSMechanism *)initWithOID:(gss_const_OID)oid
 {
