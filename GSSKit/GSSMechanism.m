@@ -104,26 +104,26 @@
     return _oid;
 }
 
-- (NSString *)name
+- (NSString *)oidString
 {
-#if 0
     OM_uint32 major, minor;
-    gss_buffer_desc buffer = GSS_C_EMPTY_BUFFER;
+    gss_buffer_desc oidString = GSS_C_EMPTY_BUFFER;
     
-    major = gss_inquire_saslname_for_mech(&minor, _oid,
-                                          GSS_C_NO_BUFFER, &buffer, GSS_C_NO_BUFFER);
+    major = gss_oid_to_str(&minor, _oid, &oidString);
     if (GSS_ERROR(major))
         return nil;
     
-    return [NSString stringWithGSSBuffer:&buffer];
-#else
-    if ([self isKerberosMechanism])
-        return @"KRB5";
-    else if ([self isSPNEGOMechanism])
-        return @"SPNEGO";
-    else
+    return [NSString stringWithGSSBuffer:&oidString freeWhenDone:YES];
+}
+
+- (NSString *)name
+{
+    const char *name = gss_oid_to_name(_oid);
+    
+    if (name == NULL)
         return nil;
-#endif
+    
+    return [NSString stringWithUTF8String:name];    
 }
 
 - (NSString *)SASLName
@@ -137,7 +137,7 @@
     if (GSS_ERROR(major))
         return nil;
     
-    return [NSString stringWithGSSBuffer:&buffer];
+    return [NSString stringWithGSSBuffer:&buffer freeWhenDone:YES];
 #else
     if ([self isKerberosMechanism])
         return @"GSSAPI";
@@ -148,9 +148,9 @@
 #endif
 }
 
-#if 0
 - (NSString *)description
 {
+#if 0
     OM_uint32 major, minor;
     gss_buffer_desc buffer = GSS_C_EMPTY_BUFFER;
     
@@ -160,8 +160,10 @@
         return nil;
     
     return [NSString stringWithGSSBuffer:&buffer];
-}
+#else
+    return [self name];
 #endif
+}
 
 - (BOOL)isSPNEGOMechanism
 {
@@ -171,6 +173,14 @@
 - (BOOL)isKerberosMechanism
 {
     return gss_oid_equal(_oid, GSS_KRB5_MECHANISM);
+}
+
+- (BOOL)isEqual:(id)anObject
+{
+    if ([anObject isKindOfClass:[GSSMechanism class]])
+        return gss_oid_equal(_oid, [anObject oid]);
+    else
+        return NO;
 }
 
 @end

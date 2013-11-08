@@ -35,8 +35,12 @@ gss_inquire_saslname_for_mech(OM_uint32 *minor_status,
                               gss_buffer_t mech_name,
                               gss_buffer_t mech_description);
 
+GSSAPI_LIB_FUNCTION const char * GSSAPI_LIB_CALL
+__ApplePrivate_gss_oid_to_name(gss_const_OID oid);
 
-OM_uint32
+#define gss_oid_to_name __ApplePrivate_gss_oid_to_name
+
+GSSAPI_LIB_FUNCTION OM_uint32
 __ApplePrivate_gss_acquire_cred_ext (
                      OM_uint32 */*minor_status*/,
                      const gss_name_t /*desired_name*/,
@@ -49,12 +53,12 @@ __ApplePrivate_gss_acquire_cred_ext (
 
 #define gss_acquire_cred_ext __ApplePrivate_gss_acquire_cred_ext
 
-OM_uint32
+GSSAPI_LIB_FUNCTION OM_uint32
 __ApplePrivate_gss_cred_hold(OM_uint32 *min_stat, gss_cred_id_t cred_handle);
 
 #define gss_cred_hold __ApplePrivate_gss_cred_hold
 
-OM_uint32
+GSSAPI_LIB_FUNCTION OM_uint32
 __ApplePrivate_gss_cred_unhold(OM_uint32 *min_stat, gss_cred_id_t cred_handle);
 
 #define gss_cred_unhold __ApplePrivate_gss_cred_unhold

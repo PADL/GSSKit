@@ -24,10 +24,14 @@
 + (GSSMechanism *)mechanismWithSASLName:(NSString *)name;
 
 - (gss_const_OID)oid;
+- (NSString *)oidString;
+
 - (NSString *)name;
 - (NSString *)SASLName;
 
 - (BOOL)isSPNEGOMechanism;
 - (BOOL)isKerberosMechanism;
+
+- (BOOL)isEqual:(id)anObject;
 
 @end
