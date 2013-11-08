@@ -80,7 +80,7 @@
     gss_buffer_desc saslName;
     gss_OID mechType;
     
-    saslName = [name GSSBuffer];
+    saslName = [name _gssBuffer];
     
     major = gss_inquire_mech_for_saslname(&minor, &saslName, &mechType);
     if (GSS_ERROR(major))
@@ -91,7 +91,7 @@
 
 - (gss_OID)oid
 {
-    return self.oid;
+    return _oid;
 }
 
 - (NSString *)name

@@ -15,7 +15,7 @@
 #pragma mark Initialization
 
 - (id)initWithName:(GSSName *)name
-         mechanism:(gss_const_OID)desiredMech
+         mechanism:(GSSMechanism *)desiredMech
         attributes:(NSDictionary *)attributes
              error:(NSError **)error
 {
@@ -26,9 +26,9 @@
     
     *error = nil;
     
-    major = gss_aapl_initial_cred((gss_name_t)name, desiredMech, (CFDictionaryRef)attributes, &cred, (CFErrorRef *)error);
+    major = gss_aapl_initial_cred((gss_name_t)name, [desiredMech oid], (CFDictionaryRef)attributes, &cred, (CFErrorRef *)error);
     if (GSS_ERROR(major) && *error == nil)
-        *error = [NSError gssError:major];
+        *error = [NSError GSSError:major];
     
     [*error autorelease];
     
@@ -55,6 +55,11 @@
 - (NSUInteger)retainCount
 {
     return CFGetRetainCount((CFTypeRef)self);
+}
+
+- (gss_cred_id_t)_gssCred
+{
+    return (gss_cred_id_t)self;
 }
 
 @end

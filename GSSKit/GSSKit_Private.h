@@ -11,20 +11,20 @@
 #import "GSSPlaceholderName.h"
 #import "GSSPlaceholderCredential.h"
 #import "GSSItem_Private.h"
+#import "GSSBuffer.h"
 
 @interface NSError (GSSKit)
-+ (NSError *)gssError:(OM_uint32)majorStatus :(OM_uint32)minorStatus;
-+ (NSError *)gssError:(OM_uint32)majorStatus;
++ (NSError *)GSSError:(OM_uint32)majorStatus :(OM_uint32)minorStatus;
++ (NSError *)GSSError:(OM_uint32)majorStatus;
+@end
+
+@interface NSData (GSSKit)
+- (gss_buffer_desc)_gssBuffer;
 @end
 
 @interface NSString (GSSKit)
 + (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer;
-- (gss_buffer_desc)GSSBuffer;
-@end
-
-@interface NSData (GSSKit)
-+ (NSData *)dataWithGSSBuffer:(gss_buffer_t)buffer;
-- (gss_buffer_desc)GSSBuffer;
+- (gss_buffer_desc)_gssBuffer;
 @end
 
 GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL

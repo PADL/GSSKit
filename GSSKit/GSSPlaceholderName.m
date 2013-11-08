@@ -31,10 +31,24 @@
     
     major = gss_import_name(&minor, &nameBuf, nameType, &name);
     if (GSS_ERROR(major))
-        *error = [NSError gssError:major :minor];
+        *error = [NSError GSSError:major :minor];
     
     return (id)name;
 }
+
+- (instancetype)initWithGSSName:(gss_name_t)name
+                   freeWhenDone:(BOOL)flag
+{
+    [self release];
+    
+    if (flag)
+        self = (id)name;
+    else
+        self = [(id)name copy];
+
+    return self;
+}
+
 
 #pragma mark Bridging
 
@@ -70,9 +84,7 @@
     if (GSS_ERROR(major))
         return nil;
     
-    data = [NSData dataWithGSSBuffer:&exportedName];
-    
-    gss_release_buffer(&minor, &exportedName);
+    data = [GSSBuffer dataWithGSSBufferNoCopy:&exportedName freeWhenDone:YES];
     
     return data;
 }
@@ -93,6 +105,11 @@
     gss_release_buffer(&minor, &displayName);
     
     return desc;
+}
+
+- (gss_name_t)_gssName
+{
+    return (gss_name_t)self;
 }
 
 @end

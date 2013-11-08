@@ -8,9 +8,22 @@
 
 @interface GSSCredential : NSObject
 
+// primitive methods
+
 - (id)initWithName:(GSSName *)name
-         mechanism:(gss_const_OID)desiredMech
+         mechanism:(GSSMechanism *)desiredMech
         attributes:(NSDictionary *)attributes
              error:(NSError **)error;
+
+- (gss_cred_id_t)_gssCred;
+
+// category methods
+
+- (GSSName *)name;
+- (OM_uint32)lifetime;
+- (OM_uint32)credUsage;
+- (NSArray *)mechanisms;
+- (NSData *)export;
+
 
 @end

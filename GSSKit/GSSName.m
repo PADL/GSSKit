@@ -29,15 +29,27 @@ static GSSName *placeholderName;
     return [[self alloc] initWithData:data nameType:nameType error:error];
 }
 
++ (GSSName *)nameWithGSSName:(gss_name_t)name freeWhenDone:(BOOL)flag
+{
+    return [[self alloc] initWithGSSName:name freeWhenDone:flag];
+}
+
 - (id)init
 {
     NSAssert(NO, @"Must implement a complete subclass of GSSName");
     return nil;
 }
 
-- (id)initWithData:(NSData *)data
-          nameType:(gss_const_OID)nameType
-             error:(NSError **)error
+- (instancetype)initWithData:(NSData *)data
+                    nameType:(gss_const_OID)nameType
+                       error:(NSError **)error
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSName");
+    return nil;
+}
+
+- (instancetype)initWithGSSName:(gss_name_t)name
+                   freeWhenDone:(BOOL)flag
 {
     NSAssert(NO, @"Must implement a complete subclass of GSSName");
     return nil;
@@ -69,6 +81,12 @@ static GSSName *placeholderName;
 }
 
 - (NSString *)description
+{
+    NSAssert(NO, @"Must implement a complete subclass of GSSName");
+    return nil;
+}
+
+- (gss_name_t)_gssName
 {
     NSAssert(NO, @"Must implement a complete subclass of GSSName");
     return nil;

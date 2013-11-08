@@ -10,28 +10,41 @@
 
 @implementation NSError (GSSKit)
 
-+ (NSError *)gssError:(OM_uint32)majorStatus
++ (NSError *)GSSError:(OM_uint32)majorStatus
                      :(OM_uint32)minorStatus
 {
     return [NSError errorWithDomain:@"org.h5l.GSS" code:(NSInteger)majorStatus userInfo:nil];
 }
 
-+ (NSError *)gssError:(OM_uint32)majorStatus
++ (NSError *)GSSError:(OM_uint32)majorStatus
 {
-    return [self gssError:majorStatus :0];
+    return [self GSSError:majorStatus :0];
 }
 
+@end
+
+
+@implementation NSData (GSSKit)
+- (gss_buffer_desc)_gssBuffer
+{
+    gss_buffer_desc buffer;
+    
+    buffer.length = [self length];
+    buffer.value = (void *)[self bytes];
+    
+    return buffer;
+}
 @end
 
 @implementation NSString (GSSKit)
 + (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer
 {
-    NSData *data = [NSData dataWithGSSBuffer:buffer];
+    NSData *data = [GSSBuffer dataWithGSSBufferNoCopy:buffer freeWhenDone:NO];
     
     return [[self alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
-- (gss_buffer_desc)GSSBuffer
+- (gss_buffer_desc)_gssBuffer
 {
     gss_buffer_desc buffer;
     
@@ -42,19 +55,20 @@
 }
 @end
 
-@implementation NSData (GSSKit)
-+ (NSData *)dataWithGSSBuffer:(gss_buffer_t)buffer
+GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
+gss_inquire_mech_for_saslname(OM_uint32 *minor_status,
+                              const gss_buffer_t sasl_mech_name,
+                              gss_OID *mech_type)
 {
-    return [NSData dataWithBytes:buffer->value length:buffer->length];
+    return GSS_S_UNAVAILABLE;
 }
 
-- (gss_buffer_desc)GSSBuffer
+GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
+gss_inquire_saslname_for_mech(OM_uint32 *minor_status,
+                              const gss_OID desired_mech,
+                              gss_buffer_t sasl_mech_name,
+                              gss_buffer_t mech_name,
+                              gss_buffer_t mech_description)
 {
-    gss_buffer_desc buffer;
-    
-    buffer.length = [self length];
-    buffer.value = (void *)[self bytes];
-    
-    return buffer;
+    return GSS_S_UNAVAILABLE;
 }
-@end
