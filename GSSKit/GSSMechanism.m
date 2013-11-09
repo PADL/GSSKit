@@ -27,49 +27,49 @@ static const gss_OID_desc GSSEapAes256MechDesc =
     NSData *_data;
 }
 
-+ (GSSMechanism *)mechanismDefault
++ (GSSMechanism *)defaultMechanism
 {
-    return [self mechanismDefault];
+    return [self SPNEGOMechanism];
 }
 
-+ (GSSMechanism *)mechanismSPNEGO
++ (GSSMechanism *)SPNEGOMechanism
 {
     return [self mechanismWithOID:GSS_SPNEGO_MECHANISM];
 }
 
-+ (GSSMechanism *)mechanismKerberos
++ (GSSMechanism *)kerberosMechanism
 {
     return [self mechanismWithOID:GSS_KRB5_MECHANISM];
 }
 
-+ (GSSMechanism *)mechanismNTLM
++ (GSSMechanism *)NTLMMechanism
 {
     return [self mechanismWithOID:GSS_NTLM_MECHANISM];
 }
 
-+ (GSSMechanism *)mechanismPKU2U
++ (GSSMechanism *)PKU2UMechanism
 {
     return [self mechanismWithOID:GSS_PKU2U_MECHANISM];
 }
 
 #if 0
-+ (GSSMechanism *)mechanismSCRAM
++ (GSSMechanism *)SCRAMMechanism
 {
     return [self mechanismWithOID:GSS_SCRAM_MECHANISM];
 }
 #endif
 
-+ (GSSMechanism *)mechanismSASLDigestMD5
++ (GSSMechanism *)digestMD5Mechanism
 {
     return [self mechanismWithOID:GSS_SASL_DIGEST_MD5_MECHANISM];
 }
 
-+ (GSSMechanism *)mechanismBrowserID
++ (GSSMechanism *)personaMechanism
 {
     return [self mechanismWithOID:&GSSBrowserIDAes128MechDesc];
 }
 
-+ (GSSMechanism *)mechanismEap
++ (GSSMechanism *)EAPMechanism
 {
     return [self mechanismWithOID:&GSSEapAes128MechDesc];
 }
@@ -118,9 +118,9 @@ static const gss_OID_desc GSSEapAes256MechDesc =
     return [self mechanismWithOID:mechType];
 #else
     if ([name isEqualToString:@"GSSAPI"])
-        return [self mechanismKerberos];
+        return [self kerberosMechanism];
     else if ([name isEqualToString:@"GSS-SPNEGO"])
-        return [self mechanismSPNEGO];
+        return [self SPNEGOMechanism];
     else
         return nil;
 #endif

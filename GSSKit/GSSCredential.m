@@ -43,7 +43,7 @@ static GSSPlaceholderCredential *placeholderCred;
 
 + (GSSCredential *)credentialWithName:(id)name
 {
-    return [[self alloc] initWithName:name mechanism:[GSSMechanism mechanismDefault] attributes:nil error:NULL];
+    return [[self alloc] initWithName:name mechanism:[GSSMechanism defaultMechanism] attributes:nil error:NULL];
 }
 
 + (GSSCredential *)credentialWithName:(id)name
@@ -126,7 +126,7 @@ static GSSPlaceholderCredential *placeholderCred;
 
 - (id)init
 {
-    return [self initWithName:nil mechanism:[GSSMechanism mechanismDefault] attributes:nil error:NULL];
+    return [self initWithName:nil mechanism:[GSSMechanism defaultMechanism] attributes:nil error:NULL];
 }
 
 - (void)destroy

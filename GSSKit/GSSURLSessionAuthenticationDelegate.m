@@ -22,7 +22,7 @@
                                                   queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
                                             isInitiator:TRUE];
 
-    _context.mechanism = [GSSMechanism mechanismSPNEGO];
+    _context.mechanism = [GSSMechanism SPNEGOMechanism];
     _context.credential = credential;
     _context.encoding = GSS_C_ENC_BASE64;
     
@@ -84,7 +84,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
     if (_context.credential == nil)
         _context.credential = [GSSCredential credentialWithURLCredential:[challenge proposedCredential]
-                                                               mechanism:[GSSMechanism mechanismSPNEGO]];
+                                                               mechanism:[GSSMechanism SPNEGOMechanism]];
     if (_context.targetName == nil)
         _context.targetName = [NSString stringWithFormat:@"http@%@", [protectionSpace host]];
     

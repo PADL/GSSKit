@@ -9,18 +9,14 @@
 #import <GSS/gssapi.h>
 
 @interface GSSMechanism : NSObject
-+ (GSSMechanism *)mechanismDefault;
-+ (GSSMechanism *)mechanismSPNEGO;
-+ (GSSMechanism *)mechanismKerberos;
-+ (GSSMechanism *)mechanismBrowserID;
-+ (GSSMechanism *)mechanismEap;
++ (GSSMechanism *)defaultMechanism;
++ (GSSMechanism *)SPNEGOMechanism;
++ (GSSMechanism *)kerberosMechanism;
++ (GSSMechanism *)PKU2UMechanism;
++ (GSSMechanism *)NTLMMechanism;
 
-#if 0
-+ (GSSMechanism *)mechanismPKU2U;
-+ (GSSMechanism *)mechanismSCRAM;
-+ (GSSMechanism *)mechanismNTLM;
-+ (GSSMechanism *)mechanismSASLDigestMD5;
-#endif
++ (GSSMechanism *)personaMechanism;
++ (GSSMechanism *)EAPMechanism;
 
 + (GSSMechanism *)mechanismWithOID:(gss_const_OID)oid;
 + (GSSMechanism *)mechanismWithDERData:(NSData *)data;
