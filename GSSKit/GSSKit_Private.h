@@ -22,6 +22,10 @@
 #import "NSString+GSSBufferHelper.h"
 #import "NSArray+GSSOIDHelper.h"
 
+#define GSS_ABSTRACT_METHOD {\
+    [self doesNotRecognizeSelector:_cmd]; \
+    __builtin_unreachable(); \
+}
 
 GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
 gss_inquire_mech_for_saslname(OM_uint32 *minor_status,

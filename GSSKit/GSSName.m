@@ -17,14 +17,12 @@ static GSSName *placeholderName;
 - (instancetype)initWithGSSName:(gss_name_t)name
                    freeWhenDone:(BOOL)flag
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSName");
-    return nil;
+    GSS_ABSTRACT_METHOD;
 }
 
 - (gss_name_t)_gssName
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSName");
-    return GSS_C_NO_NAME;
+    GSS_ABSTRACT_METHOD;
 }
 
 #pragma Concrete methods

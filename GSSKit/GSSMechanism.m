@@ -27,6 +27,11 @@ static const gss_OID_desc GSSEapAes256MechDesc =
     NSData *_data;
 }
 
++ (GSSMechanism *)mechanismDefault
+{
+    return [self mechanismDefault];
+}
+
 + (GSSMechanism *)mechanismSPNEGO
 {
     return [self mechanismWithOID:GSS_SPNEGO_MECHANISM];

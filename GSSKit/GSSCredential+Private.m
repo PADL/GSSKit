@@ -31,14 +31,12 @@ static const gss_OID_desc GSSCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\xA9\
 - (instancetype)initWithGSSCred:(gss_cred_id_t)cred
                    freeWhenDone:(BOOL)flag
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
-    return nil;
+    GSS_ABSTRACT_METHOD;
 }
 
 - (gss_cred_id_t)_gssCred
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
-    return nil;
+    GSS_ABSTRACT_METHOD;
 }
 
 @end

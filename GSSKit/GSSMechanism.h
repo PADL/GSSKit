@@ -9,6 +9,7 @@
 #import <GSS/gssapi.h>
 
 @interface GSSMechanism : NSObject
++ (GSSMechanism *)mechanismDefault;
 + (GSSMechanism *)mechanismSPNEGO;
 + (GSSMechanism *)mechanismKerberos;
 + (GSSMechanism *)mechanismBrowserID;

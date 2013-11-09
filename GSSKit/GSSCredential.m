@@ -22,7 +22,25 @@ static GSSCredential *placeholderCred;
     return placeholderCred;
 }
 
-+ (GSSCredential *)credentialWithName:(GSSName *)name
++ (GSSCredential *)credentialWithName:(id)name
+{
+    return [[self alloc] initWithName:name mechanism:[GSSMechanism mechanismDefault] attributes:nil error:NULL];
+}
+
++ (GSSCredential *)credentialWithName:(id)name
+                            mechanism:(GSSMechanism *)desiredMech
+{
+    return [[self alloc] initWithName:name mechanism:desiredMech attributes:nil error:NULL];
+}
+
++ (GSSCredential *)credentialWithName:(id)name
+                            mechanism:(GSSMechanism *)desiredMech
+                           attributes:(NSDictionary *)attributes
+{
+    return [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:NULL];
+}
+
++ (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
                            attributes:(NSDictionary *)attributes
                                 error:(NSError **)error
@@ -52,7 +70,7 @@ static GSSCredential *placeholderCred;
     return credUsage;
 }
 
-+ (GSSCredential *)credentialWithName:(GSSName *)name
++ (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
                            usageFlags:(OM_uint32)flags
                              password:(NSString *)password
@@ -68,12 +86,19 @@ static GSSCredential *placeholderCred;
 
 }
 
-- (instancetype)initWithName:(GSSName *)name
+- (instancetype)initWithName:(id)name
                    mechanism:(GSSMechanism *)desiredMech
                   attributes:(NSDictionary *)attributes
                        error:(NSError **)error
 {
     self = nil;
+    
+    if ([name isKindOfClass:[NSString class]])
+        name = [GSSName nameWithUserName:name];
+    else if (![name isKindOfClass:[GSSName class]])
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"-[GSSCredential initWihName:...] requires a NSString or GSSName"]
+                                     userInfo:nil];
     
     GSSAcquireCred(name, desiredMech, attributes, &self, error);
     
@@ -82,12 +107,12 @@ static GSSCredential *placeholderCred;
 
 - (id)init
 {
-    return [self initWithName:nil mechanism:[GSSMechanism mechanismSPNEGO] attributes:nil error:NULL];
+    return [self initWithName:nil mechanism:[GSSMechanism mechanismDefault] attributes:nil error:NULL];
 }
 
 - (void)destroy
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSCredential");
+    GSS_ABSTRACT_METHOD;
 }
 
 + (GSSCredential *)credentialWithExportedData:(NSData *)data

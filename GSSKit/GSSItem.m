@@ -33,50 +33,42 @@ static GSSItem *placeholderItem;
 
 - init
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return nil;
+    GSS_ABSTRACT_METHOD;
 }
 
 - (instancetype)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return nil;
+    GSS_ABSTRACT_METHOD;
 }
 
 + (GSSItem *)add:(NSDictionary *)attributes error:(NSError **)error
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return nil;
+    GSS_ABSTRACT_METHOD;
 }
 
 + (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return NO;
+    GSS_ABSTRACT_METHOD;
 }
 
 + (BOOL)delete:(NSDictionary *)query error:(NSError **)error
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return NO;
+    GSS_ABSTRACT_METHOD;
 }
 
 - (BOOL)delete:(NSError **)error
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return NO;
+    GSS_ABSTRACT_METHOD;
 }
 
 + (NSArray *)copyMatching:(NSDictionary *)query error:(NSError **)error
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return nil;
+    GSS_ABSTRACT_METHOD;
 }
 
 - (id)valueForKey:(NSString *)key
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return nil;
+    GSS_ABSTRACT_METHOD;
 }
 @end
 
@@ -86,8 +78,7 @@ static GSSItem *placeholderItem;
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(NSObject *, NSError *))fun
 {
-    NSAssert(NO, @"Must implement a complete subclass of GSSItem");
-    return NO;
+    GSS_ABSTRACT_METHOD;
 }
 
 - (id)_performOperationSynchronously:(const NSObject *)op

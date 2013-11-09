@@ -14,12 +14,19 @@
 
 // category methods
 
-+ (GSSCredential *)credentialWithName:(GSSName *)name
++ (GSSCredential *)credentialWithName:(id)name
+                            mechanism:(GSSMechanism *)desiredMech;
+
++ (GSSCredential *)credentialWithName:(id)name
+                            mechanism:(GSSMechanism *)desiredMech
+                           attributes:(NSDictionary *)attributes;
+
++ (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
                            attributes:(NSDictionary *)attributes
                                 error:(NSError **)error;
 
-+ (GSSCredential *)credentialWithName:(GSSName *)name
++ (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
                            usageFlags:(OM_uint32)flags
                              password:(NSString *)password
@@ -29,6 +36,11 @@
 
 + (GSSCredential *)credentialWithURLCredential:(NSURLCredential *)urlCred
                                      mechanism:(GSSMechanism *)mech;
+
+- (instancetype)initWithName:(id)name
+                   mechanism:(GSSMechanism *)desiredMech
+                  attributes:(NSDictionary *)attributes
+                       error:(NSError **)error;
 
 - (GSSName *)name;
 - (OM_uint32)lifetime;
