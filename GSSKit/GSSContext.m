@@ -45,8 +45,7 @@
                                        reason:[NSString stringWithFormat:@"-[GSSContext setTargetName:...] requires a NSString or GSSName"]
                                      userInfo:nil];
 
-    if (_targetName != someName)
-        _targetName = someName;
+    _targetName = someName;
 }
    
 @synthesize credential;
@@ -65,7 +64,10 @@
 
 - (NSError *)lastError
 {
-    return [NSError GSSError:_major :_minor];
+    if (_major != GSS_S_COMPLETE)
+        return [NSError GSSError:_major :_minor];
+    else
+        return nil;
 }
 
 - (BOOL)isContextEstablished

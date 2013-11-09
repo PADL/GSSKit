@@ -1,5 +1,5 @@
 //
-//  GSSPlaceholderItem.m
+//  GSSCFItem.m
 //  GSSKit
 //
 //  Created by Luke Howard on 7/11/2013.
@@ -10,19 +10,24 @@
 
 // ARC disabled
 
-@implementation GSSPlaceholderItem
+@implementation GSSCFItem
 
 #pragma mark Initialization
+
++ (id)allocWithZone:(NSZone *)zone
+{
+    return nil;
+}
 
 - (instancetype)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
     GSSItemRef item;
 
-    [self release];
-
+    NSAssert(self == nil, @"self must be nil");
+    
     *error = nil;
     item = GSSItemAdd((CFDictionaryRef)attributes, (CFErrorRef *)error);
-
+    
     [*error autorelease];
     
     return (id)item;
@@ -116,8 +121,6 @@
     
     return res;
 }
-
-
 
 - (BOOL)_performOperation:(NSObject *)op
               withOptions:(NSDictionary *)options

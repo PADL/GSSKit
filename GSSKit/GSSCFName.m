@@ -1,5 +1,5 @@
 //
-//  GSSPlaceholderName.m
+//  GSSCFName.m
 //  GSSKit
 //
 //  Created by Luke Howard on 7/11/2013.
@@ -10,23 +10,27 @@
 
 // ARC disabled
 
-@implementation GSSPlaceholderName
+@implementation GSSCFName
 
 #pragma mark Initialization
+
++ (id)allocWithZone:(NSZone *)zone
+{
+    return nil;
+}
 
 - (instancetype)initWithGSSName:(gss_name_t)name
                    freeWhenDone:(BOOL)flag
 {
-    [self release];
+    NSAssert(self == nil, @"self must be nil");
     
     if (flag)
         self = (id)name;
     else
         self = [(id)name copy];
-
+    
     return self;
 }
-
 
 #pragma mark Bridging
 

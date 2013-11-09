@@ -1,5 +1,5 @@
 //
-//  GSSPlaceholderCredential.m
+//  GSSCFCredential.m
 //  GSSKit
 //
 //  Created by Luke Howard on 7/11/2013.
@@ -14,16 +14,23 @@
  * this is a variant of gss_aapl_initial_cred() that is more generalised
  */
 
-@implementation GSSPlaceholderCredential
+@implementation GSSCFCredential
 
 #pragma mark Initialization
+
++ (id)allocWithZone:(NSZone *)zone
+{
+    return nil;
+}
 
 - (instancetype)initWithGSSCred:(gss_cred_id_t)cred
                    freeWhenDone:(BOOL)flag
 {
-    [self release];
+    NSAssert(self == nil, @"self must be nil");
+    
     if (!flag)
         CFRetain((CFTypeRef)cred);
+    
     self = (id)cred;
     return self;
 }

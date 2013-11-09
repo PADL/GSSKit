@@ -10,10 +10,12 @@
 
 // GSSItem abstract class
 
-static GSSItem *placeholderItem;
+@interface GSSPlaceholderItem : GSSItem
+@end
 
-@implementation GSSItem
+static GSSPlaceholderItem *placeholderItem;
 
+@implementation GSSPlaceholderItem
 + (id)allocWithZone:(NSZone *)zone
 {
     @synchronized(self) {
@@ -23,12 +25,26 @@ static GSSItem *placeholderItem;
     
     return placeholderItem;
 }
+@end
+
+@implementation GSSItem
++ (id)allocWithZone:(NSZone *)zone
+{
+    id ret;
+    
+    if (self == [GSSItem class])
+        ret = [GSSPlaceholderItem allocWithZone:zone];
+    else
+        ret = [super allocWithZone:zone];
+    
+    return ret;
+}
 
 #pragma mark GSSItem primitive methods
 
 + (GSSItem *)itemWithAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
-    return [[self alloc] initWithAttributes:attributes error:error];
+    return [[GSSCFItem alloc] initWithAttributes:attributes error:error];
 }
 
 - init

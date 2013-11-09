@@ -8,10 +8,12 @@
 
 #import "GSSKit_Private.h"
 
-static GSSCredential *placeholderCred;
+@interface GSSPlaceholderCredential : GSSName
+@end
 
-@implementation GSSCredential
+static GSSPlaceholderCredential *placeholderCred;
 
+@implementation GSSPlaceholderCredential
 + (id)allocWithZone:(NSZone *)zone
 {
     @synchronized(self) {
@@ -20,6 +22,21 @@ static GSSCredential *placeholderCred;
     }
     
     return placeholderCred;
+}
+@end
+
+@implementation GSSCredential
+
++ (id)allocWithZone:(NSZone *)zone
+{
+    id ret;
+    
+    if (self == [GSSItem class])
+        ret = [GSSPlaceholderCredential allocWithZone:zone];
+    else
+        ret = [super allocWithZone:zone];
+    
+    return ret;
 }
 
 + (GSSCredential *)credentialWithName:(id)name

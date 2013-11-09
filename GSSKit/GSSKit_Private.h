@@ -11,10 +11,10 @@
 #import <GSS/gssapi_spnego.h>
 
 #import "GSSKit.h"
-#import "GSSPlaceholderItem.h"
-#import "GSSPlaceholderName.h"
+#import "GSSCFItem.h"
+#import "GSSCFName.h"
+#import "GSSCFCredential.h"
 #import "GSSCredential+Private.h"
-#import "GSSPlaceholderCredential.h"
 #import "GSSItem_Private.h"
 #import "GSSBuffer.h"
 

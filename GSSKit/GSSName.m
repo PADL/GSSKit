@@ -8,7 +8,22 @@
 
 #import "GSSKit_Private.h"
 
-static GSSName *placeholderName;
+@interface GSSPlaceholderName : GSSName
+@end
+
+static GSSPlaceholderName *placeholderName;
+
+@implementation GSSPlaceholderName
++ (id)allocWithZone:(NSZone *)zone
+{
+    @synchronized(self) {
+        if (placeholderName == nil)
+            placeholderName = [super allocWithZone:zone];
+    }
+    
+    return placeholderName;
+}
+@end
 
 @implementation GSSName
 
@@ -29,12 +44,14 @@ static GSSName *placeholderName;
 
 + (id)allocWithZone:(NSZone *)zone
 {
-    @synchronized(self) {
-        if (placeholderName == nil)
-            placeholderName = [super allocWithZone:zone];
-    }
+    id ret;
     
-    return placeholderName;
+    if (self == [GSSItem class])
+        ret = [GSSPlaceholderName allocWithZone:zone];
+    else
+        ret = [super allocWithZone:zone];
+    
+    return ret;
 }
 
 + (GSSName *)nameWithData:(NSData *)data
@@ -49,14 +66,14 @@ static GSSName *placeholderName;
     return [[self alloc] initWithGSSName:name freeWhenDone:flag];
 }
 
-- (id)init
+- (instancetype)init
 {
     return [self initWithGSSName:GSS_C_NO_NAME freeWhenDone:YES];
 }
 
-- (id)initWithData:(NSData *)data
-          nameType:(gss_const_OID)nameType
-             error:(NSError **)error
+- (instancetype)initWithData:(NSData *)data
+                    nameType:(gss_const_OID)nameType
+                       error:(NSError **)error
 {
     gss_name_t name = GSS_C_NO_NAME;
     gss_buffer_desc nameBuf = GSS_C_EMPTY_BUFFER;
@@ -72,7 +89,7 @@ static GSSName *placeholderName;
     if (GSS_ERROR(major) && error != NULL)
         *error = [NSError GSSError:major :minor];
     
-    return [self initWithGSSName:name freeWhenDone:YES];
+    return [[GSSCFName alloc] initWithGSSName:name freeWhenDone:YES];
 }
 
 + (GSSName *)nameWithHostBasedService:(NSString *)name
