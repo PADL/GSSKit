@@ -8,7 +8,7 @@
 
 #import "GSSKit_Private.h"
 
-@interface GSSPlaceholderCredential : GSSName
+@interface GSSPlaceholderCredential : GSSCredential
 @end
 
 static GSSPlaceholderCredential *placeholderCred;
@@ -31,7 +31,7 @@ static GSSPlaceholderCredential *placeholderCred;
 {
     id ret;
     
-    if (self == [GSSItem class])
+    if (self == [GSSCredential class])
         ret = [GSSPlaceholderCredential allocWithZone:zone];
     else
         ret = [super allocWithZone:zone];
@@ -103,10 +103,10 @@ static GSSPlaceholderCredential *placeholderCred;
 
 }
 
-- (instancetype)initWithName:(id)name
-                   mechanism:(GSSMechanism *)desiredMech
-                  attributes:(NSDictionary *)attributes
-                       error:(NSError **)error
+- (id)initWithName:(id)name
+         mechanism:(GSSMechanism *)desiredMech
+        attributes:(NSDictionary *)attributes
+             error:(NSError **)error
 {
     self = nil;
     
@@ -117,7 +117,7 @@ static GSSPlaceholderCredential *placeholderCred;
                                        reason:[NSString stringWithFormat:@"-[GSSCredential initWihName:...] requires a NSString or GSSName"]
                                      userInfo:nil];
     
-    GSSAcquireCred(name, desiredMech, attributes, &self, error);
+    GSSAcquireCredFunnel(name, desiredMech, attributes, &self, error);
     
     return self;
 }
@@ -167,24 +167,14 @@ static GSSPlaceholderCredential *placeholderCred;
 
 - (GSSName *)name
 {
-    OM_uint32 major, minor;
-    gss_name_t name = GSS_C_NO_NAME;
-    
-    major = gss_inquire_cred(&minor, [self _gssCred], &name, NULL, NULL, NULL);
-    if (GSS_ERROR(major))
-        return nil;
+    gss_name_t name = GSSCredentialCopyName([self _gssCred]);
     
     return [GSSName nameWithGSSName:name freeWhenDone:YES];
 }
 
 - (OM_uint32)lifetime
 {
-    OM_uint32 minor;
-    OM_uint32 lifetime = 0;
-    
-    gss_inquire_cred(&minor, [self _gssCred], NULL, &lifetime, NULL, NULL);
-    
-    return lifetime;
+    return GSSCredentialGetLifetime([self _gssCred]);
 }
 
 - (OM_uint32)credUsage

@@ -14,25 +14,64 @@
  * this is a variant of gss_aapl_initial_cred() that is more generalised
  */
 
+/* GSS_C_CRED_PASSWORD - 1.2.752.43.13.200 */
+static const gss_OID_desc GSSCredPasswordDesc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x48" };
+
+/* GSS_C_CRED_CERTIFICATE - 1.2.752.43.13.201 */
+static const gss_OID_desc GSSCredCertificateDesc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x49" };
+
+/* GSS_C_CRED_SecIdentity - 1.2.752.43.13.202 */
+static const gss_OID_desc GSSCredSecIdentityDesc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x4a" };
+
+/* GSS_C_CRED_CFDictionary - 1.3.6.1.4.1.5322.25.1.1 */
+static const gss_OID_desc GSSCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x19\x01\x01" };
+
+static CFTypeID _gssCredTypeID;
+
 @implementation GSSCFCredential
 
 #pragma mark Initialization
+
++ (void)initialize
+{
+    OM_uint32 major, minor;
+    CFErrorRef error = nil;
+    gss_name_t name = GSSCreateName(__GSSKitIdentity, GSS_C_NT_USER_NAME, &error);
+    gss_cred_id_t cred;
+    
+    major = gss_acquire_cred(&minor, name, GSS_C_INDEFINITE,
+                             GSS_C_NO_OID_SET, GSS_C_ACCEPT,
+                             &cred, NULL, NULL);
+    
+    NSAssert(cred != GSS_C_NO_CREDENTIAL, @"failed to initialize cred");
+    
+    _gssCredTypeID = CFGetTypeID((CFTypeRef)cred);
+    
+    CFRelease(cred);
+    if (error)
+        CFRelease(error);
+    
+    _CFRuntimeBridgeClasses(_gssCredTypeID, [[[GSSCFCredential class] description] UTF8String]);
+}
 
 + (id)allocWithZone:(NSZone *)zone
 {
     return nil;
 }
 
-- (instancetype)initWithGSSCred:(gss_cred_id_t)cred
-                   freeWhenDone:(BOOL)flag
++ (GSSCredential *)credentialWithGSSCred:(gss_cred_id_t)cred
+                            freeWhenDone:(BOOL)flag
 {
-    NSAssert(self == nil, @"self must be nil");
-    
-    if (!flag)
-        CFRetain((CFTypeRef)cred);
-    
-    self = (id)cred;
-    return self;
+    id newCred;
+
+    if (flag)
+        newCred = (id)cred;
+    else
+        newCred = [(id)cred retain];
+
+    object_setClass(newCred, [GSSCFCredential class]);
+
+    return newCred;
 }
 
 #pragma mark Bridging
@@ -55,10 +94,12 @@
     CFRelease((CFTypeRef)self);
 }
 
+#if 0
 - (id)autorelease
 {
-    return CFAutorelease((CFTypeRef)self);
+    return CFAutorelease((GSSItemRef)self);
 }
+#endif
 
 - (NSUInteger)retainCount
 {
@@ -70,32 +111,39 @@
     return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
 }
 
+- (NSUInteger)hash
+{
+    return CFHash((CFTypeRef)self);
+}
+
+- (NSString *)description
+{
+    CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
+    
+    return [(NSString *)copyDesc autorelease];
+}
+
+- (BOOL)allowsWeakReference
+{
+    return !_CFIsDeallocating(self);
+}
+
+- (BOOL)retainWeakReference
+{
+    return _CFTryRetain(self) != nil;
+}
+
+- (CFTypeID)_cfTypeID
+{
+    return _gssCredTypeID;
+}
+
 - (gss_cred_id_t)_gssCred
 {
     return (gss_cred_id_t)self;
 }
 
 @end
-
-OM_uint32
-GSSAcquireCredExtWrapper(OM_uint32 *minor,
-                         GSSName *desiredName,
-                         gss_const_OID credType,
-                         const void *credData,
-                         OM_uint32 timeReq,
-                         GSSMechanism *desiredMech,
-                         gss_cred_usage_t credUsage,
-                         GSSCredential **pCredHandle)
-{
-    return gss_acquire_cred_ext(minor,
-                                desiredName ? [desiredName _gssName] : GSS_C_NO_NAME,
-                                credType,
-                                credData,
-                                timeReq,
-                                desiredMech ? [desiredMech oid] : GSS_C_NO_OID,
-                                credUsage,
-                                (gss_cred_id_t *)pCredHandle);
-}
 
 OM_uint32
 GSSChangePasswordWrapper(GSSName *desiredName,
@@ -110,6 +158,111 @@ GSSChangePasswordWrapper(GSSName *desiredName,
                                      [desiredMech oid],
                                      (CFDictionaryRef)attributes,
                                      &error);
+    
+    return major;
+}
+
+static OM_uint32
+GSSUsageFromAttributeDictionary(NSDictionary *attributes,
+                                gss_cred_usage_t *pCredUsage)
+{
+    gss_cred_usage_t credUsage;
+    NSString *usage;
+    
+    usage = [attributes objectForKey:(NSString *)kGSSCredentialUsage];
+    if ([usage isEqualToString:(NSString *)kGSS_C_INITIATE])
+        credUsage = GSS_C_INITIATE;
+    else if ([usage isEqualToString:(NSString *)kGSS_C_ACCEPT])
+        credUsage = GSS_C_ACCEPT;
+    else if ([usage isEqualToString:(NSString *)kGSS_C_BOTH])
+        credUsage = GSS_C_BOTH;
+    else
+        return GSS_S_FAILURE;
+    
+    *pCredUsage = credUsage;
+    return GSS_S_COMPLETE;
+}
+
+OM_uint32
+GSSAcquireCredFunnel(GSSName *desiredName,
+                     GSSMechanism *desiredMech,
+                     NSDictionary *attributes,
+                     GSSCredential **pCredential,
+                     NSError **pError)
+{
+    OM_uint32 major, minor;
+    gss_cred_usage_t credUsage = GSS_C_INITIATE;
+    gss_cred_id_t credHandle = GSS_C_NO_CREDENTIAL;
+    
+    if (pError != NULL)
+        *pError = nil;
+    *pCredential = nil;
+    
+    if (desiredMech == nil) {
+        major = GSS_S_BAD_MECH;
+        goto cleanup;
+    }
+    
+    major = GSSUsageFromAttributeDictionary(attributes, &credUsage);
+    if (GSS_ERROR(major))
+        goto cleanup;
+    
+    major = gss_acquire_cred_ext(&minor,
+                                 [desiredName _gssName],
+                                 &GSSCredCFDictionary,
+                                 attributes,
+                                 GSS_C_INDEFINITE,
+                                 [desiredMech oid],
+                                 credUsage,
+                                 &credHandle);
+    if (major == GSS_S_FAILURE || major == GSS_S_UNAVAILABLE) {
+        /* try password or certificate fallback */
+        id password = [attributes objectForKey:(NSString *)kGSSICPassword];
+        id certificate = [attributes objectForKey:(NSString *)kGSSICCertificate];
+        gss_buffer_desc credBuffer = GSS_C_EMPTY_BUFFER;
+        void *credData = NULL;
+        gss_const_OID credOid = GSS_C_NO_OID;
+        
+        if (password && [password respondsToSelector:@selector(_gssBuffer)]) {
+            credBuffer = [password _gssBuffer];
+            credOid = &GSSCredPasswordDesc;
+            credData = &credBuffer;
+        } else if (certificate && CFGetTypeID((CFTypeRef)certificate) == SecIdentityGetTypeID()) {
+            credOid = &GSSCredSecIdentityDesc;
+            credData = certificate;
+        }
+        
+        if (credOid != GSS_C_NO_OID) {
+            major = gss_acquire_cred_ext(&minor,
+                                         [desiredName _gssName],
+                                         credOid,
+                                         credData,
+                                         GSS_C_INDEFINITE,
+                                         [desiredMech oid],
+                                         credUsage,
+                                         &credHandle);
+        } else {
+            gss_OID_set_desc desiredMechs = { 1, (gss_OID)[desiredMech oid] };
+            
+            major = gss_acquire_cred(&minor,
+                                     [desiredName _gssName],
+                                     GSS_C_INDEFINITE,
+                                     &desiredMechs,
+                                     credUsage,
+                                     (gss_cred_id_t *)&credHandle,
+                                     NULL,
+                                     NULL);
+        }
+    }
+    
+    if (GSS_ERROR(major))
+        goto cleanup;
+    
+    *pCredential = [GSSCFCredential credentialWithGSSCred:credHandle freeWhenDone:YES];
+    
+cleanup:
+    if (GSS_ERROR(major) && pError != NULL)
+        *pError = [NSError GSSError:major :minor];
     
     return major;
 }

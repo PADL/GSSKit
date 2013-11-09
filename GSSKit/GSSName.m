@@ -23,21 +23,37 @@ static GSSPlaceholderName *placeholderName;
     
     return placeholderName;
 }
+
 @end
 
 @implementation GSSName
 
 #pragma Primitive methods
 
-- (instancetype)initWithGSSName:(gss_name_t)name
-                   freeWhenDone:(BOOL)flag
+- (gss_name_t)_gssName
 {
     GSS_ABSTRACT_METHOD;
 }
 
-- (gss_name_t)_gssName
++ (GSSName *)nameWithData:(NSData *)data
+                 nameType:(gss_const_OID)nameType
+                    error:(NSError **)error
 {
-    GSS_ABSTRACT_METHOD;
+    gss_name_t name = GSS_C_NO_NAME;
+    CFErrorRef cfError = nil;
+    
+    name = GSSCreateName((__bridge CFDataRef)data, nameType, &cfError);
+    if (name == nil) {
+        *error = (__bridge_transfer NSError *)cfError;
+        return nil;
+    }
+
+    return [GSSCFName nameWithGSSName:name freeWhenDone:YES];    
+}
+
++ (GSSName *)nameWithGSSName:(gss_name_t)name freeWhenDone:(BOOL)flag
+{
+    return [GSSCFName nameWithGSSName:name freeWhenDone:flag];
 }
 
 #pragma Concrete methods
@@ -46,50 +62,12 @@ static GSSPlaceholderName *placeholderName;
 {
     id ret;
     
-    if (self == [GSSItem class])
+    if (self == [GSSName class])
         ret = [GSSPlaceholderName allocWithZone:zone];
     else
         ret = [super allocWithZone:zone];
     
     return ret;
-}
-
-+ (GSSName *)nameWithData:(NSData *)data
-                 nameType:(gss_const_OID)nameType
-                    error:(NSError **)error
-{
-    return [[self alloc] initWithData:data nameType:nameType error:error];
-}
-
-+ (GSSName *)nameWithGSSName:(gss_name_t)name freeWhenDone:(BOOL)flag
-{
-    return [[self alloc] initWithGSSName:name freeWhenDone:flag];
-}
-
-- (instancetype)init
-{
-    return [self initWithGSSName:GSS_C_NO_NAME freeWhenDone:YES];
-}
-
-- (instancetype)initWithData:(NSData *)data
-                    nameType:(gss_const_OID)nameType
-                       error:(NSError **)error
-{
-    gss_name_t name = GSS_C_NO_NAME;
-    gss_buffer_desc nameBuf = GSS_C_EMPTY_BUFFER;
-    OM_uint32 major, minor;
-
-    if (error != NULL)
-        *error = nil;
-    
-    nameBuf.length = [data length];
-    nameBuf.value = (void *)[data bytes];
-    
-    major = gss_import_name(&minor, &nameBuf, nameType, &name);
-    if (GSS_ERROR(major) && error != NULL)
-        *error = [NSError GSSError:major :minor];
-    
-    return [[GSSCFName alloc] initWithGSSName:name freeWhenDone:YES];
 }
 
 + (GSSName *)nameWithHostBasedService:(NSString *)name
@@ -134,14 +112,9 @@ static GSSPlaceholderName *placeholderName;
 
 - (NSString *)description
 {
-    OM_uint32 major, minor;
-    gss_buffer_desc displayName = GSS_C_EMPTY_BUFFER;
-    gss_OID oid;
+    CFStringRef description = GSSNameCreateDisplayString([self _gssName]);
     
-    major = gss_display_name(&minor, [self _gssName], &displayName, &oid);
-    if (GSS_ERROR(major))
-        return nil;
-    
-    return [NSString stringWithGSSBuffer:&displayName freeWhenDone:YES];
+    return (__bridge_transfer NSString *)description;
 }
+
 @end

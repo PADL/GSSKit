@@ -32,6 +32,8 @@ typedef OM_uint32 GSSEncoding;
 @property(nonatomic, readonly) GSSName *initiatorName;
 @property(nonatomic, readonly) GSSName *acceptorName;
 
+@property(nonatomic, readonly) BOOL isInitiator;
+
 - (id)initWithRequestFlags:(OM_uint32)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator;
 
 - (void)stepWithData:(NSData *)reqData

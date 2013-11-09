@@ -10,26 +10,22 @@
 
 @implementation GSSContext
 {
-    GSSMechanism *_mechanism;
-    OM_uint32 _requestFlags;
-    GSSName *_targetName;
-    GSSCredential *_credential;
-    GSSChannelBindings *_channelBindings;
-    GSSEncoding _encoding;
-    
-    GSSMechanism *_finalMechanism;
-    OM_uint32 _finalFlags;
-    time_t _expiryTime;
-    GSSCredential *_delegatedCredentials;
-
-    gss_ctx_id_t _ctx;
-    dispatch_queue_t _queue;
-    BOOL _isInitiator;
     OM_uint32 _major, _minor;
+    id _targetName;
+    gss_ctx_id_t _ctx;
+    time_t _expiryTime;
 }
 
-@synthesize mechanism;
-@synthesize requestFlags;
+@synthesize mechanism = _mechanism;
+@synthesize requestFlags = _requestFlags;
+@synthesize credential = _credential;
+@synthesize channelBindings = _channelBindings;
+@synthesize encoding = _encoding;
+@synthesize queue = _queue;
+@synthesize finalMechanism = _finalMechanism;
+@synthesize finalFlags = _finalFlags;
+@synthesize delegatedCredentials = _delegatedCredentials;
+@synthesize isInitiator = _isInitiator;
 
 - (id)targetName
 {
@@ -47,15 +43,6 @@
 
     _targetName = someName;
 }
-   
-@synthesize credential;
-@synthesize channelBindings;
-@synthesize encoding;
-@synthesize queue;
-
-@synthesize finalMechanism;
-@synthesize finalFlags;
-@synthesize delegatedCredentials;
 
 - (oneway void)dealloc
 {
@@ -121,8 +108,8 @@
     if (!someQueue)
         someQueue = dispatch_queue_create("com.padl.GSSContextQueue", NULL);
     
-    _requestFlags = flags;
-    _queue = someQueue;
+    self.requestFlags = flags;
+    self.queue = someQueue;
     _isInitiator = initiator;
     _major = GSS_S_FAILURE;
     

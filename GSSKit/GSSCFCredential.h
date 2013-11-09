@@ -13,17 +13,14 @@
 @end
 
 OM_uint32
-GSSAcquireCredExtWrapper(OM_uint32 *minor,
-                         GSSName *desiredName,
-                         gss_const_OID credType,
-                         const void *credData,
-                         OM_uint32 timeReq,
-                         GSSMechanism *desiredMech,
-                         gss_cred_usage_t credUsage,
-                         GSSCredential **pCredHandle);
-
-OM_uint32
 GSSChangePasswordWrapper(GSSName *desiredName,
                          GSSMechanism *desiredMech,
                          NSDictionary *attributes,
                          NSError **pError);
+
+OM_uint32
+GSSAcquireCredFunnel(GSSName *desiredName,
+                     GSSMechanism *desiredMech,
+                     NSDictionary *attributes,
+                     GSSCredential **pCredential,
+                     NSError **pError);

@@ -8,3 +8,4 @@
 
 #import "GSSKit_Private.h"
 
+CFStringRef __GSSKitIdentity = CFSTR("GSSKit@h5l.org");

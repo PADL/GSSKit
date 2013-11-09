@@ -9,13 +9,6 @@
 #import "GSSKit_Private.h"
 
 @implementation GSSChannelBindings
-{
-    OM_uint32 _initiatorAddressType;
-    NSData *_initiatorAddress;
-    OM_uint32 _acceptorAddressType;
-    NSData *_acceptorAddress;
-    NSData *_applicationData;
-}
 
 @synthesize initiatorAddressType;
 @synthesize initiatorAddress;

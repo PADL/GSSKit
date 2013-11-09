@@ -10,26 +10,47 @@
 
 // ARC disabled
 
+static CFTypeID _gssNameTypeID;
+
 @implementation GSSCFName
 
 #pragma mark Initialization
+
++ (void)initialize
+{
+    CFTypeRef name;
+    CFErrorRef error = nil;
+    
+    name = GSSCreateName(__GSSKitIdentity, GSS_C_NT_USER_NAME, &error);
+    NSAssert(name != nil, @"failed to create temporary GSS name");
+
+    _gssNameTypeID = CFGetTypeID((CFTypeRef)name);
+    
+    if (error)
+        CFRelease(error);
+    CFRelease(name);
+    
+    _CFRuntimeBridgeClasses(_gssNameTypeID, [[[GSSCFName class] description] UTF8String]);
+}
 
 + (id)allocWithZone:(NSZone *)zone
 {
     return nil;
 }
 
-- (instancetype)initWithGSSName:(gss_name_t)name
-                   freeWhenDone:(BOOL)flag
++ (GSSName *)nameWithGSSName:(gss_name_t)name
+                freeWhenDone:(BOOL)flag
 {
-    NSAssert(self == nil, @"self must be nil");
-    
+    id newName;
+
     if (flag)
-        self = (id)name;
+        newName = (id)name;
     else
-        self = [(id)name copy];
-    
-    return self;
+        newName = [(id)name retain];
+
+    object_setClass(newName, [GSSCFName class]);
+
+    return newName;
 }
 
 #pragma mark Bridging
@@ -44,10 +65,12 @@
     CFRelease((CFTypeRef)self);
 }
 
+#if 0
 - (id)autorelease
 {
-    return CFAutorelease((CFTypeRef)self);
+    return CFAutorelease((GSSItemRef)self);
 }
+#endif
 
 - (NSUInteger)retainCount
 {
@@ -57,6 +80,33 @@
 - (BOOL)isEqual:(id)anObject
 {
     return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
+}
+
+- (NSUInteger)hash
+{
+    return CFHash((CFTypeRef)self);
+}
+
+- (NSString *)description
+{
+    CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
+    
+    return [(NSString *)copyDesc autorelease];
+}
+
+- (BOOL)allowsWeakReference
+{
+    return !_CFIsDeallocating(self);
+}
+
+- (BOOL)retainWeakReference
+{
+    return _CFTryRetain(self) != nil;
+}
+
+- (CFTypeID)_cfTypeID
+{
+    return _gssNameTypeID;
 }
 
 - (gss_name_t)_gssName

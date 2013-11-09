@@ -22,10 +22,22 @@
 #import "NSString+GSSBufferHelper.h"
 #import "NSArray+GSSOIDHelper.h"
 
+#import <objc/runtime.h>
+
+extern CFStringRef __GSSKitIdentity;
+
 #define GSS_ABSTRACT_METHOD {\
     [self doesNotRecognizeSelector:_cmd]; \
     __builtin_unreachable(); \
 }
+
+void _CFRuntimeBridgeClasses(CFTypeID cf_typeID, const char *objc_classname);
+//const CFRuntimeClass * _CFRuntimeGetClassWithTypeID(CFTypeID typeID);
+void _CFRuntimeUnregisterClassWithTypeID(CFTypeID typeID);
+//CFTypeID _CFRuntimeRegisterClass(const CFRuntimeClass * const cls);
+
+CF_EXPORT CFTypeRef _CFTryRetain(CFTypeRef cf);
+CF_EXPORT Boolean _CFIsDeallocating(CFTypeRef cf);
 
 GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
 gss_inquire_mech_for_saslname(OM_uint32 *minor_status,

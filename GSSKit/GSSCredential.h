@@ -37,10 +37,10 @@
 + (GSSCredential *)credentialWithURLCredential:(NSURLCredential *)urlCred
                                      mechanism:(GSSMechanism *)mech;
 
-- (instancetype)initWithName:(id)name
-                   mechanism:(GSSMechanism *)desiredMech
-                  attributes:(NSDictionary *)attributes
-                       error:(NSError **)error;
+- (id)initWithName:(id)name
+         mechanism:(GSSMechanism *)desiredMech
+        attributes:(NSDictionary *)attributes
+             error:(NSError **)error;
 
 - (GSSName *)name;
 - (OM_uint32)lifetime;

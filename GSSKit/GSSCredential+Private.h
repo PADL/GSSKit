@@ -10,17 +10,8 @@
 
 @interface GSSCredential (Private)
 
-- (gss_cred_id_t)_gssCred;
 + (GSSCredential *)credentialWithGSSCred:(gss_cred_id_t)cred freeWhenDone:(BOOL)flag;
-- (instancetype)initWithGSSCred:(gss_cred_id_t)cred freeWhenDone:(BOOL)flag;
+- (gss_cred_id_t)_gssCred;
 
 @end
 
-
-
-OM_uint32
-GSSAcquireCred(GSSName *desiredName,
-               GSSMechanism *desiredMech,
-               NSDictionary *attributes,
-               GSSCredential **pCredential,
-               NSError **pError);

@@ -14,6 +14,11 @@
 
 #pragma mark Initialization
 
++ (void)initialize
+{
+    _CFRuntimeBridgeClasses(GSSItemGetTypeID(), [[[self class] description] UTF8String]);
+}
+
 + (id)allocWithZone:(NSZone *)zone
 {
     return nil;
@@ -30,7 +35,11 @@
     
     [*error autorelease];
     
-    return (id)item;
+    self = (id)item;
+    
+    object_setClass(self, [GSSCFItem class]);
+    
+    return self;
 }
 
 #pragma mark Bridging
@@ -45,10 +54,12 @@
     CFRelease((GSSItemRef)self);
 }
 
+#if 0
 - (id)autorelease
 {
     return CFAutorelease((GSSItemRef)self);
 }
+#endif
 
 - (NSUInteger)retainCount
 {
@@ -58,6 +69,28 @@
 - (BOOL)isEqual:(id)anObject
 {
     return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
+}
+
+- (NSUInteger)hash
+{
+    return CFHash((CFTypeRef)self);
+}
+
+- (NSString *)description
+{
+    CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
+    
+    return [(NSString *)copyDesc autorelease];
+}
+
+- (BOOL)allowsWeakReference
+{
+    return !_CFIsDeallocating(self);
+}
+
+- (BOOL)retainWeakReference
+{
+    return _CFTryRetain(self) != nil;
 }
 
 - (CFTypeID)_cfTypeID
