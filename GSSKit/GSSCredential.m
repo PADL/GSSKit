@@ -112,12 +112,16 @@ static GSSPlaceholderCredential *placeholderCred;
 {
     self = nil;
     
-    if ([name isKindOfClass:[NSString class]])
-        name = [GSSName nameWithUserName:name];
-    else if (![name isKindOfClass:[GSSName class]])
+    if ([name isKindOfClass:[NSString class]]) {
+        if ([attributes[(__bridge NSString *)kGSSCredentialUsage] isEqualToString:(__bridge NSString *)kGSS_C_ACCEPT])
+            name = [GSSName nameWithHostBasedService:name];
+        else
+            name = [GSSName nameWithUserName:name];
+    } else if (![name isKindOfClass:[GSSName class]]) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException
                                        reason:[NSString stringWithFormat:@"-[GSSCredential initWihName:...] requires a NSString or GSSName"]
                                      userInfo:nil];
+    }
     
     GSSAcquireCredFunnel(name, desiredMech, attributes, &self, error);
     

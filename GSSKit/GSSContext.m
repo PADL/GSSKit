@@ -198,7 +198,7 @@
     _major = gss_accept_sec_context(&_minor,
                                     &_ctx,
                                     self.credential ? [self.credential _gssCred] : GSS_C_NO_CREDENTIAL,
-                                    reqData ? &inputToken : GSS_C_NO_BUFFER,
+                                    &inputToken,
                                     self.channelBindings ? &channelBindingsStruct : GSS_C_NO_CHANNEL_BINDINGS,
                                     &sourceName,
                                     &actualMechType,
