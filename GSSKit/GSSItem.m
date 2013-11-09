@@ -18,10 +18,12 @@ static GSSPlaceholderItem *placeholderItem;
 @implementation GSSPlaceholderItem
 + (id)allocWithZone:(NSZone *)zone
 {
-    @synchronized(self) {
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
         if (placeholderItem == nil)
             placeholderItem = [super allocWithZone:zone];
-    }
+    });
     
     return placeholderItem;
 }

@@ -16,10 +16,12 @@ static GSSPlaceholderName *placeholderName;
 @implementation GSSPlaceholderName
 + (id)allocWithZone:(NSZone *)zone
 {
-    @synchronized(self) {
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
         if (placeholderName == nil)
             placeholderName = [super allocWithZone:zone];
-    }
+    });
     
     return placeholderName;
 }

@@ -16,10 +16,12 @@ static GSSPlaceholderCredential *placeholderCred;
 @implementation GSSPlaceholderCredential
 + (id)allocWithZone:(NSZone *)zone
 {
-    @synchronized(self) {
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
         if (placeholderCred == nil)
             placeholderCred = [super allocWithZone:zone];
-    }
+    });
     
     return placeholderCred;
 }
