@@ -12,6 +12,7 @@
                     error:(NSError **)error;
 
 + (GSSName *)nameWithGSSName:(gss_name_t)name freeWhenDone:(BOOL)flag;
++ (GSSName *)nameWithHostBasedService:(NSString *)name;
 + (GSSName *)nameWithHostBasedService: (NSString *)service withHostName: (NSString *)hostname;
 + (GSSName *)nameWithUserName: (NSString *)username;
 

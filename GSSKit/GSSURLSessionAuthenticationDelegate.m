@@ -86,9 +86,8 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         _context.credential = [GSSCredential credentialWithURLCredential:[challenge proposedCredential]
                                                                mechanism:[GSSMechanism mechanismSPNEGO]];
     if (_context.targetName == nil)
-        _context.targetName = [GSSName nameWithHostBasedService:@"http"
-                                                   withHostName:[protectionSpace host]];
-
+        _context.targetName = [NSString stringWithFormat:@"host@%@", [protectionSpace host]];
+    
     if ([[protectionSpace protocol] isEqualToString:NSURLProtectionSpaceHTTPS] ||
         [[protectionSpace protocol] isEqualToString:NSURLProtectionSpaceHTTPProxy])
         ;    // TODO channel bindings

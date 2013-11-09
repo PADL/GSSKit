@@ -19,7 +19,7 @@ typedef OM_uint32 GSSEncoding;
 @property(nonatomic, retain) dispatch_queue_t queue;
 @property(nonatomic, retain) GSSMechanism *mechanism;
 @property(nonatomic, assign) OM_uint32 requestFlags;
-@property(nonatomic, retain) GSSName *targetName;
+@property(nonatomic, retain) id targetName;
 @property(nonatomic, retain) GSSCredential *credential;
 @property(nonatomic, retain) GSSChannelBindings *channelBindings;
 @property(nonatomic, assign) GSSEncoding encoding;

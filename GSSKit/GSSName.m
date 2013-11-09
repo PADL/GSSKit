@@ -62,27 +62,34 @@ static GSSName *placeholderName;
     gss_buffer_desc nameBuf = GSS_C_EMPTY_BUFFER;
     OM_uint32 major, minor;
 
-    *error = nil;
+    if (error != NULL)
+        *error = nil;
     
     nameBuf.length = [data length];
     nameBuf.value = (void *)[data bytes];
     
     major = gss_import_name(&minor, &nameBuf, nameType, &name);
-    if (GSS_ERROR(major))
+    if (GSS_ERROR(major) && error != NULL)
         *error = [NSError GSSError:major :minor];
     
     return [self initWithGSSName:name freeWhenDone:YES];
 }
 
++ (GSSName *)nameWithHostBasedService:(NSString *)name
+{
+    NSError *error;
+
+    return [self nameWithData:[name dataUsingEncoding:NSUTF8StringEncoding]
+                     nameType:GSS_C_NT_HOSTBASED_SERVICE error:&error];
+}
+
 + (GSSName *)nameWithHostBasedService:(NSString *)service withHostName:(NSString *)hostname
 {
     NSString *name;
-    NSError *error;
     
     name = [NSString stringWithFormat:@"%@@%@", service, hostname];
     
-    return [self nameWithData:[name dataUsingEncoding:NSUTF8StringEncoding]
-                     nameType:GSS_C_NT_HOSTBASED_SERVICE error:&error];
+    return [self nameWithHostBasedService:name];
 }
 
 + (GSSName *)nameWithUserName:(NSString *)username

@@ -30,7 +30,25 @@
 
 @synthesize mechanism;
 @synthesize requestFlags;
-@synthesize targetName;
+
+- (id)targetName
+{
+    return _targetName;
+}
+
+- (void)setTargetName:(id)someName
+{
+    if ([someName isKindOfClass:[NSString class]])
+        someName = [GSSName nameWithHostBasedService:someName];
+    else if (![someName isKindOfClass:[GSSName class]])
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"-[GSSContext setTargetName:...] requires a NSString or GSSName"]
+                                     userInfo:nil];
+
+    if (_targetName != someName)
+        _targetName = someName;
+}
+   
 @synthesize credential;
 @synthesize channelBindings;
 @synthesize encoding;
