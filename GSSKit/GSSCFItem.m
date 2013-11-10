@@ -10,6 +10,12 @@
 
 // ARC disabled
 
+static GSSItem *__GSSItemFixupObjCClass(GSSItem *obj)
+{
+    object_setClass(obj, [GSSCFItem class]);
+    return obj;
+}
+
 @implementation GSSCFItem
 
 #pragma mark Initialization
@@ -22,24 +28,6 @@
 + (id)allocWithZone:(NSZone *)zone
 {
     return nil;
-}
-
-- (instancetype)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error
-{
-    GSSItemRef item;
-
-    NSAssert(self == nil, @"self must be nil");
-    
-    *error = nil;
-    item = GSSItemAdd((CFDictionaryRef)attributes, (CFErrorRef *)error);
-    
-    [*error autorelease];
-    
-    self = (id)item;
-    
-    object_setClass(self, [GSSCFItem class]);
-    
-    return self;
 }
 
 #pragma mark Bridging
@@ -108,7 +96,7 @@
     res = (GSSItem *)GSSItemAdd((CFDictionaryRef)attributes, (CFErrorRef *)error);
     [*error autorelease];
     
-    return res;
+    return __GSSItemFixupObjCClass(res);
 }
 
 + (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError **)error
@@ -147,9 +135,21 @@
 + (NSArray *)copyMatching:(NSDictionary *)query error:(NSError **)error
 {
     NSArray *res;
+    NSEnumerator *e;
+    id anItem;
     
     *error = nil;
+    
     res = (NSArray *)GSSItemCopyMatching((CFDictionaryRef)query, (CFErrorRef *)error);
+    if (res) {
+        e = [res objectEnumerator];
+        while ((anItem = [e nextObject]) != nil) {
+            if ([anItem respondsToSelector:@selector(_cfTypeID)] &&
+                [anItem _cfTypeID] == GSSItemGetTypeID())
+                (void)__GSSItemFixupObjCClass(anItem);
+        }
+    }
+    
     [*error autorelease];
     
     return res;
@@ -158,9 +158,15 @@
 - (BOOL)_performOperation:(NSObject *)op
               withOptions:(NSDictionary *)options
                     queue:(dispatch_queue_t)queue
-        completionHandler:(void (^)(NSObject *, NSError *))fun
+        completionHandler:(void (^)(id, NSError *))fun
 {
-    return GSSItemOperation((GSSItemRef)self, (CFTypeRef)op, (CFDictionaryRef)options, queue, (GSSItemOperationCallbackBlock)fun);
+    return GSSItemOperation((GSSItemRef)self,
+                            (CFTypeRef)op,
+                            (CFDictionaryRef)options,
+                            queue,
+                            ^(CFTypeRef result, CFErrorRef err) {
+                                fun((id)result, (NSError *)err);
+                            });
 }
 
 - (id)valueForKey:(NSString *)key

@@ -227,7 +227,7 @@ __OSX_AVAILABLE_STARTING(__MAC_10_8, __IPHONE_6_0);
 - (BOOL)_performOperation:(const NSObject *)op
               withOptions:(NSDictionary *)options
                     queue:(dispatch_queue_t)queue
-        completionHandler:(void (^)(NSObject *, NSError *))fun;
+        completionHandler:(void (^)(id, NSError *))fun;
 - (id)_performOperationSynchronously:(const NSObject *)op
                          withOptions:(NSDictionary *)options
                                error:(NSError **)error;

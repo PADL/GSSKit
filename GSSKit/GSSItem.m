@@ -44,17 +44,7 @@ static GSSPlaceholderItem *placeholderItem;
 
 #pragma mark GSSItem primitive methods
 
-+ (GSSItem *)itemWithAttributes:(NSDictionary *)attributes error:(NSError **)error
-{
-    return [[GSSCFItem alloc] initWithAttributes:attributes error:error];
-}
-
 - init
-{
-    GSS_ABSTRACT_METHOD;
-}
-
-- (instancetype)initWithAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
     GSS_ABSTRACT_METHOD;
 }
@@ -94,7 +84,7 @@ static GSSPlaceholderItem *placeholderItem;
 - (BOOL)_performOperation:(NSObject *)op
               withOptions:(NSDictionary *)options
                     queue:(dispatch_queue_t)queue
-        completionHandler:(void (^)(NSObject *, NSError *))fun
+        completionHandler:(void (^)(id, NSError *))fun
 {
     GSS_ABSTRACT_METHOD;
 }
@@ -112,7 +102,7 @@ static GSSPlaceholderItem *placeholderItem;
     bResult = [self _performOperation:op
                           withOptions:options
                                 queue:queue
-                    completionHandler:^(NSObject *o, NSError *e) {
+                    completionHandler:^(id o, NSError *e) {
                         object = o;
                         *error = e;
                     }];

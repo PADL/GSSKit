@@ -8,7 +8,27 @@
 
 @interface GSSItem (SyncOperations)
 
+/*
+ * Credentials are identfied by:
+ *
+ *  kGSSAttrClass           kGSSAttrClassKerberos/kGSSAttrClassNTLM/kGSSAttrClassIAKerb
+ *  kGSSAttrNameType        kGSSAttrNameTypeGSSUsername/kGSSAttrNameTypeGSSHostBasedService/kGSSAttrNameTypeGSSExportedName
+ *  kGSSAttrName            CFStringRef/CFDataRef
+ *  kGSSAttrUUID            CFStringRef
+ *
+ *
+ */
+
+/*
+ * Acquire credentials, either using the kGSSAttrCredentialPassword in the
+ * options dictionary, or by looking in the keychain for a generic credential
+ * identified by UUID.
+ */
 - (id)acquire:(NSDictionary *)options error:(NSError **)error;
+
+/*
+ * Renew credential.
+ */
 - (void)renewCredential:(NSDictionary *)options error:(NSError **)error;
 - (id)getGSSCredential:(NSDictionary *)options error:(NSError **)error;
 - (NSNumber *)destroyTransient:(NSDictionary *)options error:(NSError **)error;
