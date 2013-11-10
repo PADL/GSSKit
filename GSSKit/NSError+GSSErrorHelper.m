@@ -31,14 +31,14 @@ NSString * const GSSMinorStatusErrorKey = @"GSSMinorStatusErrorKey";
 
 - (BOOL)_gssContinueNeeded
 {
-    NSNumber *major = [[self userInfo] objectForKey:GSSMajorStatusErrorKey];
+    NSNumber *major = self.userInfo[GSSMajorStatusErrorKey];
     
     return ([major unsignedIntValue] == GSS_S_CONTINUE_NEEDED);
 }
 
 - (BOOL)_gssCompleteOrContinueNeeded
 {
-    NSNumber *major = [[self userInfo] objectForKey:GSSMajorStatusErrorKey];
+    NSNumber *major = self.userInfo[GSSMajorStatusErrorKey];
     
     return ([major unsignedIntValue] == GSS_S_COMPLETE ||
             [major unsignedIntValue] == GSS_S_CONTINUE_NEEDED);

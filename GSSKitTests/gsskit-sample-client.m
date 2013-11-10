@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
     GSSCredential *initiatorCred = nil;
     GSSContext *initiatorCtx = nil, *acceptorCtx = nil;
     NSDictionary *attrs = @{
-                            (__bridge NSString *)kGSSCredentialUsage : (__bridge NSString *)kGSS_C_INITIATE
+                            GSSCredentialUsage : GSSCredentialUsageInitiate
                             };
     NSError *err = nil;
     __block NSData *initiatorToken = nil, *acceptorToken = nil;
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     
     acceptorCtx.credential = [GSSCredential credentialWithName:@"host@rand.mit.de.padl.com"
                                                      mechanism:[GSSMechanism kerberosMechanism]
-                                                    attributes:@{(__bridge NSString *)kGSSCredentialUsage : (__bridge NSString *)kGSS_C_ACCEPT}
+                                                    attributes:@{GSSCredentialUsage : GSSCredentialUsageAccept}
                                                          error:&err];
     
     do {

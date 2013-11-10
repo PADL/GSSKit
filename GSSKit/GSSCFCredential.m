@@ -26,6 +26,7 @@ static const gss_OID_desc GSSCredSecIdentityDesc = { 7, "\x2a\x85\x70\x2b\x0d\x8
 /* GSS_C_CRED_CFDictionary - 1.3.6.1.4.1.5322.25.1.1 */
 static const gss_OID_desc GSSCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x19\x01\x01" };
 
+
 static CFTypeID _gssCredTypeID;
 
 @implementation GSSCFCredential
@@ -169,12 +170,12 @@ GSSUsageFromAttributeDictionary(NSDictionary *attributes,
     gss_cred_usage_t credUsage;
     NSString *usage;
     
-    usage = [attributes objectForKey:(NSString *)kGSSCredentialUsage];
-    if ([usage isEqualToString:(NSString *)kGSS_C_INITIATE])
+    usage = attributes[GSSCredentialUsage];
+    if ([usage isEqualToString:GSSCredentialUsageInitiate])
         credUsage = GSS_C_INITIATE;
-    else if ([usage isEqualToString:(NSString *)kGSS_C_ACCEPT])
+    else if ([usage isEqualToString:GSSCredentialUsageAccept])
         credUsage = GSS_C_ACCEPT;
-    else if ([usage isEqualToString:(NSString *)kGSS_C_BOTH])
+    else if ([usage isEqualToString:GSSCredentialUsageBoth])
         credUsage = GSS_C_BOTH;
     else
         return GSS_S_FAILURE;
@@ -217,8 +218,8 @@ GSSAcquireCredFunnel(GSSName *desiredName,
                                  &credHandle);
     if (major == GSS_S_FAILURE || major == GSS_S_UNAVAILABLE) {
         /* try password or certificate fallback */
-        id password = [attributes objectForKey:(NSString *)kGSSICPassword];
-        id certificate = [attributes objectForKey:(NSString *)kGSSICCertificate];
+        id password = attributes[GSSICPassword];
+        id certificate = attributes[GSSICCertificate];
         gss_buffer_desc credBuffer = GSS_C_EMPTY_BUFFER;
         void *credData = NULL;
         gss_const_OID credOid = GSS_C_NO_OID;
@@ -257,12 +258,29 @@ GSSAcquireCredFunnel(GSSName *desiredName,
     
     if (GSS_ERROR(major))
         goto cleanup;
-    
+
     *pCredential = [GSSCFCredential credentialWithGSSCred:credHandle freeWhenDone:YES];
+
+    if (attributes[GSSICVerifyCredential]) {
+        NSError *error;
+        
+        if (![*pCredential validate:&error]) {
+            major = [error.userInfo[GSSMajorStatusErrorKey] unsignedIntValue];
+            minor = [error.userInfo[GSSMinorStatusErrorKey] unsignedIntValue];
+            
+            goto cleanup;
+        }
+    }
     
+    credHandle = GSS_C_NO_CREDENTIAL;
+
 cleanup:
-    if (GSS_ERROR(major) && pError != NULL)
-        *pError = [NSError GSSError:major :minor];
+    if (GSS_ERROR(major)) {
+        if (pError != NULL)
+            *pError = [NSError GSSError:major :minor];
+        if (credHandle != GSS_C_NO_CREDENTIAL)
+            gss_destroy_cred(&minor, &credHandle);
+    }
     
     return major;
 }

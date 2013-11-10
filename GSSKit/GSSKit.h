@@ -27,3 +27,20 @@
 
 extern NSString * const GSSMajorStatusErrorKey;
 extern NSString * const GSSMinorStatusErrorKey;
+
+
+extern NSString * const GSSICPassword;
+extern NSString * const GSSICCertificate;
+extern NSString * const GSSICVerifyCredential;
+
+extern NSString * const GSSCredentialUsage;
+extern NSString * const GSSCredentialUsageInitiate;
+extern NSString * const GSSCredentialUsageAccept;
+extern NSString * const GSSCredentialUsageBoth;
+
+extern NSString * const GSSICLKDCHostname;
+extern NSString * const GSSICKerberosCacheName;
+extern NSString * const GSSICAppIdentifierACL;
+
+extern NSString * const GSSChangePasswordOldPassword;
+extern NSString * const GSSChangePasswordNewPassword;

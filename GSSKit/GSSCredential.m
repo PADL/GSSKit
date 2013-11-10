@@ -8,6 +8,8 @@
 
 #import "GSSKit_Private.h"
 
+static const gss_OID_desc GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
+
 @interface GSSPlaceholderCredential : GSSCredential
 @end
 
@@ -75,14 +77,14 @@ static GSSPlaceholderCredential *placeholderCred;
     
     switch (flags) {
         case GSS_C_ACCEPT:
-            credUsage = (__bridge NSString *)kGSS_C_ACCEPT;
+            credUsage = GSSCredentialUsageAccept;
             break;
         case GSS_C_BOTH:
-            credUsage = (__bridge NSString *)kGSS_C_BOTH;
+            credUsage = GSSCredentialUsageBoth;
             break;
         case GSS_C_INITIATE:
         default:
-            credUsage = (__bridge NSString *)kGSS_C_INITIATE;
+            credUsage = GSSCredentialUsageInitiate;
             break;
     }
     
@@ -96,8 +98,8 @@ static GSSPlaceholderCredential *placeholderCred;
                                 error:(NSError **)error
 {
     NSDictionary *attributes = @{
-                                 (__bridge NSString *)kGSSCredentialUsage : [self usageFlagsToString:flags],
-                                 (__bridge NSString *)kGSSICPassword : password
+                                 GSSCredentialUsage : [self usageFlagsToString:flags],
+                                 GSSICPassword : password
                                  };
     
     return [self credentialWithName:name mechanism:desiredMech
@@ -113,7 +115,7 @@ static GSSPlaceholderCredential *placeholderCred;
     self = nil;
     
     if ([name isKindOfClass:[NSString class]]) {
-        if ([attributes[(__bridge NSString *)kGSSCredentialUsage] isEqualToString:(__bridge NSString *)kGSS_C_ACCEPT])
+        if ([attributes[GSSCredentialUsage] isEqualToString:GSSCredentialUsageAccept])
             name = [GSSName nameWithHostBasedService:name];
         else
             name = [GSSName nameWithUserName:name];
@@ -161,9 +163,9 @@ static GSSPlaceholderCredential *placeholderCred;
     NSError *error = nil;
     
     if ([urlCred hasPassword])
-        attributes[(__bridge const NSString *)kGSSICPassword] = [urlCred password];
+        attributes[GSSICPassword] = [urlCred password];
     else if ([urlCred identity])
-        attributes[(__bridge const NSString *)kGSSICCertificate] = (__bridge id)[urlCred identity];
+        attributes[GSSICCertificate] = (__bridge id)[urlCred identity];
 
     return [self credentialWithName:[GSSName nameWithUserName:[urlCred user]]
                           mechanism:mech
@@ -234,6 +236,28 @@ static GSSPlaceholderCredential *placeholderCred;
                                GSSCredential *c = [GSSCredential credentialWithGSSCred:mechCred freeWhenDone:NO];
                                fun(m, c);
     });
+}
+
+- (BOOL)validate
+{
+    return [self validate:NULL];
+}
+
+- (BOOL)validate:(NSError **)pError
+{
+    OM_uint32 major, minor;
+    gss_buffer_set_t bufferSet = GSS_C_NO_BUFFER_SET;
+    
+    major = gss_inquire_cred_by_oid(&minor, [self _gssCred],
+                                    (gss_OID)&GSSCredValidateOidDesc,
+                                    &bufferSet);
+ 
+    if (pError != NULL && GSS_ERROR(major))
+        *pError = [NSError GSSError:major :minor];
+
+    gss_release_buffer_set(&minor, &bufferSet);
+    
+    return !GSS_ERROR(major);
 }
 
 - (void)retainCredential

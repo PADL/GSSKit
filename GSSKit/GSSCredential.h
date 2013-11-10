@@ -48,6 +48,9 @@
 - (NSArray *)mechanisms;
 - (NSData *)export;
 
+- (BOOL)validate;
+- (BOOL)validate:(NSError **)error;
+
 - (void)iterateWithFlags:(OM_uint32)flags ofMechanism:(GSSMechanism *)mech
                 callback:(void (^)(GSSMechanism *, GSSCredential *))fun;
 
