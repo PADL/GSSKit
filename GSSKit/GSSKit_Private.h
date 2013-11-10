@@ -15,6 +15,9 @@
 #import "GSSCFName.h"
 #import "GSSCFCredential.h"
 #import "GSSCredential+Private.h"
+#import "GSSChannelBindings+Private.h"
+#import "GSSMechanism+Private.h"
+#import "GSSName+Private.h"
 #import "GSSItem_Private.h"
 #import "GSSBuffer.h"
 

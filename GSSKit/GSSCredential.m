@@ -69,7 +69,7 @@ static GSSPlaceholderCredential *placeholderCred;
     return [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:error];
 }
 
-+ (NSString *)usageFlagsToString:(OM_uint32)flags
++ (NSString *)usageFlagsToString:(uint32_t)flags
 {
     NSString *credUsage = nil;
     
@@ -93,7 +93,7 @@ static GSSPlaceholderCredential *placeholderCred;
 
 + (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
-                           usageFlags:(OM_uint32)flags
+                           usageFlags:(uint32_t)flags
                              password:(NSString *)password
                                 error:(NSError **)error
 {
@@ -180,12 +180,12 @@ static GSSPlaceholderCredential *placeholderCred;
     return [GSSName nameWithGSSName:name freeWhenDone:YES];
 }
 
-- (OM_uint32)lifetime
+- (uint32_t)lifetime
 {
     return GSSCredentialGetLifetime([self _gssCred]);
 }
 
-- (OM_uint32)credUsage
+- (uint32_t)credUsage
 {
     OM_uint32 minor;
     gss_cred_usage_t usage;

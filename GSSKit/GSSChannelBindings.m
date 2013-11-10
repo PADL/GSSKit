@@ -16,17 +16,4 @@
 @synthesize acceptorAddress;
 @synthesize applicationData;
 
-- (struct gss_channel_bindings_struct)_gssChannelBindings
-{
-    struct gss_channel_bindings_struct cb;
-    
-    cb.initiator_addrtype = self.initiatorAddressType;
-    cb.initiator_address = [self.initiatorAddress _gssBuffer];
-    cb.acceptor_addrtype = self.acceptorAddressType;
-    cb.acceptor_address = [self.acceptorAddress _gssBuffer];
-    cb.application_data = [self.applicationData _gssBuffer];
-        
-    return cb;
-}
-
 @end

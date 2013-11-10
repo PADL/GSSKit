@@ -126,10 +126,6 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 #endif
 }
 
-- (gss_const_OID)oid
-{
-    return _oid;
-}
 
 - (NSString *)oidString
 {
@@ -192,11 +188,6 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 #endif
 }
 
-- (BOOL)isEqualToOID:(gss_const_OID)someOid
-{
-    return gss_oid_equal(_oid, someOid);
-}
-
 - (BOOL)isSPNEGOMechanism
 {
     return [self isEqualToOID:GSS_SPNEGO_MECHANISM];
@@ -213,6 +204,16 @@ static const gss_OID_desc GSSEapAes256MechDesc =
         return [self isEqualToOID:[anObject oid]];
     else
         return NO;
+}
+
+- (gss_const_OID)oid
+{
+    return _oid;
+}
+
+- (BOOL)isEqualToOID:(gss_const_OID)someOid
+{
+    return gss_oid_equal(_oid, someOid);
 }
 
 @end

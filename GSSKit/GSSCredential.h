@@ -28,7 +28,7 @@
 
 + (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
-                           usageFlags:(OM_uint32)flags
+                           usageFlags:(uint32_t)flags
                              password:(NSString *)password
                                 error:(NSError **)error;
 
@@ -43,15 +43,15 @@
              error:(NSError **)error;
 
 - (GSSName *)name;
-- (OM_uint32)lifetime;
-- (OM_uint32)credUsage;
+- (uint32_t)lifetime;
+- (uint32_t)credUsage;
 - (NSArray *)mechanisms;
 - (NSData *)export;
 
 - (BOOL)validate;
 - (BOOL)validate:(NSError **)error;
 
-- (void)iterateWithFlags:(OM_uint32)flags ofMechanism:(GSSMechanism *)mech
+- (void)iterateWithFlags:(uint32_t)flags ofMechanism:(GSSMechanism *)mech
                 callback:(void (^)(GSSMechanism *, GSSCredential *))fun;
 
 @end

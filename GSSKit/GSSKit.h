@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import <GSS/gssapi.h>
-#import <GSS/gssapi_apple.h>
+//#import <GSS/gssapi.h>
+//#import <GSS/gssapi_apple.h>
 
 #import <GSSKit/GSSItem.h>
 #import <GSSKit/GSSItem+AsyncOperations.h>
