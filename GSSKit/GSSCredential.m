@@ -225,7 +225,7 @@ static GSSPlaceholderCredential *placeholderCred;
 }
 
 
-- (void)iterateWithFlags:(OM_uint32)flags ofMechanism:(GSSMechanism *)mech
+- (void)iterateWithFlags:(uint32_t)flags ofMechanism:(GSSMechanism *)mech
                 callback:(void (^)(GSSMechanism *, GSSCredential *))fun
 {
     OM_uint32 major, minor;

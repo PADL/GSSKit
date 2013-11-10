@@ -10,9 +10,11 @@
 
 #import <GSS/gssapi.h>
 
-@interface NSError (GSSErrorHelper)
+@interface NSError (GSSKitErrorHelper)
 + (NSError *)GSSError:(OM_uint32)majorStatus :(OM_uint32)minorStatus;
 + (NSError *)GSSError:(OM_uint32)majorStatus;
+
 - (BOOL)_gssContinueNeeded;
-- (BOOL)_gssCompleteOrContinueNeeded;
+- (BOOL)_gssError;
+
 @end

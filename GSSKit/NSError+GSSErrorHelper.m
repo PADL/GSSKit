@@ -11,7 +11,7 @@
 NSString * const GSSMajorStatusErrorKey = @"GSSMajorStatusErrorKey";
 NSString * const GSSMinorStatusErrorKey = @"GSSMinorStatusErrorKey";
 
-@implementation NSError (GSSErrorHelper)
+@implementation NSError (GSSKitErrorHelper)
 
 + (NSError *)GSSError:(OM_uint32)majorStatus
                      :(OM_uint32)minorStatus
@@ -36,12 +36,11 @@ NSString * const GSSMinorStatusErrorKey = @"GSSMinorStatusErrorKey";
     return ([major unsignedIntValue] == GSS_S_CONTINUE_NEEDED);
 }
 
-- (BOOL)_gssCompleteOrContinueNeeded
+- (BOOL)_gssError
 {
     NSNumber *major = self.userInfo[GSSMajorStatusErrorKey];
-    
-    return ([major unsignedIntValue] == GSS_S_COMPLETE ||
-            [major unsignedIntValue] == GSS_S_CONTINUE_NEEDED);
+
+    return GSS_ERROR(major.unsignedIntValue); 
 }
 
 @end

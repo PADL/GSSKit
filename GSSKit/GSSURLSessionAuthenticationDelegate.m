@@ -77,7 +77,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         return;
     }
 
-    if ([_context.lastError _gssContinueNeeded] && ![inputToken length]) {
+    if ([_context isContinueNeeded] && ![inputToken length]) {
         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
         return;
     }
@@ -96,7 +96,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
          completionHandler:^(NSData *outputToken, NSError *error) {
              NSURLCredential *cred = [challenge proposedCredential];
              
-             if ([error _gssCompleteOrContinueNeeded]) {
+             if (GSS_ERROR(error.code)) {
                  [self _gssTokenToURLSession:session task:task token:outputToken];
                  completionHandler(NSURLSessionAuthChallengeUseCredential, cred);
              } else {

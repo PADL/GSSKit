@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
                  }];
         dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
         
-        if (GSS_ERROR([[initiatorCtx lastError] code]) || ![initiatorToken length])
+        if ([initiatorCtx didError] || ![initiatorToken length])
             break;
         
         NSLog(@"Sending initiator token %@", initiatorToken);
@@ -59,11 +59,11 @@ int main(int argc, char *argv[])
                     dispatch_semaphore_signal(sema);
                 }];
         dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-        if (GSS_ERROR([[acceptorCtx lastError] code]))
+        if ([acceptorCtx didError])
             break;
         
         NSLog(@"Sending acceptor token %@", acceptorToken);
-    } while ([[initiatorCtx lastError] code] == GSS_S_CONTINUE_NEEDED);
+    } while ([initiatorCtx isContinueNeeded]);
 
     NSLog(@"Initiator status %ld acceptor status %ld", [[initiatorCtx lastError] code], [[acceptorCtx lastError] code]);
     
