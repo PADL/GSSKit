@@ -52,6 +52,11 @@ static const gss_OID_desc GSSEapAes256MechDesc =
     return [self mechanismWithOID:GSS_PKU2U_MECHANISM];
 }
 
++ (GSSMechanism *)IAKerbMechanism
+{
+    return [self mechanismWithOID:GSS_IAKERB_MECHANISM];
+}
+
 #if 0
 + (GSSMechanism *)SCRAMMechanism
 {

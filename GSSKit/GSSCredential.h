@@ -47,6 +47,8 @@
 - (uint32_t)credUsage;
 - (NSArray *)mechanisms;
 - (NSData *)export;
+- (NSData *)labelForKey:(NSString *)key;
+- (void)setLabel:(NSData *)label forKey:(NSString *)key;
 
 - (BOOL)validate;
 - (BOOL)validate:(NSError **)error;

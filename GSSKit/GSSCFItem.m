@@ -159,11 +159,18 @@ __GSSItemToObjCClass(GSSItemRef obj)
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(id, NSError *))fun
 {
+    if (op == (NSObject *)kGSSOperationAcquire) {
+        // This is a hack to deal with extensible dictionary funnelling
+        [self _itemAcquireOperation:options queue:queue completionHandler:fun];
+        return YES;
+    }
+    
     return GSSItemOperation((GSSItemRef)self,
                             (CFTypeRef)op,
                             (CFDictionaryRef)options,
                             queue,
                             ^(CFTypeRef result, CFErrorRef err) {
+                                // any ObjC type coercing required?
                                 fun((id)result, (NSError *)err);
                             });
 }
@@ -171,6 +178,11 @@ __GSSItemToObjCClass(GSSItemRef obj)
 - (id)valueForKey:(NSString *)key
 {
     return GSSItemGetValue((GSSItemRef)self, (CFStringRef)key);
+}
+
+- (id)objectForKeyedSubscript:(id)key
+{
+    return [self valueForKey:key];
 }
 
 @end

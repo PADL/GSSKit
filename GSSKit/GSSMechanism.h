@@ -12,6 +12,7 @@
 + (GSSMechanism *)kerberosMechanism;
 + (GSSMechanism *)PKU2UMechanism;
 + (GSSMechanism *)NTLMMechanism;
++ (GSSMechanism *)IAKerbMechanism;
 
 + (GSSMechanism *)personaMechanism;
 + (GSSMechanism *)EAPMechanism;

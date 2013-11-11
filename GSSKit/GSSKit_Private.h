@@ -19,6 +19,7 @@
 #import "GSSMechanism+Private.h"
 #import "GSSName+Private.h"
 #import "GSSItem_Private.h"
+#import "GSSItem+AcquireCredGlue.h"
 #import "GSSBuffer.h"
 
 #import "NSError+GSSErrorHelper.h"
@@ -76,3 +77,21 @@ GSSAPI_LIB_FUNCTION OM_uint32
 __ApplePrivate_gss_cred_unhold(OM_uint32 *min_stat, gss_cred_id_t cred_handle);
 
 #define gss_cred_unhold __ApplePrivate_gss_cred_unhold
+
+OM_uint32
+__ApplePrivate_gss_cred_label_get (
+	OM_uint32 * /*min_stat*/,
+	gss_cred_id_t /*cred_handle*/,
+	const char * /*label*/,
+	gss_buffer_t /*value*/);
+
+#define gss_cred_label_get __ApplePrivate_gss_cred_label_get
+
+OM_uint32
+__ApplePrivate_gss_cred_label_set (
+	OM_uint32 * /*min_stat*/,
+	gss_cred_id_t /*cred_handle*/,
+	const char * /*label*/,
+	gss_buffer_t /*value*/);
+
+#define gss_cred_label_set __ApplePrivate_gss_cred_label_set

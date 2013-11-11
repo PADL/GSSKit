@@ -10,6 +10,7 @@
 + (GSSName *)nameWithHostBasedService:(NSString *)name;
 + (GSSName *)nameWithHostBasedService: (NSString *)service withHostName: (NSString *)hostname;
 + (GSSName *)nameWithUserName: (NSString *)username;
++ (GSSName *)nameWithExportedName:(NSData *)name;
 
 - (NSData *)exportName;
 - (NSString *)description;

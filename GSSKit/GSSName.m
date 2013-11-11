@@ -98,6 +98,13 @@ static GSSPlaceholderName *placeholderName;
                      nameType:GSS_C_NT_USER_NAME error:&error];
 }
 
++ (GSSName *)nameWithExportedName:(NSData *)name
+{
+    NSError *error;
+
+    return [self nameWithData:name nameType:GSS_C_NT_EXPORT_NAME error:&error];
+}
+
 - (NSData *)exportName
 {
     OM_uint32 major, minor;

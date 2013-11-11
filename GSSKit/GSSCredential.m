@@ -224,6 +224,25 @@ static GSSPlaceholderCredential *placeholderCred;
     return [GSSBuffer dataWithGSSBufferNoCopy:&exportedCred freeWhenDone:YES];
 }
 
+- (NSData *)labelForKey:(NSString *)key
+{
+    OM_uint32 major, minor;
+    gss_buffer_desc labelData;
+
+    major = gss_cred_label_get(&minor, [self _gssCred], [key UTF8String], &labelData);
+    if (GSS_ERROR(major))
+        return nil;
+
+    return [GSSBuffer dataWithGSSBufferNoCopy:&labelData freeWhenDone:YES];
+}
+
+- (void)setLabel:(NSData *)label forKey:(NSString *)key
+{
+    OM_uint32 major, minor;
+    gss_buffer_desc labelData = [label _gssBuffer];
+
+    major = gss_cred_label_set(&minor, [self _gssCred], [key UTF8String], &labelData);
+}
 
 - (void)iterateWithFlags:(uint32_t)flags ofMechanism:(GSSMechanism *)mech
                 callback:(void (^)(GSSMechanism *, GSSCredential *))fun
