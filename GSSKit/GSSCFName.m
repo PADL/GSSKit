@@ -72,7 +72,7 @@ static CFTypeID _gssNameTypeID;
 
 - (BOOL)isEqual:(id)anObject
 {
-    return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
+    return CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
 }
 
 - (NSUInteger)hash

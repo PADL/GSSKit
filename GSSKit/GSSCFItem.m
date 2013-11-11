@@ -144,7 +144,7 @@ __GSSItemToObjCClass(GSSItemRef obj)
         while ((anItem = [e nextObject]) != nil) {
             if ([anItem respondsToSelector:@selector(_cfTypeID)] &&
                 [anItem _cfTypeID] == GSSItemGetTypeID())
-                (void)__GSSItemToObjCClass((GSSItemRef)anItem);
+                __GSSItemToObjCClass((GSSItemRef)anItem);
         }
     }
     
@@ -164,7 +164,6 @@ __GSSItemToObjCClass(GSSItemRef obj)
                             (CFDictionaryRef)options,
                             queue,
                             ^(CFTypeRef result, CFErrorRef err) {
-
                                 fun((id)result, (NSError *)err);
                             });
 }
