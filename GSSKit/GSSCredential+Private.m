@@ -18,7 +18,8 @@
 
 - (gss_cred_id_t)_gssCred
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSCredential class]);
+    return GSS_C_NO_CREDENTIAL;
 }
 
 @end

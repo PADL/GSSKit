@@ -34,7 +34,8 @@ static GSSPlaceholderName *placeholderName;
 
 - (gss_name_t)_gssName
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSName class]);
+    return GSS_C_NO_NAME;
 }
 
 + (GSSName *)nameWithData:(NSData *)data

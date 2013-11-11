@@ -72,7 +72,7 @@ static CFTypeID _gssCredTypeID;
 
     object_setClass(newCred, [GSSCFCredential class]);
 
-    return [newCred autorelease];
+    return NSMakeCollectable([newCred autorelease]);
 }
 
 #pragma mark Bridging
@@ -114,7 +114,7 @@ static CFTypeID _gssCredTypeID;
 {
     CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
     
-    return [(NSString *)copyDesc autorelease];
+    return NSMakeCollectable([(NSString *)copyDesc autorelease]);
 }
 
 - (BOOL)allowsWeakReference

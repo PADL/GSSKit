@@ -29,11 +29,6 @@
 
 extern CFStringRef __GSSKitIdentity;
 
-#define GSS_ABSTRACT_METHOD {\
-    [self doesNotRecognizeSelector:_cmd]; \
-    __builtin_unreachable(); \
-}
-
 void _CFRuntimeBridgeClasses(CFTypeID cf_typeID, const char *objc_classname);
 //const CFRuntimeClass * _CFRuntimeGetClassWithTypeID(CFTypeID typeID);
 //void _CFRuntimeUnregisterClassWithTypeID(CFTypeID typeID);
@@ -41,6 +36,9 @@ void _CFRuntimeBridgeClasses(CFTypeID cf_typeID, const char *objc_classname);
 
 CF_EXPORT CFTypeRef _CFTryRetain(CFTypeRef cf);
 CF_EXPORT Boolean _CFIsDeallocating(CFTypeRef cf);
+
+void
+NSRequestConcreteImplementation(id self, SEL _cmd, Class absClass);
 
 GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
 gss_inquire_mech_for_saslname(OM_uint32 *minor_status,

@@ -15,7 +15,7 @@ __GSSItemToObjCClass(GSSItemRef obj)
 {
     GSSItem *item = (GSSItem *)obj;
     object_setClass(item, [GSSCFItem class]);
-    return [item autorelease];
+    return NSMakeCollectable([item autorelease]);
 }
 
 @implementation GSSCFItem
@@ -63,7 +63,7 @@ __GSSItemToObjCClass(GSSItemRef obj)
 {
     CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
     
-    return [(NSString *)copyDesc autorelease];
+    return NSMakeCollectable([(NSString *)copyDesc autorelease]);
 }
 
 - (BOOL)allowsWeakReference
@@ -92,9 +92,9 @@ __GSSItemToObjCClass(GSSItemRef obj)
 {
     GSSItemRef res;
     
-    *error = nil;
     res = GSSItemAdd((CFDictionaryRef)attributes, (CFErrorRef *)error);
-    [*error autorelease];
+    if (error)
+        NSMakeCollectable([*error autorelease]);
     
     return __GSSItemToObjCClass(res);
 }
@@ -103,9 +103,9 @@ __GSSItemToObjCClass(GSSItemRef obj)
 {
     BOOL res;
     
-    *error = nil;
     res = GSSItemUpdate((CFDictionaryRef)query, (CFDictionaryRef)attributes, (CFErrorRef *)error);
-    [*error autorelease];
+    if (error)
+        NSMakeCollectable([*error autorelease]);
     
     return res;
 }
@@ -114,9 +114,9 @@ __GSSItemToObjCClass(GSSItemRef obj)
 {
     BOOL res;
     
-    *error = nil;
     res = GSSItemDelete((CFDictionaryRef)query, (CFErrorRef *)error);
-    [*error autorelease];
+    if (error)
+        NSMakeCollectable([*error autorelease]);
     
     return res;
 }
@@ -125,9 +125,9 @@ __GSSItemToObjCClass(GSSItemRef obj)
 {
     BOOL res;
     
-    *error = nil;
     res = GSSItemDeleteItem((GSSItemRef)self, (CFErrorRef *)error);
-    [*error autorelease];
+    if (error)
+        NSMakeCollectable([*error autorelease]);
     
     return res;
 }
@@ -137,8 +137,6 @@ __GSSItemToObjCClass(GSSItemRef obj)
     NSArray *res;
     NSEnumerator *e;
     id anItem;
-    
-    *error = nil;
     
     res = (NSArray *)GSSItemCopyMatching((CFDictionaryRef)query, (CFErrorRef *)error);
     if (res) {
@@ -150,7 +148,8 @@ __GSSItemToObjCClass(GSSItemRef obj)
         }
     }
     
-    [*error autorelease];
+    if (error)
+        NSMakeCollectable([*error autorelease]);
     
     return res;
 }

@@ -50,7 +50,7 @@ static CFTypeID _gssNameTypeID;
 
     object_setClass(newName, [GSSCFName class]);
 
-    return [newName autorelease];
+    return NSMakeCollectable([newName autorelease]);
 }
 
 #pragma mark Bridging
@@ -84,7 +84,7 @@ static CFTypeID _gssNameTypeID;
 {
     CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
     
-    return [(NSString *)copyDesc autorelease];
+    return NSMakeCollectable([(NSString *)copyDesc autorelease]);
 }
 
 - (BOOL)allowsWeakReference

@@ -46,37 +46,44 @@ static GSSPlaceholderItem *placeholderItem;
 
 - init
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return nil;
 }
 
 + (GSSItem *)add:(NSDictionary *)attributes error:(NSError **)error
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return nil;
 }
 
 + (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return NO;
 }
 
 + (BOOL)delete:(NSDictionary *)query error:(NSError **)error
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return NO;
 }
 
 - (BOOL)delete:(NSError **)error
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return NO;
 }
 
 + (NSArray *)copyMatching:(NSDictionary *)query error:(NSError **)error
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return nil;
 }
 
 - (id)valueForKey:(NSString *)key
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return nil;
 }
 @end
 
@@ -86,7 +93,8 @@ static GSSPlaceholderItem *placeholderItem;
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(id, NSError *))fun
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return NO;
 }
 
 - (id)_performOperationSynchronously:(const NSObject *)op

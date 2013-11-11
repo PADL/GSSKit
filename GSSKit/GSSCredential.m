@@ -137,7 +137,7 @@ static GSSPlaceholderCredential *placeholderCred;
 
 - (void)destroy
 {
-    GSS_ABSTRACT_METHOD;
+    NSRequestConcreteImplementation(self, _cmd, [GSSCredential class]);
 }
 
 + (GSSCredential *)credentialWithExportedData:(NSData *)data
