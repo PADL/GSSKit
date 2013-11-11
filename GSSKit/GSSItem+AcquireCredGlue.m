@@ -8,6 +8,12 @@
 
 #import "GSSKit_Private.h"
 
+/*
+ * Semi-replacement for itemAcquire() in GSS.framework. We need this to support
+ * extensible mappings of GSSItem to gss_acquire_cred_ext() dictionaries, which
+ * will be used by CredUI. This can go away eventually if anything gets
+ * integrated into OS X.
+ */
 @implementation GSSItem (AcquireCredGlue)
 
 - (GSSName *)_itemGssName
