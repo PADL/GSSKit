@@ -52,7 +52,7 @@
 - (NSError *)lastError
 {
     if (_major != GSS_S_COMPLETE)
-        return [NSError GSSError:_major :_minor];
+        return [NSError GSSError:_major :_minor :(self.finalMechanism ? self.finalMechanism : self.mechanism)];
     else
         return nil;
 }

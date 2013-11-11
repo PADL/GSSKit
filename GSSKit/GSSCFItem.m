@@ -154,19 +154,19 @@ __GSSItemToObjCClass(GSSItemRef obj)
     return res;
 }
 
-- (BOOL)_performOperation:(NSObject *)op
+- (BOOL)_performOperation:(GSSOperation)op
               withOptions:(NSDictionary *)options
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(id, NSError *))fun
 {
-    if (op == (NSObject *)kGSSOperationAcquire) {
+    if (op == kGSSOperationAcquire) {
         // This is a hack to deal with extensible dictionary funnelling
         [self _itemAcquireOperation:options queue:queue completionHandler:fun];
         return YES;
     }
     
     return GSSItemOperation((GSSItemRef)self,
-                            (CFTypeRef)op,
+                            op,
                             (CFDictionaryRef)options,
                             queue,
                             ^(CFTypeRef result, CFErrorRef err) {

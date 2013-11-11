@@ -12,21 +12,21 @@
 
 - (GSSCredential *)acquire:(NSDictionary *)options error:(NSError **)error
 {
-    return [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationAcquire
+    return [self _performOperationSynchronously:kGSSOperationAcquire
                                     withOptions:options
                                           error:error];
 }
 
 - (void)renewCredential:(NSDictionary *)options error:(NSError **)error
 {
-    [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationRenewCredential
+    [self _performOperationSynchronously:kGSSOperationRenewCredential
                              withOptions:options
                                    error:error];
 }
 
 - (GSSCredential *)getGSSCredential:(NSDictionary *)options error:(NSError **)error
 {
-    return [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationGetGSSCredential
+    return [self _performOperationSynchronously:kGSSOperationGetGSSCredential
                                     withOptions:options
                                           error:error];
 }
@@ -35,7 +35,7 @@
 {
     id ret;
     
-    ret = [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationDestoryTransient
+    ret = [self _performOperationSynchronously:kGSSOperationDestoryTransient
                                    withOptions:options
                                          error:error];
     
@@ -46,7 +46,7 @@
 {
     id ret;
     
-    ret = [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationRemoveBackingCredential
+    ret = [self _performOperationSynchronously:kGSSOperationRemoveBackingCredential
                                    withOptions:options
                                          error:error];
 
@@ -55,21 +55,21 @@
 
 - (void)changePassword:(NSDictionary *)options error:(NSError **)error
 {
-    [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationChangePassword
+    [self _performOperationSynchronously:kGSSOperationChangePassword
                              withOptions:options
                                    error:error];
 }
 
 - (void)setDefault:(NSDictionary *)options error:(NSError **)error
 {
-    [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationSetDefault
+    [self _performOperationSynchronously:kGSSOperationSetDefault
                              withOptions:options
                                    error:error];
 }
 
 - (NSArray *)credentialDiagnostics:(NSDictionary *)options error:(NSError **)error
 {
-    return [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationCredentialDiagnostics
+    return [self _performOperationSynchronously:kGSSOperationCredentialDiagnostics
                                     withOptions:options
                                           error:error];
 }

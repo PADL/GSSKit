@@ -21,6 +21,8 @@
 
 extern NSString * const GSSMajorStatusErrorKey;
 extern NSString * const GSSMinorStatusErrorKey;
+extern NSString * const GSSMajorStatusDescriptionKey;
+extern NSString * const GSSMinorStatusDescriptionKey;
 
 extern NSString * const GSSICPassword;
 extern NSString * const GSSICCertificate;

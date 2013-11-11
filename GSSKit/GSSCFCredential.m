@@ -10,10 +10,6 @@
 
 // ARC disabled
 
-/*
- * this is a variant of gss_aapl_initial_cred() that is more generalised
- */
-
 /* GSS_C_CRED_PASSWORD - 1.2.752.43.13.200 */
 static const gss_OID_desc GSSCredPasswordDesc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x48" };
 
@@ -182,6 +178,10 @@ GSSUsageFromAttributeDictionary(NSDictionary *attributes,
     return GSS_S_COMPLETE;
 }
 
+/*
+ * this is a variant of gss_aapl_initial_cred() that is more generalised
+ */
+
 OM_uint32
 GSSAcquireCredFunnel(GSSName *desiredName,
                      GSSMechanism *desiredMech,
@@ -205,7 +205,11 @@ GSSAcquireCredFunnel(GSSName *desiredName,
     major = GSSUsageFromAttributeDictionary(attributes, &credUsage);
     if (GSS_ERROR(major))
         goto cleanup;
-    
+   
+    /*
+     * First, try passing the CFDictionary directly to the mechanism, as some
+     * mechanisms (for example BrowserID) might use this.
+     */ 
     major = gss_acquire_cred_ext(&minor,
                                  [desiredName _gssName],
                                  &GSSCredCFDictionary,
@@ -275,7 +279,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
 cleanup:
     if (GSS_ERROR(major)) {
         if (pError != NULL)
-            *pError = [NSError GSSError:major :minor];
+            *pError = [NSError GSSError:major :minor :desiredMech];
         if (credHandle != GSS_C_NO_CREDENTIAL)
             gss_destroy_cred(&minor, &credHandle);
     }

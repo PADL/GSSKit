@@ -224,11 +224,11 @@ __OSX_AVAILABLE_STARTING(__MAC_10_8, __IPHONE_6_0);
 @class GSSItem;
 
 @interface GSSItem (Private)
-- (BOOL)_performOperation:(const NSObject *)op
+- (BOOL)_performOperation:(GSSOperation)op
               withOptions:(NSDictionary *)options
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(id, NSError *))fun;
-- (id)_performOperationSynchronously:(const NSObject *)op
+- (id)_performOperationSynchronously:(GSSOperation)op
                          withOptions:(NSDictionary *)options
                                error:(NSError **)error;
 @end

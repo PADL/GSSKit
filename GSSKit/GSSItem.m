@@ -52,20 +52,17 @@ static GSSPlaceholderItem *placeholderItem;
 
 + (GSSItem *)add:(NSDictionary *)attributes error:(NSError **)error
 {
-    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
-    return nil;
+    return [GSSCFItem add:attributes error:error];
 }
 
 + (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError **)error
 {
-    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
-    return NO;
+    return [GSSCFItem update:query withAttributes:attributes error:error];
 }
 
 + (BOOL)delete:(NSDictionary *)query error:(NSError **)error
 {
-    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
-    return NO;
+    return [GSSCFItem delete:query error:error];
 }
 
 - (BOOL)delete:(NSError **)error
@@ -76,8 +73,7 @@ static GSSPlaceholderItem *placeholderItem;
 
 + (NSArray *)copyMatching:(NSDictionary *)query error:(NSError **)error
 {
-    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
-    return nil;
+    return [GSSCFItem copyMatching:query error:error];
 }
 
 - (id)valueForKey:(NSString *)key
@@ -88,7 +84,7 @@ static GSSPlaceholderItem *placeholderItem;
 @end
 
 @implementation GSSItem (Private)
-- (BOOL)_performOperation:(NSObject *)op
+- (BOOL)_performOperation:(GSSOperation)op
               withOptions:(NSDictionary *)options
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(id, NSError *))fun
@@ -97,7 +93,7 @@ static GSSPlaceholderItem *placeholderItem;
     return NO;
 }
 
-- (id)_performOperationSynchronously:(const NSObject *)op
+- (id)_performOperationSynchronously:(GSSOperation)op
                          withOptions:(NSDictionary *)options
                                error:(NSError **)error
 {

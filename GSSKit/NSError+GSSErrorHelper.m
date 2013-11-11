@@ -10,18 +10,46 @@
 
 NSString * const GSSMajorStatusErrorKey = @"GSSMajorStatusErrorKey";
 NSString * const GSSMinorStatusErrorKey = @"GSSMinorStatusErrorKey";
+NSString * const GSSMajorStatusDescriptionKey = @"GSSMajorStatusDescriptionKey";
+NSString * const GSSMinorStatusDescriptionKey = @"GSSMinorStatusDescriptionKey";
 
 @implementation NSError (GSSKitErrorHelper)
+
++ (NSString *)_gssDisplayStatus:(OM_uint32)status
+                           type:(int)statusType
+                           mech:(GSSMechanism *)mech
+{
+    OM_uint32 major, minor, msgCtx;
+    gss_buffer_desc errorMessage = GSS_C_EMPTY_BUFFER;
+    
+    major = gss_display_status(&minor, status, statusType,
+                               mech ? (gss_OID)[mech oid] : GSS_C_NO_OID,
+                               &msgCtx,
+                               &errorMessage);
+    if (GSS_ERROR(major) || !errorMessage.value)
+        return nil;
+    
+    return [NSString stringWithGSSBuffer:&errorMessage freeWhenDone:YES];
+}
+
++ (NSError *)GSSError:(OM_uint32)majorStatus
+                     :(OM_uint32)minorStatus
+                     :(GSSMechanism *)mech
+{
+    NSDictionary *userInfo = @{
+                               GSSMajorStatusErrorKey : [NSNumber numberWithUnsignedInt:majorStatus],
+                               GSSMinorStatusErrorKey : [NSNumber numberWithUnsignedInt:minorStatus],
+                               GSSMajorStatusDescriptionKey : [self _gssDisplayStatus:majorStatus type:GSS_C_GSS_CODE mech:mech],
+                               GSSMinorStatusDescriptionKey : [self _gssDisplayStatus:minorStatus type:GSS_C_MECH_CODE mech:mech]
+                               };
+    
+    return [NSError errorWithDomain:@"org.h5l.GSS" code:(NSInteger)majorStatus userInfo:userInfo];
+}
 
 + (NSError *)GSSError:(OM_uint32)majorStatus
                      :(OM_uint32)minorStatus
 {
-    NSDictionary *userInfo = @{
-                               GSSMajorStatusErrorKey : [NSNumber numberWithUnsignedInt:majorStatus],
-                               GSSMinorStatusErrorKey : [NSNumber numberWithUnsignedInt:minorStatus]
-                               };
-    
-    return [NSError errorWithDomain:@"org.h5l.GSS" code:(NSInteger)majorStatus userInfo:userInfo];
+    return [self GSSError:majorStatus :minorStatus :nil];
 }
 
 + (NSError *)GSSError:(OM_uint32)majorStatus

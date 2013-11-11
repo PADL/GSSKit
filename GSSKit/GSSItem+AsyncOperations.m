@@ -14,7 +14,7 @@
           queue:(dispatch_queue_t)queue
 completionHandler:(void (^)(GSSCredential *, NSError *))fun
 {
-    return [self _performOperation:(__bridge const NSObject *)kGSSOperationAcquire
+    return [self _performOperation:kGSSOperationAcquire
                        withOptions:options
                              queue:queue
                  completionHandler:fun];
@@ -24,7 +24,7 @@ completionHandler:(void (^)(GSSCredential *, NSError *))fun
                   queue:(dispatch_queue_t)queue
       completionHandler:(void (^)(id, NSError *))fun
 {
-    return [self _performOperation:(__bridge const NSObject *)kGSSOperationRenewCredential
+    return [self _performOperation:kGSSOperationRenewCredential
                        withOptions:options
                              queue:queue
                  completionHandler:fun];
@@ -34,7 +34,7 @@ completionHandler:(void (^)(GSSCredential *, NSError *))fun
                    queue:(dispatch_queue_t)queue
        completionHandler:(void (^)(GSSCredential *, NSError *))fun
 {
-    return [self _performOperation:(__bridge const NSObject *)kGSSOperationGetGSSCredential
+    return [self _performOperation:kGSSOperationGetGSSCredential
                        withOptions:options
                              queue:queue
                  completionHandler:fun];
@@ -44,7 +44,7 @@ completionHandler:(void (^)(GSSCredential *, NSError *))fun
                    queue:(dispatch_queue_t)queue
        completionHandler:(void (^)(NSNumber *, NSError *))fun
 {
-    return [self _performOperation:(__bridge const NSObject *)kGSSOperationDestoryTransient
+    return [self _performOperation:kGSSOperationDestoryTransient
                        withOptions:options
                              queue:queue
                  completionHandler:fun];
@@ -54,7 +54,7 @@ completionHandler:(void (^)(GSSCredential *, NSError *))fun
                           queue:(dispatch_queue_t)queue
               completionHandler:(void (^)(id, NSError *))fun
 {
-    return [self _performOperation:(__bridge const NSObject *)kGSSOperationRemoveBackingCredential
+    return [self _performOperation:kGSSOperationRemoveBackingCredential
                        withOptions:options
                              queue:queue
                  completionHandler:fun];
@@ -64,7 +64,7 @@ completionHandler:(void (^)(GSSCredential *, NSError *))fun
                  queue:(dispatch_queue_t)queue
      completionHandler:(void (^)(id, NSError *))fun
 {
-    return [self _performOperation:(__bridge const NSObject *)kGSSOperationChangePassword
+    return [self _performOperation:kGSSOperationChangePassword
                        withOptions:options
                              queue:queue
                  completionHandler:fun];
@@ -74,7 +74,7 @@ completionHandler:(void (^)(GSSCredential *, NSError *))fun
              queue:(dispatch_queue_t)queue
  completionHandler:(void (^)(id, NSError *))fun
 {
-    return [self _performOperation:(__bridge const NSObject *)kGSSOperationSetDefault
+    return [self _performOperation:kGSSOperationSetDefault
                        withOptions:options
                              queue:queue
                  completionHandler:fun];
@@ -84,7 +84,7 @@ completionHandler:(void (^)(GSSCredential *, NSError *))fun
                         queue:(dispatch_queue_t)queue
             completionHandler:(void (^)(NSArray *, NSError *))fun
 {
-    return [self _performOperation:(__bridge const NSObject *)kGSSOperationCredentialDiagnostics
+    return [self _performOperation:kGSSOperationCredentialDiagnostics
                        withOptions:options
                              queue:queue
                  completionHandler:fun];

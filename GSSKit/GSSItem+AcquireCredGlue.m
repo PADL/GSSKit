@@ -57,7 +57,7 @@
         return GSSICPassword;
     else if ([key isEqualToString:(__bridge NSString *)kGSSAttrCredentialSecIdentity])
         return GSSICCertificate;
-    else
+    else if ([key hasPrefix:@"kGSSAttrCredential"])
         return [key stringByReplacingOccurrencesOfString:@"kGSSAttrCredential" withString:@"kGSSIC"];
     
     return nil;
@@ -79,6 +79,8 @@
         if (mappedKey)
             gssAttrs[mappedKey] = obj;
     }];
+    
+    gssAttrs[GSSCredentialUsage] = GSSCredentialUsageInitiate;
     
     GSSAcquireCredFunnel(name, mech, gssAttrs, &cred, &error);
     GSSItemGetValue((__bridge GSSItemRef)self, kGSSAttrCredentialExists);
