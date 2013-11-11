@@ -27,5 +27,4 @@
 - (BOOL)isKerberosMechanism;
 
 - (BOOL)isEqual:(id)anObject;
-
 @end

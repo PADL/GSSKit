@@ -10,7 +10,7 @@
 
 @implementation GSSItem (SyncOperations)
 
-- (id)acquire:(NSDictionary *)options error:(NSError **)error
+- (GSSCredential *)acquire:(NSDictionary *)options error:(NSError **)error
 {
     return [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationAcquire
                                     withOptions:options
@@ -24,25 +24,33 @@
                                    error:error];
 }
 
-- (id)getGSSCredential:(NSDictionary *)options error:(NSError **)error
+- (GSSCredential *)getGSSCredential:(NSDictionary *)options error:(NSError **)error
 {
     return [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationGetGSSCredential
                                     withOptions:options
                                           error:error];
 }
 
-- (NSNumber *)destroyTransient:(NSDictionary *)options error:(NSError **)error
+- (BOOL)destroyTransient:(NSDictionary *)options error:(NSError **)error
 {
-    return [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationDestoryTransient
-                                    withOptions:options
-                                          error:error];
+    id ret;
+    
+    ret = [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationDestoryTransient
+                                   withOptions:options
+                                         error:error];
+    
+    return [ret booleanValue];
 }
 
-- (NSNumber *)removeBackingCredential:(NSDictionary *)options error:(NSError **)error
+- (BOOL)removeBackingCredential:(NSDictionary *)options error:(NSError **)error
 {
-    return [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationRemoveBackingCredential
-                                    withOptions:options
-                                          error:error];
+    id ret;
+    
+    ret = [self _performOperationSynchronously:(__bridge const NSObject *)kGSSOperationRemoveBackingCredential
+                                   withOptions:options
+                                         error:error];
+
+    return [ret booleanValue];
 }
 
 - (void)changePassword:(NSDictionary *)options error:(NSError **)error

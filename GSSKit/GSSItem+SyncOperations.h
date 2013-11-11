@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
+@class GSSCredential;
+
 @interface GSSItem (SyncOperations)
 
 /*
@@ -30,15 +32,15 @@
  * options dictionary, or by looking in the keychain for a generic credential
  * identified by UUID.
  */
-- (id)acquire:(NSDictionary *)options error:(NSError **)error;
+- (GSSCredential *)acquire:(NSDictionary *)options error:(NSError **)error;
 
 /*
  * Renew credential.
  */
 - (void)renewCredential:(NSDictionary *)options error:(NSError **)error;
-- (id)getGSSCredential:(NSDictionary *)options error:(NSError **)error;
-- (NSNumber *)destroyTransient:(NSDictionary *)options error:(NSError **)error;
-- (NSNumber *)removeBackingCredential:(NSDictionary *)options error:(NSError **)error;
+- (GSSCredential *)getGSSCredential:(NSDictionary *)options error:(NSError **)error;
+- (BOOL)destroyTransient:(NSDictionary *)options error:(NSError **)error;
+- (BOOL)removeBackingCredential:(NSDictionary *)options error:(NSError **)error;
 - (void)changePassword:(NSDictionary *)options error:(NSError **)error;
 - (void)setDefault:(NSDictionary *)options error:(NSError **)error;
 - (NSArray *)credentialDiagnostics:(NSDictionary *)options error:(NSError **)error;

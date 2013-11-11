@@ -9,9 +9,8 @@
 #import "GSSKit_Private.h"
 
 @interface GSSMechanism (Private)
-- (gss_const_OID)oid;
-- (BOOL)isEqualToOID:(gss_const_OID)someOid;
-
 + (GSSMechanism *)mechanismWithOID:(gss_const_OID)oid;
 
+- (gss_const_OID)oid;
+- (BOOL)isEqualToOID:(gss_const_OID)someOid;
 @end
