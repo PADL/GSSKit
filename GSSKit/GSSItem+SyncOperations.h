@@ -15,7 +15,13 @@
  *  kGSSAttrNameType        kGSSAttrNameTypeGSSUsername/kGSSAttrNameTypeGSSHostBasedService/kGSSAttrNameTypeGSSExportedName
  *  kGSSAttrName            CFStringRef/CFDataRef
  *  kGSSAttrUUID            CFStringRef
+ *  kGSSAttrCredentialPassword  -> kGSSICPassword
+ *  kGSSAttrCredentialSecIdentity -> kGSSICCertificate
  *
+ * On output:
+ *
+ *  kGSSAttrNameDisplay     CFStringRef 
+ *  kGSSAttrCredentialExists    CFBoolean
  *
  */
 

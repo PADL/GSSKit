@@ -36,7 +36,7 @@ extern CFStringRef __GSSKitIdentity;
 
 void _CFRuntimeBridgeClasses(CFTypeID cf_typeID, const char *objc_classname);
 //const CFRuntimeClass * _CFRuntimeGetClassWithTypeID(CFTypeID typeID);
-void _CFRuntimeUnregisterClassWithTypeID(CFTypeID typeID);
+//void _CFRuntimeUnregisterClassWithTypeID(CFTypeID typeID);
 //CFTypeID _CFRuntimeRegisterClass(const CFRuntimeClass * const cls);
 
 CF_EXPORT CFTypeRef _CFTryRetain(CFTypeRef cf);

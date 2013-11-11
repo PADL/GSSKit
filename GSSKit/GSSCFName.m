@@ -30,7 +30,7 @@ static CFTypeID _gssNameTypeID;
         CFRelease(error);
     CFRelease(name);
     
-    _CFRuntimeBridgeClasses(_gssNameTypeID, [[[GSSCFName class] description] UTF8String]);
+    _CFRuntimeBridgeClasses(_gssNameTypeID, "GSSCFName");
 }
 
 + (id)allocWithZone:(NSZone *)zone
@@ -50,7 +50,7 @@ static CFTypeID _gssNameTypeID;
 
     object_setClass(newName, [GSSCFName class]);
 
-    return newName;
+    return [newName autorelease];
 }
 
 #pragma mark Bridging
@@ -64,13 +64,6 @@ static CFTypeID _gssNameTypeID;
 {
     CFRelease((CFTypeRef)self);
 }
-
-#if 0
-- (id)autorelease
-{
-    return CFAutorelease((GSSItemRef)self);
-}
-#endif
 
 - (NSUInteger)retainCount
 {
@@ -105,6 +98,11 @@ static CFTypeID _gssNameTypeID;
 }
 
 - (CFTypeID)_cfTypeID
+{
+    return _gssNameTypeID;
+}
+
++ (CFTypeID)_cfTypeID
 {
     return _gssNameTypeID;
 }

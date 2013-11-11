@@ -26,7 +26,6 @@ static const gss_OID_desc GSSCredSecIdentityDesc = { 7, "\x2a\x85\x70\x2b\x0d\x8
 /* GSS_C_CRED_CFDictionary - 1.3.6.1.4.1.5322.25.1.1 */
 static const gss_OID_desc GSSCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x19\x01\x01" };
 
-
 static CFTypeID _gssCredTypeID;
 
 @implementation GSSCFCredential
@@ -52,7 +51,7 @@ static CFTypeID _gssCredTypeID;
     if (error)
         CFRelease(error);
     
-    _CFRuntimeBridgeClasses(_gssCredTypeID, [[[GSSCFCredential class] description] UTF8String]);
+    _CFRuntimeBridgeClasses(_gssCredTypeID, "GSSCFCredential");
 }
 
 + (id)allocWithZone:(NSZone *)zone
@@ -65,6 +64,7 @@ static CFTypeID _gssCredTypeID;
 {
     id newCred;
 
+    // cred is a CF object, so it needs to be autoreleased
     if (flag)
         newCred = (id)cred;
     else
@@ -72,7 +72,7 @@ static CFTypeID _gssCredTypeID;
 
     object_setClass(newCred, [GSSCFCredential class]);
 
-    return newCred;
+    return [newCred autorelease];
 }
 
 #pragma mark Bridging
@@ -94,13 +94,6 @@ static CFTypeID _gssCredTypeID;
 {
     CFRelease((CFTypeRef)self);
 }
-
-#if 0
-- (id)autorelease
-{
-    return CFAutorelease((GSSItemRef)self);
-}
-#endif
 
 - (NSUInteger)retainCount
 {
@@ -135,6 +128,11 @@ static CFTypeID _gssCredTypeID;
 }
 
 - (CFTypeID)_cfTypeID
+{
+    return _gssCredTypeID;
+}
+
++ (CFTypeID)_cfTypeID
 {
     return _gssCredTypeID;
 }

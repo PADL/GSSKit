@@ -10,10 +10,12 @@
 
 // ARC disabled
 
-static GSSItem *__GSSItemFixupObjCClass(GSSItem *obj)
+static GSSItem *
+__GSSItemToObjCClass(GSSItemRef obj)
 {
-    object_setClass(obj, [GSSCFItem class]);
-    return obj;
+    GSSItem *item = (GSSItem *)obj;
+    object_setClass(item, [GSSCFItem class]);
+    return [item autorelease];
 }
 
 @implementation GSSCFItem
@@ -22,7 +24,7 @@ static GSSItem *__GSSItemFixupObjCClass(GSSItem *obj)
 
 + (void)initialize
 {
-    _CFRuntimeBridgeClasses(GSSItemGetTypeID(), [[[self class] description] UTF8String]);
+    _CFRuntimeBridgeClasses(GSSItemGetTypeID(), "GSSCFItem");
 }
 
 + (id)allocWithZone:(NSZone *)zone
@@ -41,13 +43,6 @@ static GSSItem *__GSSItemFixupObjCClass(GSSItem *obj)
 {
     CFRelease((GSSItemRef)self);
 }
-
-#if 0
-- (id)autorelease
-{
-    return CFAutorelease((GSSItemRef)self);
-}
-#endif
 
 - (NSUInteger)retainCount
 {
@@ -86,17 +81,22 @@ static GSSItem *__GSSItemFixupObjCClass(GSSItem *obj)
     return GSSItemGetTypeID();
 }
 
++ (CFTypeID)_cfTypeID
+{
+    return GSSItemGetTypeID();
+}
+
 #pragma mark Wrappers
 
 + (GSSItem *)add:(NSDictionary *)attributes error:(NSError **)error
 {
-    GSSItem *res;
+    GSSItemRef res;
     
     *error = nil;
-    res = (GSSItem *)GSSItemAdd((CFDictionaryRef)attributes, (CFErrorRef *)error);
+    res = GSSItemAdd((CFDictionaryRef)attributes, (CFErrorRef *)error);
     [*error autorelease];
     
-    return __GSSItemFixupObjCClass(res);
+    return __GSSItemToObjCClass(res);
 }
 
 + (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError **)error
@@ -146,7 +146,7 @@ static GSSItem *__GSSItemFixupObjCClass(GSSItem *obj)
         while ((anItem = [e nextObject]) != nil) {
             if ([anItem respondsToSelector:@selector(_cfTypeID)] &&
                 [anItem _cfTypeID] == GSSItemGetTypeID())
-                (void)__GSSItemFixupObjCClass(anItem);
+                (void)__GSSItemToObjCClass((GSSItemRef)anItem);
         }
     }
     
@@ -165,6 +165,7 @@ static GSSItem *__GSSItemFixupObjCClass(GSSItem *obj)
                             (CFDictionaryRef)options,
                             queue,
                             ^(CFTypeRef result, CFErrorRef err) {
+
                                 fun((id)result, (NSError *)err);
                             });
 }
