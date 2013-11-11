@@ -16,5 +16,4 @@
 
 - (BOOL)_gssContinueNeeded;
 - (BOOL)_gssError;
-
 @end

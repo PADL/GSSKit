@@ -12,5 +12,4 @@
 
 @interface NSArray (GSSOIDHelper)
 + (NSArray *)arrayWithGSSOIDSet:(gss_OID_set)oids;
-
 @end

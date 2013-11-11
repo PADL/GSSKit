@@ -13,5 +13,4 @@
 
 - (NSData *)exportName;
 - (NSString *)description;
-
 @end
