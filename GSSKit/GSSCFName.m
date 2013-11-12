@@ -46,7 +46,7 @@ static CFTypeID _gssNameTypeID;
     if (flag)
         newName = (id)name;
     else
-        newName = [(id)name retain];
+        newName = (id)CFRetain(name);
 
     object_setClass(newName, [GSSCFName class]);
 

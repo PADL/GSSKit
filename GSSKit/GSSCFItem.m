@@ -159,18 +159,22 @@ __GSSItemToObjCClass(GSSItemRef obj)
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(id, NSError *))fun
 {
+#if 0
     if (op == kGSSOperationAcquire) {
         // This is a hack to deal with extensible dictionary funnelling
         [self _itemAcquireOperation:options queue:queue completionHandler:fun];
         return YES;
     }
+#endif
     
     return GSSItemOperation((GSSItemRef)self,
                             op,
                             (CFDictionaryRef)options,
                             queue,
                             ^(CFTypeRef result, CFErrorRef err) {
-                                // any ObjC type coercing required?
+                                // XXX why is this required if we've registered the CF/ObjC mapping?
+                                if (CFGetTypeID(result) == [GSSCFCredential _cfTypeID])
+                                    object_setClass((id)result, [GSSCFCredential class]);
                                 fun((id)result, (NSError *)err);
                             });
 }

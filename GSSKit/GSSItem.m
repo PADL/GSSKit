@@ -100,6 +100,7 @@ static GSSPlaceholderItem *placeholderItem;
     BOOL bResult;
     __block id object = nil;
     dispatch_queue_t queue = dispatch_queue_create("com.padl.GSSItemOperationQueue", NULL);
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
     *error = nil;
     
@@ -109,11 +110,11 @@ static GSSPlaceholderItem *placeholderItem;
                     completionHandler:^(id o, NSError *e) {
                         object = o;
                         *error = e;
+                        dispatch_semaphore_signal(semaphore);
                     }];
     
-    if (bResult == NO)
-        return nil;
-    
-    return object;
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
+    return bResult ? object : nil;
 }
 @end

@@ -64,7 +64,7 @@ static CFTypeID _gssCredTypeID;
     if (flag)
         newCred = (id)cred;
     else
-        newCred = [(id)cred retain];
+        newCred = (id)CFRetain(cred);
 
     object_setClass(newCred, [GSSCFCredential class]);
 
