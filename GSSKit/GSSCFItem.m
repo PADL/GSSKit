@@ -10,19 +10,11 @@
 
 // ARC disabled
 
-static GSSItem *
-__GSSItemToObjCClass(GSSItemRef obj)
-{
-    GSSItem *item = (GSSItem *)obj;
-    object_setClass(item, [GSSCFItem class]);
-    return NSMakeCollectable([item autorelease]);
-}
-
 @implementation GSSCFItem
 
 #pragma mark Initialization
 
-+ (void)initialize
++ (void)load
 {
     _CFRuntimeBridgeClasses(GSSItemGetTypeID(), "GSSCFItem");
 }
@@ -96,7 +88,7 @@ __GSSItemToObjCClass(GSSItemRef obj)
     if (error)
         NSMakeCollectable([*error autorelease]);
     
-    return __GSSItemToObjCClass(res);
+    return NSMakeCollectable([(id)res autorelease]);
 }
 
 + (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError **)error
@@ -135,19 +127,8 @@ __GSSItemToObjCClass(GSSItemRef obj)
 + (NSArray *)copyMatching:(NSDictionary *)query error:(NSError **)error
 {
     NSArray *res;
-    NSEnumerator *e;
-    id anItem;
     
     res = (NSArray *)GSSItemCopyMatching((CFDictionaryRef)query, (CFErrorRef *)error);
-    if (res) {
-        e = [res objectEnumerator];
-        while ((anItem = [e nextObject]) != nil) {
-            if ([anItem respondsToSelector:@selector(_cfTypeID)] &&
-                [anItem _cfTypeID] == GSSItemGetTypeID())
-                __GSSItemToObjCClass((GSSItemRef)anItem);
-        }
-    }
-    
     if (error)
         NSMakeCollectable([*error autorelease]);
     
@@ -159,7 +140,7 @@ __GSSItemToObjCClass(GSSItemRef obj)
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(id, NSError *))fun
 {
-#if 0
+#if 1
     if (op == kGSSOperationAcquire) {
         // This is a hack to deal with extensible dictionary funnelling
         [self _itemAcquireOperation:options queue:queue completionHandler:fun];
@@ -172,9 +153,6 @@ __GSSItemToObjCClass(GSSItemRef obj)
                             (CFDictionaryRef)options,
                             queue,
                             ^(CFTypeRef result, CFErrorRef err) {
-                                // XXX why is this required if we've registered the CF/ObjC mapping?
-                                if (CFGetTypeID(result) == [GSSCFCredential _cfTypeID])
-                                    object_setClass((id)result, [GSSCFCredential class]);
                                 fun((id)result, (NSError *)err);
                             });
 }

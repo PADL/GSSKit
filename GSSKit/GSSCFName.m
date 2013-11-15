@@ -16,7 +16,7 @@ static CFTypeID _gssNameTypeID;
 
 #pragma mark Initialization
 
-+ (void)initialize
++ (void)load
 {
     CFTypeRef name;
     CFErrorRef error = nil;
@@ -48,7 +48,7 @@ static CFTypeID _gssNameTypeID;
     else
         newName = (id)CFRetain(name);
 
-    object_setClass(newName, [GSSCFName class]);
+    NSAssert([newName class] == [GSSCFName class], @"GSSCFName class not mapped");
 
     return NSMakeCollectable([newName autorelease]);
 }
@@ -98,11 +98,6 @@ static CFTypeID _gssNameTypeID;
 }
 
 - (CFTypeID)_cfTypeID
-{
-    return _gssNameTypeID;
-}
-
-+ (CFTypeID)_cfTypeID
 {
     return _gssNameTypeID;
 }

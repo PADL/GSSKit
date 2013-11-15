@@ -9,9 +9,6 @@
 #import <GSSKit/GSSKit.h>
 
 @interface GSSCFCredential : GSSCredential
-
-+ (CFTypeID)_cfTypeID;
-
 @end
 
 OM_uint32

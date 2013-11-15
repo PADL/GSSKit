@@ -28,7 +28,7 @@ static CFTypeID _gssCredTypeID;
 
 #pragma mark Initialization
 
-+ (void)initialize
++ (void)load
 {
     OM_uint32 major, minor;
     CFErrorRef error = nil;
@@ -66,7 +66,7 @@ static CFTypeID _gssCredTypeID;
     else
         newCred = (id)CFRetain(cred);
 
-    object_setClass(newCred, [GSSCFCredential class]);
+    NSAssert([newCred class] == [GSSCFCredential class], @"GSSCFCredential class not mapped");
 
     return NSMakeCollectable([newCred autorelease]);
 }
@@ -124,11 +124,6 @@ static CFTypeID _gssCredTypeID;
 }
 
 - (CFTypeID)_cfTypeID
-{
-    return _gssCredTypeID;
-}
-
-+ (CFTypeID)_cfTypeID
 {
     return _gssCredTypeID;
 }
