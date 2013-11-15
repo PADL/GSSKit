@@ -8,10 +8,15 @@
 
 #import "GSSKit_Private.h"
 
-NSString * const GSSMajorStatusErrorKey = @"GSSMajorStatusErrorKey";
-NSString * const GSSMinorStatusErrorKey = @"GSSMinorStatusErrorKey";
-NSString * const GSSMajorStatusDescriptionKey = @"GSSMajorStatusDescriptionKey";
-NSString * const GSSMinorStatusDescriptionKey = @"GSSMinorStatusDescriptionKey";
+NSString * const GSSMajorErrorCodeKey = @"kGSSMajorErrorCode";
+NSString * const GSSMinorErrorCodeKey = @"kGSSMinorErrorCode";
+
+NSString * const GSSMajorErrorDescriptionKey = @"kGSSMajorErrorDescription";
+NSString * const GSSMinorErrorDescriptionKey = @"kGSSMajorErrorDescription";
+
+NSString * const GSSMechanismOIDKey = @"kGSSMechanismOID";
+NSString * const GSSMechanismKey = @"kGSSMechanism";
+
 
 @implementation NSError (GSSKitErrorHelper)
 
@@ -37,10 +42,12 @@ NSString * const GSSMinorStatusDescriptionKey = @"GSSMinorStatusDescriptionKey";
                      :(GSSMechanism *)mech
 {
     NSDictionary *userInfo = @{
-                               GSSMajorStatusErrorKey : [NSNumber numberWithUnsignedInt:majorStatus],
-                               GSSMinorStatusErrorKey : [NSNumber numberWithUnsignedInt:minorStatus],
-                               GSSMajorStatusDescriptionKey : [self _gssDisplayStatus:majorStatus type:GSS_C_GSS_CODE mech:mech],
-                               GSSMinorStatusDescriptionKey : [self _gssDisplayStatus:minorStatus type:GSS_C_MECH_CODE mech:mech]
+                               GSSMajorErrorCodeKey : [NSNumber numberWithUnsignedInt:majorStatus],
+                               GSSMinorErrorCodeKey : [NSNumber numberWithUnsignedInt:minorStatus],
+                               GSSMajorErrorDescriptionKey : [self _gssDisplayStatus:majorStatus type:GSS_C_GSS_CODE mech:mech],
+                               GSSMinorErrorDescriptionKey : [self _gssDisplayStatus:minorStatus type:GSS_C_MECH_CODE mech:mech],
+                               GSSMechanismOIDKey : mech ? [mech oidString] : @"no-mech",
+                               GSSMechanismKey : mech ? [mech name] : @"no mech given"
                                };
     
     return [NSError errorWithDomain:@"org.h5l.GSS" code:(NSInteger)majorStatus userInfo:userInfo];
@@ -59,14 +66,14 @@ NSString * const GSSMinorStatusDescriptionKey = @"GSSMinorStatusDescriptionKey";
 
 - (BOOL)_gssContinueNeeded
 {
-    NSNumber *major = self.userInfo[GSSMajorStatusErrorKey];
+    NSNumber *major = self.userInfo[GSSMajorErrorCodeKey];
     
     return ([major unsignedIntValue] == GSS_S_CONTINUE_NEEDED);
 }
 
 - (BOOL)_gssError
 {
-    NSNumber *major = self.userInfo[GSSMajorStatusErrorKey];
+    NSNumber *major = self.userInfo[GSSMajorErrorCodeKey];
 
     return GSS_ERROR(major.unsignedIntValue); 
 }

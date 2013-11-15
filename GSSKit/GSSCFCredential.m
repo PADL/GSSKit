@@ -267,8 +267,8 @@ GSSAcquireCredFunnel(GSSName *desiredName,
         NSError *error;
         
         if (![*pCredential validate:&error]) {
-            major = [error.userInfo[GSSMajorStatusErrorKey] unsignedIntValue];
-            minor = [error.userInfo[GSSMinorStatusErrorKey] unsignedIntValue];
+            major = [error.userInfo[GSSMajorErrorCodeKey] unsignedIntValue];
+            minor = [error.userInfo[GSSMinorErrorCodeKey] unsignedIntValue];
             
             goto cleanup;
         }

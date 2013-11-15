@@ -19,11 +19,6 @@
 #import <GSSKit/GSSContext.h>
 #import <GSSKit/GSSURLSessionAuthenticationDelegate.h>
 
-extern NSString * const GSSMajorStatusErrorKey;
-extern NSString * const GSSMinorStatusErrorKey;
-extern NSString * const GSSMajorStatusDescriptionKey;
-extern NSString * const GSSMinorStatusDescriptionKey;
-
 extern NSString * const GSSICPassword;
 extern NSString * const GSSICCertificate;
 extern NSString * const GSSICVerifyCredential;
@@ -40,3 +35,11 @@ extern NSString * const GSSICAppIdentifierACL;
 extern NSString * const GSSChangePasswordOldPassword;
 extern NSString * const GSSChangePasswordNewPassword;
 
+extern NSString * const GSSMajorErrorCodeKey;
+extern NSString * const GSSMinorErrorCodeKey;
+
+extern NSString * const GSSMajorErrorDescriptionKey;
+extern NSString * const GSSMinorErrorDescriptionKey;
+
+extern NSString * const GSSMechanismOIDKey;
+extern NSString * const GSSMechanismKey;
