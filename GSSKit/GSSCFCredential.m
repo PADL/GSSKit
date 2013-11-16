@@ -148,7 +148,9 @@ GSSChangePasswordWrapper(GSSName *desiredName,
                                      [desiredMech oid],
                                      (CFDictionaryRef)attributes,
                                      &error);
-    
+    if (GSS_ERROR(major) && error != NULL)
+        *pError = NSMakeCollectable([(NSError *)error autorelease]);
+
     return major;
 }
 

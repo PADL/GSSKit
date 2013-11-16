@@ -8,7 +8,7 @@
 
 #import "GSSKit_Private.h"
 
-CFStringRef __GSSKitIdentity = CFSTR("GSSKit@h5l.org");
+CFStringRef __GSSKitIdentity = CFSTR("GSSKit@GSS.h5l.org");
 
 NSString * const GSSICPassword = (__bridge NSString *)kGSSICPassword;
 NSString * const GSSICCertificate = (__bridge NSString *)kGSSICCertificate;
