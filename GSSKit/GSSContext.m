@@ -246,7 +246,7 @@
 
 - (NSData *)wrapData:(NSData *)data
              encrypt:(uint32_t)confState
-            qopState:(uint32_t)qopState;
+            qopState:(uint32_t)qopState
 {
     gss_buffer_desc inputMessageBuffer = [data _gssBuffer];
     int actualConfState;
@@ -273,7 +273,7 @@
 
 - (NSData *)unwrapData:(NSData *)data
             didEncrypt:(uint32_t *)didEncrypt
-              qopState:(uint32_t *)qopState;
+              qopState:(uint32_t *)qopState
 {
     id cookie = nil;
     gss_buffer_desc inputMessageBuffer = [self _decodeToken:data cookie:&cookie];

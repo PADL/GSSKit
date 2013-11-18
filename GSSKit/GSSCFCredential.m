@@ -139,7 +139,7 @@ OM_uint32
 GSSChangePasswordWrapper(GSSName *desiredName,
                          GSSMechanism *desiredMech,
                          NSDictionary *attributes,
-                         NSError **pError)
+                         NSError * __autoreleasing *pError)
 {
     OM_uint32 major;
     CFErrorRef error = NULL;
@@ -183,8 +183,8 @@ OM_uint32
 GSSAcquireCredFunnel(GSSName *desiredName,
                      GSSMechanism *desiredMech,
                      NSDictionary *attributes,
-                     GSSCredential **pCredential,
-                     NSError **pError)
+                     GSSCredential * __autoreleasing *pCredential,
+                     NSError * __autoreleasing *pError)
 {
     OM_uint32 major, minor;
     gss_cred_usage_t credUsage = GSS_C_INITIATE;
