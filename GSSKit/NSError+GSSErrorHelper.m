@@ -68,7 +68,7 @@ NSString * const GSSMechanismKey = @"kGSSMechanism";
 {
     NSNumber *major = self.userInfo[GSSMajorErrorCodeKey];
     
-    return ([major unsignedIntValue] == GSS_S_CONTINUE_NEEDED);
+    return !!([major unsignedIntValue] & GSS_S_CONTINUE_NEEDED);
 }
 
 - (BOOL)_gssError

@@ -184,6 +184,12 @@
         *retData = [self _encodeToken:&outputToken];
     if (timeRec)
         _expiryTime = time(NULL) + timeRec;
+
+#if 0
+    if (_major == GSS_S_COMPLETE &&
+        (_finalFlags & self.requestFlags) != self.requestFlags)
+        ;
+#endif
 }
 
 - (void)_acceptSecContext:(NSData *)reqData
