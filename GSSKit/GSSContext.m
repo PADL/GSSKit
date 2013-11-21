@@ -108,7 +108,7 @@
     return [self initWithRequestFlags:0 queue:nil isInitiator:YES];
 }
 
-- (instancetype)initWithRequestFlags:(uint32_t)flags
+- (instancetype)initWithRequestFlags:(GSSFlags)flags
                                queue:(dispatch_queue_t)someQueue
                          isInitiator:(BOOL)initiator
 {
@@ -130,7 +130,7 @@
 {
     NSData *data = [GSSBuffer dataWithGSSBufferNoCopy:buffer freeWhenDone:YES];
     
-    if (self.encoding == GSS_C_ENC_BASE64)
+    if (self.encoding == GSSEncodingBase64)
         data = [data base64EncodedDataWithOptions:0];
     
     return data;
@@ -139,7 +139,7 @@
 - (gss_buffer_desc)_decodeToken:(NSData *)data
                          cookie:(id *)pData
 {
-    if (self.encoding == GSS_C_ENC_BASE64) {
+    if (self.encoding == GSSEncodingBase64) {
         data = [[NSData alloc] initWithBase64EncodedData:data options:0];
         *pData = data;
     }
@@ -251,8 +251,8 @@
 }
 
 - (NSData *)wrapData:(NSData *)data
-             encrypt:(uint32_t)confState
-            qopState:(uint32_t)qopState
+             encrypt:(GSSFlags)confState
+            qopState:(GSSQopState)qopState
 {
     gss_buffer_desc inputMessageBuffer = [data _gssBuffer];
     int actualConfState;
@@ -272,14 +272,14 @@
 }
 
 - (NSData *)wrapData:(NSData *)data
-             encrypt:(uint32_t)confState
+             encrypt:(GSSFlags)confState
 {
     return [self wrapData:data encrypt:confState qopState:GSS_C_QOP_DEFAULT];
 }
 
 - (NSData *)unwrapData:(NSData *)data
-            didEncrypt:(uint32_t *)didEncrypt
-              qopState:(uint32_t *)qopState
+            didEncrypt:(GSSFlags *)didEncrypt
+              qopState:(GSSQopState *)qopState
 {
     id cookie = nil;
     gss_buffer_desc inputMessageBuffer = [self _decodeToken:data cookie:&cookie];
@@ -301,15 +301,15 @@
 }
 
 - (NSData *)unwrapData:(NSData *)data
-            didEncrypt:(uint32_t *)confState
+            didEncrypt:(GSSFlags *)confState
 {
-    uint32_t qopState;
+    GSSQopState qopState;
     
     return [self unwrapData:data didEncrypt:confState qopState:&qopState];
 }
 
 - (NSData *)messageIntegrityCodeFromData:(NSData *)data
-                                qopState:(uint32_t)qopState
+                                qopState:(GSSQopState)qopState
 {
     gss_buffer_desc messageBuffer = [data _gssBuffer];
     gss_buffer_desc messageToken = GSS_C_EMPTY_BUFFER;
@@ -333,7 +333,7 @@
 
 - (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data
                                   withCode:(NSData *)mic
-                                  qopState:(uint32_t *)qopState
+                                  qopState:(GSSQopState *)qopState
 {
     id cookie = nil;
     gss_buffer_desc messageBuffer = [data _gssBuffer];
@@ -353,7 +353,7 @@
 - (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data
                                   withCode:(NSData *)mic
 {
-    uint32_t qopState;
+    GSSQopState qopState;
     
     return [self verifyMessageIntegrityCodeFromData:data withCode:mic qopState:&qopState];
 }

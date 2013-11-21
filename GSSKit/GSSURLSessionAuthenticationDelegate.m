@@ -24,7 +24,7 @@
 
     _context.mechanism = [GSSMechanism SPNEGOMechanism];
     _context.credential = credential;
-    _context.encoding = GSS_C_ENC_BASE64;
+    _context.encoding = GSSEncodingBinary;
     
     return self;
 }
