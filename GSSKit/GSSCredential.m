@@ -64,7 +64,7 @@ static GSSPlaceholderCredential *placeholderCred;
 + (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
                            attributes:(NSDictionary *)attributes
-                                error:(NSError **)error
+                                error:(NSError * __autoreleasing *)error
 {
     return [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:error];
 }
@@ -95,7 +95,7 @@ static GSSPlaceholderCredential *placeholderCred;
                             mechanism:(GSSMechanism *)desiredMech
                            usageFlags:(uint32_t)flags
                              password:(NSString *)password
-                                error:(NSError **)error
+                                error:(NSError * __autoreleasing *)error
 {
     NSDictionary *attributes = @{
                                  GSSCredentialUsage : [self usageFlagsToString:flags],
@@ -110,7 +110,7 @@ static GSSPlaceholderCredential *placeholderCred;
 - (id)initWithName:(id)name
          mechanism:(GSSMechanism *)desiredMech
         attributes:(NSDictionary *)attributes
-             error:(NSError **)error
+             error:(NSError * __autoreleasing *)error
 {
     self = nil;
     
@@ -262,7 +262,7 @@ static GSSPlaceholderCredential *placeholderCred;
     return [self validate:NULL];
 }
 
-- (BOOL)validate:(NSError **)pError
+- (BOOL)validate:(NSError * __autoreleasing *)pError
 {
     OM_uint32 major, minor;
     gss_buffer_set_t bufferSet = GSS_C_NO_BUFFER_SET;

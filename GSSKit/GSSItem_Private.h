@@ -230,5 +230,5 @@ __OSX_AVAILABLE_STARTING(__MAC_10_8, __IPHONE_6_0);
         completionHandler:(void (^)(id, NSError *))fun;
 - (id)_performOperationSynchronously:(GSSOperation)op
                          withOptions:(NSDictionary *)options
-                               error:(NSError **)error;
+                               error:(NSError * __autoreleasing *)error;
 @end

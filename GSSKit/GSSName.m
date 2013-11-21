@@ -40,7 +40,7 @@ static GSSPlaceholderName *placeholderName;
 
 + (GSSName *)nameWithData:(NSData *)data
                  nameType:(gss_const_OID)nameType
-                    error:(NSError **)error
+                    error:(NSError * __autoreleasing *)error
 {
     gss_name_t name = GSS_C_NO_NAME;
     CFErrorRef cfError = nil;

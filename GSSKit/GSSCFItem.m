@@ -80,7 +80,7 @@
 
 #pragma mark Wrappers
 
-+ (GSSItem *)add:(NSDictionary *)attributes error:(NSError **)error
++ (GSSItem *)add:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error
 {
     GSSItemRef res;
     
@@ -91,7 +91,7 @@
     return NSMakeCollectable([(id)res autorelease]);
 }
 
-+ (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError **)error
++ (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error
 {
     BOOL res;
     
@@ -102,7 +102,7 @@
     return res;
 }
 
-+ (BOOL)delete:(NSDictionary *)query error:(NSError **)error
++ (BOOL)delete:(NSDictionary *)query error:(NSError * __autoreleasing *)error
 {
     BOOL res;
     
@@ -113,7 +113,7 @@
     return res;
 }
 
-- (BOOL)delete:(NSError **)error
+- (BOOL)delete:(NSError * __autoreleasing *)error
 {
     BOOL res;
     
@@ -124,7 +124,7 @@
     return res;
 }
 
-+ (NSArray *)copyMatching:(NSDictionary *)query error:(NSError **)error
++ (NSArray *)copyMatching:(NSDictionary *)query error:(NSError * __autoreleasing *)error
 {
     NSArray *res;
     

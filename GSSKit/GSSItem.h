@@ -8,12 +8,12 @@
 
 @interface GSSItem : NSObject
 
-+ (GSSItem *)add:(NSDictionary *)attributes error:(NSError **)error;
-+ (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError **)error;
-+ (BOOL)delete:(NSDictionary *)query error:(NSError **)error;
-+ (NSArray *)copyMatching:(NSDictionary *)query error:(NSError **)error;
++ (GSSItem *)add:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error;
++ (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error;
++ (BOOL)delete:(NSDictionary *)query error:(NSError * __autoreleasing *)error;
++ (NSArray *)copyMatching:(NSDictionary *)query error:(NSError * __autoreleasing *)error;
 
-- (BOOL)delete:(NSError **)error;
+- (BOOL)delete:(NSError * __autoreleasing *)error;
 - (id)valueForKey:(NSString *)key;
 
 @end

@@ -261,12 +261,14 @@ GSSAcquireCredFunnel(GSSName *desiredName,
     *pCredential = [GSSCFCredential credentialWithGSSCred:credHandle freeWhenDone:YES];
 
     if (attributes[GSSICVerifyCredential]) {
-        NSError *error;
+        NSError *error = nil;
         
         if (![*pCredential validate:&error]) {
             major = [error.userInfo[GSSMajorErrorCodeKey] unsignedIntValue];
-            minor = [error.userInfo[GSSMinorErrorCodeKey] unsignedIntValue];
-            
+
+            if (pError != NULL)
+                *pError = error;
+
             goto cleanup;
         }
     }
@@ -275,7 +277,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
 
 cleanup:
     if (GSS_ERROR(major)) {
-        if (pError != NULL)
+        if (pError != NULL && *pError != nil)
             *pError = [NSError GSSError:major :minor :desiredMech];
         if (credHandle != GSS_C_NO_CREDENTIAL)
             gss_destroy_cred(&minor, &credHandle);

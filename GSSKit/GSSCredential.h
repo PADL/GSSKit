@@ -24,13 +24,13 @@
 + (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
                            attributes:(NSDictionary *)attributes
-                                error:(NSError **)error;
+                                error:(NSError * __autoreleasing *)error;
 
 + (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
                            usageFlags:(uint32_t)flags
                              password:(NSString *)password
-                                error:(NSError **)error;
+                                error:(NSError * __autoreleasing *)error;
 
 + (GSSCredential *)credentialWithExportedData: (NSData *)exportedData;
 
@@ -40,7 +40,7 @@
 - (id)initWithName:(id)name
          mechanism:(GSSMechanism *)desiredMech
         attributes:(NSDictionary *)attributes
-             error:(NSError **)error;
+             error:(NSError * __autoreleasing *)error;
 
 - (GSSName *)name;
 - (uint32_t)lifetime;
@@ -51,7 +51,7 @@
 - (void)setLabel:(NSData *)label forKey:(NSString *)key;
 
 - (BOOL)validate;
-- (BOOL)validate:(NSError **)error;
+- (BOOL)validate:(NSError * __autoreleasing *)error;
 
 - (void)iterateWithFlags:(uint32_t)flags ofMechanism:(GSSMechanism *)mech
                 callback:(void (^)(GSSMechanism *, GSSCredential *))fun;

@@ -11,7 +11,7 @@
 @interface GSSName (Private)
 + (GSSName *)nameWithData:(NSData *)data
                  nameType:(gss_const_OID)nameType
-                    error:(NSError **)error;
+                    error:(NSError * __autoreleasing *)error;
 + (GSSName *)nameWithGSSName:(gss_name_t)name freeWhenDone:(BOOL)flag;
 - (gss_name_t)_gssName;
 @end

@@ -10,28 +10,28 @@
 
 @implementation GSSItem (SyncOperations)
 
-- (GSSCredential *)acquire:(NSDictionary *)options error:(NSError **)error
+- (GSSCredential *)acquire:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
     return [self _performOperationSynchronously:kGSSOperationAcquire
                                     withOptions:options
                                           error:error];
 }
 
-- (void)renewCredential:(NSDictionary *)options error:(NSError **)error
+- (void)renewCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
     [self _performOperationSynchronously:kGSSOperationRenewCredential
                              withOptions:options
                                    error:error];
 }
 
-- (GSSCredential *)getGSSCredential:(NSDictionary *)options error:(NSError **)error
+- (GSSCredential *)getGSSCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
     return [self _performOperationSynchronously:kGSSOperationGetGSSCredential
                                     withOptions:options
                                           error:error];
 }
 
-- (BOOL)destroyTransient:(NSDictionary *)options error:(NSError **)error
+- (BOOL)destroyTransient:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
     id ret;
     
@@ -42,7 +42,7 @@
     return [ret booleanValue];
 }
 
-- (BOOL)removeBackingCredential:(NSDictionary *)options error:(NSError **)error
+- (BOOL)removeBackingCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
     id ret;
     
@@ -53,21 +53,21 @@
     return [ret booleanValue];
 }
 
-- (void)changePassword:(NSDictionary *)options error:(NSError **)error
+- (void)changePassword:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
     [self _performOperationSynchronously:kGSSOperationChangePassword
                              withOptions:options
                                    error:error];
 }
 
-- (void)setDefault:(NSDictionary *)options error:(NSError **)error
+- (void)setDefault:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
     [self _performOperationSynchronously:kGSSOperationSetDefault
                              withOptions:options
                                    error:error];
 }
 
-- (NSArray *)credentialDiagnostics:(NSDictionary *)options error:(NSError **)error
+- (NSArray *)credentialDiagnostics:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
     return [self _performOperationSynchronously:kGSSOperationCredentialDiagnostics
                                     withOptions:options

@@ -32,17 +32,17 @@
  * options dictionary, or by looking in the keychain for a generic credential
  * identified by UUID.
  */
-- (GSSCredential *)acquire:(NSDictionary *)options error:(NSError **)error;
+- (GSSCredential *)acquire:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
 
 /*
  * Renew credential.
  */
-- (void)renewCredential:(NSDictionary *)options error:(NSError **)error;
-- (GSSCredential *)getGSSCredential:(NSDictionary *)options error:(NSError **)error;
-- (BOOL)destroyTransient:(NSDictionary *)options error:(NSError **)error;
-- (BOOL)removeBackingCredential:(NSDictionary *)options error:(NSError **)error;
-- (void)changePassword:(NSDictionary *)options error:(NSError **)error;
-- (void)setDefault:(NSDictionary *)options error:(NSError **)error;
-- (NSArray *)credentialDiagnostics:(NSDictionary *)options error:(NSError **)error;
+- (void)renewCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
+- (GSSCredential *)getGSSCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
+- (BOOL)destroyTransient:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
+- (BOOL)removeBackingCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
+- (void)changePassword:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
+- (void)setDefault:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
+- (NSArray *)credentialDiagnostics:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
 
 @end

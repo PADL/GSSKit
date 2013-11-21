@@ -50,28 +50,28 @@ static GSSPlaceholderItem *placeholderItem;
     return nil;
 }
 
-+ (GSSItem *)add:(NSDictionary *)attributes error:(NSError **)error
++ (GSSItem *)add:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error
 {
     return [GSSCFItem add:attributes error:error];
 }
 
-+ (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError **)error
++ (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error
 {
     return [GSSCFItem update:query withAttributes:attributes error:error];
 }
 
-+ (BOOL)delete:(NSDictionary *)query error:(NSError **)error
++ (BOOL)delete:(NSDictionary *)query error:(NSError * __autoreleasing *)error
 {
     return [GSSCFItem delete:query error:error];
 }
 
-- (BOOL)delete:(NSError **)error
+- (BOOL)delete:(NSError * __autoreleasing *)error
 {
     NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
     return NO;
 }
 
-+ (NSArray *)copyMatching:(NSDictionary *)query error:(NSError **)error
++ (NSArray *)copyMatching:(NSDictionary *)query error:(NSError * __autoreleasing *)error
 {
     return [GSSCFItem copyMatching:query error:error];
 }
@@ -95,7 +95,7 @@ static GSSPlaceholderItem *placeholderItem;
 
 - (id)_performOperationSynchronously:(GSSOperation)op
                          withOptions:(NSDictionary *)options
-                               error:(NSError **)error
+                               error:(NSError * __autoreleasing *)error
 {
     BOOL bResult;
     __block id object = nil;
