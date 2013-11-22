@@ -38,8 +38,10 @@ extern NSString * const GSSChangePasswordNewPassword;
 extern NSString * const GSSMajorErrorCodeKey;
 extern NSString * const GSSMinorErrorCodeKey;
 
+#if 0
 extern NSString * const GSSMajorErrorDescriptionKey;
 extern NSString * const GSSMinorErrorDescriptionKey;
+#endif
 
 extern NSString * const GSSMechanismOIDKey;
 extern NSString * const GSSMechanismKey;

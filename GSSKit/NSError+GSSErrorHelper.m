@@ -11,8 +11,10 @@
 NSString * const GSSMajorErrorCodeKey = @"kGSSMajorErrorCode";
 NSString * const GSSMinorErrorCodeKey = @"kGSSMinorErrorCode";
 
+#if 0
 NSString * const GSSMajorErrorDescriptionKey = @"kGSSMajorErrorDescription";
 NSString * const GSSMinorErrorDescriptionKey = @"kGSSMinorErrorDescription";
+#endif
 
 NSString * const GSSMechanismOIDKey = @"kGSSMechanismOID";
 NSString * const GSSMechanismKey = @"kGSSMechanism";
@@ -44,8 +46,8 @@ NSString * const GSSMechanismKey = @"kGSSMechanism";
     NSDictionary *userInfo = @{
                                GSSMajorErrorCodeKey : [NSNumber numberWithUnsignedInt:majorStatus],
                                GSSMinorErrorCodeKey : [NSNumber numberWithUnsignedInt:minorStatus],
-                               GSSMajorErrorDescriptionKey : [self _gssDisplayStatus:majorStatus type:GSS_C_GSS_CODE mech:mech],
-                               GSSMinorErrorDescriptionKey : [self _gssDisplayStatus:minorStatus type:GSS_C_MECH_CODE mech:mech],
+                               NSLocalizedDescriptionKey : [self _gssDisplayStatus:majorStatus type:GSS_C_GSS_CODE mech:mech],
+                               NSLocalizedFailureReasonErrorKey : [self _gssDisplayStatus:minorStatus type:GSS_C_MECH_CODE mech:mech],
                                GSSMechanismOIDKey : mech ? [mech oidString] : @"no-mech",
                                GSSMechanismKey : mech ? [mech name] : @"no mech given"
                                };
