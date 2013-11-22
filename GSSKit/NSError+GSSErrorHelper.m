@@ -12,7 +12,7 @@ NSString * const GSSMajorErrorCodeKey = @"kGSSMajorErrorCode";
 NSString * const GSSMinorErrorCodeKey = @"kGSSMinorErrorCode";
 
 NSString * const GSSMajorErrorDescriptionKey = @"kGSSMajorErrorDescription";
-NSString * const GSSMinorErrorDescriptionKey = @"kGSSMajorErrorDescription";
+NSString * const GSSMinorErrorDescriptionKey = @"kGSSMinorErrorDescription";
 
 NSString * const GSSMechanismOIDKey = @"kGSSMechanismOID";
 NSString * const GSSMechanismKey = @"kGSSMechanism";

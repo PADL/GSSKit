@@ -8,7 +8,8 @@
 
 #import "GSSKit_Private.h"
 
-static const gss_OID_desc GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
+static const gss_OID_desc
+GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
 
 @interface GSSPlaceholderCredential : GSSCredential
 @end

@@ -41,7 +41,7 @@
                                        reason:[NSString stringWithFormat:@"-[GSSContext setTargetName:...] requires a NSString or GSSName"]
                                      userInfo:nil];
 
-    _targetName = someName;
+    _targetName = ((GSSName *)someName);
 }
 
 - (oneway void)dealloc
