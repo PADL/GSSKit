@@ -68,7 +68,7 @@ static CFTypeID _gssCredTypeID;
 
     NSAssert([newCred class] == [GSSCFCredential class], @"GSSCFCredential class not mapped");
 
-    return NSMakeCollectable([newCred autorelease]);
+    return CFBridgingRelease(newCred);
 }
 
 #pragma mark Bridging
@@ -110,7 +110,7 @@ static CFTypeID _gssCredTypeID;
 {
     CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
     
-    return NSMakeCollectable([(NSString *)copyDesc autorelease]);
+    return CFBridgingRelease(copyDesc);
 }
 
 - (BOOL)allowsWeakReference
@@ -149,7 +149,7 @@ GSSChangePasswordWrapper(GSSName *desiredName,
                                      (CFDictionaryRef)attributes,
                                      &error);
     if (GSS_ERROR(major) && error != NULL)
-        *pError = NSMakeCollectable([(NSError *)error autorelease]);
+        *pError = CFBridgingRelease(error);
 
     return major;
 }

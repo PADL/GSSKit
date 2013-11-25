@@ -50,7 +50,7 @@ static CFTypeID _gssNameTypeID;
 
     NSAssert([newName class] == [GSSCFName class], @"GSSCFName class not mapped");
 
-    return NSMakeCollectable([newName autorelease]);
+    return CFBridgingRelease(newName);
 }
 
 #pragma mark Bridging
@@ -84,7 +84,7 @@ static CFTypeID _gssNameTypeID;
 {
     CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
     
-    return NSMakeCollectable([(NSString *)copyDesc autorelease]);
+    return CFBridgingRelease(copyDesc);
 }
 
 - (BOOL)allowsWeakReference

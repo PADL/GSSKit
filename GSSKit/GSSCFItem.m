@@ -55,7 +55,7 @@
 {
     CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
     
-    return NSMakeCollectable([(NSString *)copyDesc autorelease]);
+    return CFBridgingRelease(copyDesc);
 }
 
 - (BOOL)allowsWeakReference
@@ -86,9 +86,9 @@
     
     res = GSSItemAdd((CFDictionaryRef)attributes, (CFErrorRef *)error);
     if (error)
-        NSMakeCollectable([*error autorelease]);
+        CFBridgingRelease(*error);
     
-    return NSMakeCollectable([(id)res autorelease]);
+    return CFBridgingRelease(res);
 }
 
 + (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error
@@ -97,7 +97,7 @@
     
     res = GSSItemUpdate((CFDictionaryRef)query, (CFDictionaryRef)attributes, (CFErrorRef *)error);
     if (error)
-        NSMakeCollectable([*error autorelease]);
+        CFBridgingRelease(*error);
     
     return res;
 }
@@ -108,7 +108,7 @@
     
     res = GSSItemDelete((CFDictionaryRef)query, (CFErrorRef *)error);
     if (error)
-        NSMakeCollectable([*error autorelease]);
+        CFBridgingRelease(*error);
     
     return res;
 }
@@ -119,7 +119,7 @@
     
     res = GSSItemDeleteItem((GSSItemRef)self, (CFErrorRef *)error);
     if (error)
-        NSMakeCollectable([*error autorelease]);
+        CFBridgingRelease(*error);
     
     return res;
 }
@@ -130,7 +130,7 @@
     
     res = (NSArray *)GSSItemCopyMatching((CFDictionaryRef)query, (CFErrorRef *)error);
     if (error)
-        NSMakeCollectable([*error autorelease]);
+        CFBridgingRelease(*error);
     
     return res;
 }
