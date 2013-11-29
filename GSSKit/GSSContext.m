@@ -116,7 +116,7 @@
         return nil;
     
     if (!someQueue)
-        someQueue = dispatch_queue_create("com.padl.GSSContextQueue", NULL);
+        someQueue = dispatch_queue_create("com.padl.gss.DefaultContextQueue", NULL);
     
     self.requestFlags = flags;
     self.queue = someQueue;
@@ -238,15 +238,17 @@
 - (void)stepWithData:(NSData *)reqData
    completionHandler:(void (^)(NSData *, NSError *))handler
 {
-    dispatch_async(_queue, ^{
+    dispatch_async(__GSSKitBackgroundQueue, ^{
         NSData *retData = nil;
         
         if (_isInitiator)
             [self _initSecContext:reqData :&retData];
         else
             [self _acceptSecContext:reqData :&retData];
-        
-        handler(retData, self.lastError);
+
+        dispatch_async(_queue, ^{
+            handler(retData, self.lastError);
+        });
     });
 }
 

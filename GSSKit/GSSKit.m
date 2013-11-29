@@ -8,7 +8,8 @@
 
 #import "GSSKit_Private.h"
 
-CFStringRef __GSSKitIdentity = CFSTR("GSSKit@GSS.h5l.org");
+CFStringRef __GSSKitIdentity = CFSTR("GSSKit@gss.padl.com");
+dispatch_queue_t __GSSKitBackgroundQueue = NULL;
 
 NSString * const GSSICPassword = (__bridge NSString *)kGSSICPassword;
 NSString * const GSSICCertificate = (__bridge NSString *)kGSSICCertificate;
@@ -25,3 +26,11 @@ NSString * const GSSICAppIdentifierACL = (__bridge NSString *)kGSSICAppIdentifie
 
 NSString * const GSSChangePasswordOldPassword = (__bridge NSString *)kGSSChangePasswordOldPassword;
 NSString * const GSSChangePasswordNewPassword = (__bridge NSString *)kGSSChangePasswordNewPassword;
+
+__attribute__((constructor))
+static void
+__GSSKitInit(void)
+{
+    __GSSKitBackgroundQueue = dispatch_queue_create("com.padl.gss.BackgroundQueue", DISPATCH_QUEUE_CONCURRENT);
+    NSCAssert(__GSSKitBackgroundQueue != NULL, @"Failed to initialize __GSSKitBackgroundQueue");
+}

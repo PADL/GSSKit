@@ -29,6 +29,7 @@
 #import <objc/runtime.h>
 
 extern CFStringRef __GSSKitIdentity;
+extern dispatch_queue_t __GSSKitBackgroundQueue;
 
 void _CFRuntimeBridgeClasses(CFTypeID cf_typeID, const char *objc_classname);
 

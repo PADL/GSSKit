@@ -140,13 +140,14 @@
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(id, NSError *))fun
 {
-#if 1
     if (op == kGSSOperationAcquire) {
         // This is a hack to deal with extensible dictionary funnelling
-        [self _itemAcquireOperation:options queue:queue completionHandler:fun];
+        dispatch_async(__GSSKitBackgroundQueue, ^{
+            [self _itemAcquireOperation:options queue:queue completionHandler:fun];
+        });
+
         return YES;
     }
-#endif
     
     return GSSItemOperation((GSSItemRef)self,
                             op,

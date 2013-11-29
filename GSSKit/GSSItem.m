@@ -99,7 +99,7 @@ static GSSPlaceholderItem *placeholderItem;
 {
     BOOL bResult;
     __block id object = nil;
-    dispatch_queue_t queue = dispatch_queue_create("com.padl.GSSItemOperationQueue", NULL);
+    dispatch_queue_t queue = dispatch_queue_create("com.padl.gss.ItemOperationSynchronousQueue", NULL);
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
     *error = nil;
