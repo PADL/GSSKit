@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     NSError *err = nil;
     __block NSData *initiatorToken = nil, *acceptorToken = nil;
     
-    queue = dispatch_queue_create("com.padl.gsskit-sample-client.worker-queue", NULL);
+    queue = dispatch_queue_create("com.padl.gsskit-sample-client.worker-queue", DISPATCH_QUEUE_SERIAL);
  
     initiatorCred = [GSSCredential credentialWithName:@"lukeh@DE.PADL.COM"
                                             mechanism:[GSSMechanism kerberosMechanism]

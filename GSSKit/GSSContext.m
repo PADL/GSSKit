@@ -116,7 +116,7 @@
         return nil;
     
     if (!someQueue)
-        someQueue = dispatch_queue_create("com.padl.gss.DefaultContextQueue", NULL);
+        someQueue = dispatch_queue_create("com.padl.gss.DefaultContextQueue", DISPATCH_QUEUE_SERIAL);
     
     self.requestFlags = flags;
     self.queue = someQueue;
