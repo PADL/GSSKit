@@ -31,7 +31,7 @@ static CFTypeID _gssCredTypeID;
 + (void)load
 {
     OM_uint32 major, minor;
-    CFErrorRef error = nil;
+    CFErrorRef error = NULL;
     gss_name_t name = GSSCreateName(__GSSKitIdentity, GSS_C_NT_USER_NAME, &error);
     gss_cred_id_t cred;
     
@@ -41,13 +41,14 @@ static CFTypeID _gssCredTypeID;
     
     NSAssert(cred != GSS_C_NO_CREDENTIAL, @"failed to initialize cred");
     
-    _gssCredTypeID = CFGetTypeID((CFTypeRef)cred);
+    if (major == GSS_S_COMPLETE) {
+        _gssCredTypeID = CFGetTypeID((CFTypeRef)cred);
+        CFRelease(cred);
+        _CFRuntimeBridgeClasses(_gssCredTypeID, "GSSCFCredential");
+    }
     
-    CFRelease(cred);
-    if (error)
+    if (error != NULL)
         CFRelease(error);
-    
-    _CFRuntimeBridgeClasses(_gssCredTypeID, "GSSCFCredential");
 }
 
 + (id)allocWithZone:(NSZone *)zone
@@ -148,8 +149,13 @@ GSSChangePasswordWrapper(GSSName *desiredName,
                                      [desiredMech oid],
                                      (CFDictionaryRef)attributes,
                                      &error);
-    if (GSS_ERROR(major) && error != NULL)
-        *pError = CFBridgingRelease(error);
+    
+    if (error != NULL) {
+        if (pError != NULL)
+            *pError = CFBridgingRelease(error);
+        else
+            CFRelease(error);
+    }
 
     return major;
 }

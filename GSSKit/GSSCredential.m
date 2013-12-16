@@ -239,22 +239,22 @@ static GSSPlaceholderCredential *placeholderCred;
 
 - (void)setLabel:(NSData *)label forKey:(NSString *)key
 {
-    OM_uint32 major, minor;
+    OM_uint32 minor;
     gss_buffer_desc labelData = [label _gssBuffer];
 
-    major = gss_cred_label_set(&minor, [self _gssCred], [key UTF8String], &labelData);
+    gss_cred_label_set(&minor, [self _gssCred], [key UTF8String], &labelData);
 }
 
 - (void)iterateWithFlags:(uint32_t)flags ofMechanism:(GSSMechanism *)mech
                 callback:(void (^)(GSSMechanism *, GSSCredential *))fun
 {
-    OM_uint32 major, minor;
+    OM_uint32 minor;
     
-    major = gss_iter_creds(&minor, flags, [mech oid],
-                           ^(gss_iter_OID mechOid, gss_cred_id_t mechCred){
-                               GSSMechanism *m = [GSSMechanism mechanismWithOID:mechOid];
-                               GSSCredential *c = [GSSCredential credentialWithGSSCred:mechCred freeWhenDone:NO];
-                               fun(m, c);
+    gss_iter_creds(&minor, flags, [mech oid],
+                   ^(gss_iter_OID mechOid, gss_cred_id_t mechCred){
+                       GSSMechanism *m = [GSSMechanism mechanismWithOID:mechOid];
+                       GSSCredential *c = [GSSCredential credentialWithGSSCred:mechCred freeWhenDone:NO];
+                       fun(m, c);
     });
 }
 
@@ -282,16 +282,16 @@ static GSSPlaceholderCredential *placeholderCred;
 
 - (void)retainCredential
 {
-    OM_uint32 major, minor;
+    OM_uint32 minor;
     
-    major = gss_cred_hold(&minor, [self _gssCred]);
+    gss_cred_hold(&minor, [self _gssCred]);
 }
 
 - (void)releaseCredential
 {
-    OM_uint32 major, minor;
+    OM_uint32 minor;
     
-    major = gss_cred_unhold(&minor, [self _gssCred]);
+    gss_cred_unhold(&minor, [self _gssCred]);
 }
 
 @end

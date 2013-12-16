@@ -70,13 +70,15 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler;
 {
     NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
-    NSData *inputToken = [self _gssTokenFromURLSession:session task:task];
-    
+    NSData *inputToken;
+
     if (![[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodNegotiate]) {
         completionHandler(NSURLSessionAuthChallengeRejectProtectionSpace, nil);
         return;
     }
 
+    inputToken = [self _gssTokenFromURLSession:session task:task];
+    
     if ([_context isContinueNeeded] && ![inputToken length]) {
         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
         return;
@@ -95,12 +97,12 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     [_context stepWithData:inputToken
          completionHandler:^(NSData *outputToken, NSError *error) {
              NSURLCredential *cred = [challenge proposedCredential];
-             
-             if (GSS_ERROR(error.code)) {
+
+             if ([error _gssError]) {
+                 completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+             } else {
                  [self _gssTokenToURLSession:session task:task token:outputToken];
                  completionHandler(NSURLSessionAuthChallengeUseCredential, cred);
-             } else {
-                 completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
              }
     }];
 }

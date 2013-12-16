@@ -102,7 +102,8 @@ static GSSPlaceholderItem *placeholderItem;
     dispatch_queue_t queue = dispatch_queue_create("com.padl.gss.ItemOperationSynchronousQueue", DISPATCH_QUEUE_SERIAL);
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
-    *error = nil;
+    if (error != NULL)
+        *error = nil;
     
     bResult = [self _performOperation:op
                           withOptions:options

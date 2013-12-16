@@ -47,7 +47,10 @@ static GSSPlaceholderName *placeholderName;
     
     name = GSSCreateName((__bridge CFDataRef)data, nameType, &cfError);
     if (name == nil) {
-        *error = (__bridge_transfer NSError *)cfError;
+        if (error != NULL)
+            *error = (__bridge_transfer NSError *)cfError;
+        else
+            CFRelease(cfError);
         return nil;
     }
 
