@@ -283,7 +283,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
 
 cleanup:
     if (GSS_ERROR(major)) {
-        if (pError != NULL && *pError != nil)
+        if (pError != NULL && *pError == nil)
             *pError = [NSError GSSError:major :minor :desiredMech];
         if (credHandle != GSS_C_NO_CREDENTIAL)
             gss_destroy_cred(&minor, &credHandle);

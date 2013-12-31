@@ -20,6 +20,9 @@
 + (GSSMechanism *)mechanismWithDERData:(NSData *)data;
 + (GSSMechanism *)mechanismWithSASLName:(NSString *)name;
 
++ (GSSMechanism *)mechanismWithOIDString:(NSString *)oidString;
++ (GSSMechanism *)mechanismWithClass:(NSString *)className;
+
 - (NSString *)name;
 - (NSString *)SASLName;
 - (NSString *)oidString;

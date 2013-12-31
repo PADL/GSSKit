@@ -29,7 +29,7 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 
 + (GSSMechanism *)defaultMechanism
 {
-    return [self SPNEGOMechanism];
+    return [self kerberosMechanism];
 }
 
 + (GSSMechanism *)SPNEGOMechanism
@@ -104,6 +104,72 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 + (GSSMechanism *)mechanismWithDERData: (NSData *)data
 {
     return [[self alloc] initWithDERData:data];
+}
+
+typedef struct heim_oid {
+    size_t length;
+    unsigned *components;
+} heim_oid;
+
+
+int
+der_parse_heim_oid (const char *str, const char *sep, heim_oid *data);
+
+int
+der_put_oid (unsigned char *p, size_t len,
+             const heim_oid *data, size_t *size);
+
+void
+der_free_oid (heim_oid *k);
+
++ (GSSMechanism *)mechanismWithOIDString:(NSString *)oidString
+{
+    char mechbuf[64];
+    size_t mech_len;
+    heim_oid heimOid;
+    gss_OID_desc oid;
+    GSSMechanism *mech;
+    int ret;
+    
+    if (der_parse_heim_oid([oidString UTF8String], " .", &heimOid))
+        return nil;
+    
+    ret = der_put_oid ((unsigned char *)mechbuf + sizeof(mechbuf) - 1,
+                       sizeof(mechbuf),
+                       &heimOid,
+                       &mech_len);
+    if (ret) {
+        der_free_oid(&heimOid);
+        return nil;
+    }
+    
+    oid.length   = (OM_uint32)mech_len;
+    oid.elements = mechbuf + sizeof(mechbuf) - mech_len;
+
+    mech = [self mechanismWithOID:&oid];
+    
+    der_free_oid(&heimOid);
+    
+    return mech;
+}
+
++ (GSSMechanism *)mechanismWithClass:(NSString *)type
+{
+    GSSMechanism *mech;
+    
+    if ([type isEqual:(__bridge id)kGSSAttrClassKerberos])
+        mech = [self kerberosMechanism];
+    else if ([type isEqual:(__bridge id)kGSSAttrClassNTLM])
+        mech = [self NTLMMechanism];
+    else if ([type isEqual:(__bridge id)kGSSAttrClassIAKerb])
+        mech = [self IAKerbMechanism];
+    else if (type)
+        mech = [self mechanismWithOIDString:type];
+
+    if (mech == nil)
+        mech = [self defaultMechanism];
+    
+    return mech;
 }
 
 + (GSSMechanism *)mechanismWithSASLName: (NSString *)name
