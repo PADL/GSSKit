@@ -122,7 +122,7 @@ static GSSPlaceholderCredential *placeholderCred;
             name = [GSSName nameWithUserName:name];
     } else if (![name isKindOfClass:[GSSName class]]) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:[NSString stringWithFormat:@"-[GSSCredential initWihName:...] requires a NSString or GSSName"]
+                                       reason:[NSString stringWithFormat:@"-[GSSCredential initWithName:...] requires a NSString or GSSName"]
                                      userInfo:nil];
     }
     
