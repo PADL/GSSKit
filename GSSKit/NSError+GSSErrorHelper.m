@@ -43,14 +43,22 @@ NSString * const GSSMechanismKey = @"kGSSMechanism";
                      :(OM_uint32)minorStatus
                      :(GSSMechanism *)mech
 {
-    NSDictionary *userInfo = @{
-                               GSSMajorErrorCodeKey : [NSNumber numberWithUnsignedInt:majorStatus],
-                               GSSMinorErrorCodeKey : [NSNumber numberWithUnsignedInt:minorStatus],
-                               NSLocalizedDescriptionKey : [self _gssDisplayStatus:majorStatus type:GSS_C_GSS_CODE mech:mech],
-                               NSLocalizedFailureReasonErrorKey : [self _gssDisplayStatus:minorStatus type:GSS_C_MECH_CODE mech:mech],
-                               GSSMechanismOIDKey : mech ? [mech oidString] : @"no-mech",
-                               GSSMechanismKey : mech ? [mech name] : @"no mech given"
-                               };
+    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
+    NSString *majorDesc, *minorDesc;
+
+    userInfo[GSSMajorErrorCodeKey] = [NSNumber numberWithUnsignedInt:majorStatus];
+    userInfo[GSSMinorErrorCodeKey] = [NSNumber numberWithUnsignedInt:minorStatus];
+
+    majorDesc = [self _gssDisplayStatus:majorStatus type:GSS_C_GSS_CODE mech:mech];
+    if (majorDesc)
+        userInfo[NSLocalizedDescriptionKey] = majorDesc;
+
+    minorDesc = [self _gssDisplayStatus:minorStatus type:GSS_C_MECH_CODE mech:mech];
+    if (minorDesc)
+        userInfo[NSLocalizedFailureReasonErrorKey] = minorDesc;
+
+    userInfo[GSSMechanismOIDKey] = mech && [mech oidString] ? [mech oidString] : @"no-mech";
+    userInfo[GSSMechanismKey] = mech && [mech name] ? [mech name] : @"no mech given";
     
     return [NSError errorWithDomain:@"org.h5l.GSS" code:(NSInteger)majorStatus userInfo:userInfo];
 }

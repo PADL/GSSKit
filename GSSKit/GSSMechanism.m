@@ -127,8 +127,8 @@ der_free_oid (heim_oid *k);
     char mechbuf[64];
     size_t mech_len;
     heim_oid heimOid;
-    gss_OID_desc oid;
     GSSMechanism *mech;
+    NSData *data;
     int ret;
     
     if (der_parse_heim_oid([oidString UTF8String], " .", &heimOid))
@@ -142,14 +142,11 @@ der_free_oid (heim_oid *k);
         der_free_oid(&heimOid);
         return nil;
     }
-    
-    oid.length   = (OM_uint32)mech_len;
-    oid.elements = mechbuf + sizeof(mechbuf) - mech_len;
 
-    mech = [self mechanismWithOID:&oid];
-    
+    data = [NSData dataWithBytes:mechbuf + sizeof(mechbuf) - mech_len length:mech_len];
+    mech = [self mechanismWithDERData:data];
     der_free_oid(&heimOid);
-    
+
     return mech;
 }
 
