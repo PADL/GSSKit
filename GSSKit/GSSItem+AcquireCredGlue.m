@@ -16,7 +16,7 @@
  */
 @implementation GSSItem (AcquireCredGlue)
 
-- (GSSName *)_itemGssName
+- (GSSName *)_itemGSSName
 {
     id type = (__bridge id)GSSItemGetValue((__bridge GSSItemRef)self, kGSSAttrNameType);
     id name = (__bridge id)GSSItemGetValue((__bridge GSSItemRef)self, kGSSAttrName);
@@ -34,21 +34,11 @@
     return nil;
 }
 
-- (GSSMechanism *)_itemGssMech
+- (GSSMechanism *)_itemGSSMech
 {
-    id type = (__bridge id)GSSItemGetValue((__bridge GSSItemRef)self, kGSSAttrClass);
-    GSSMechanism *mech;
-    
-    if ([type isEqual:(__bridge id)kGSSAttrClassKerberos])
-        mech = [GSSMechanism kerberosMechanism];
-    else if ([type isEqual:(__bridge id)kGSSAttrClassNTLM])
-        mech = [GSSMechanism NTLMMechanism];
-    else if ([type isEqual:(__bridge id)kGSSAttrClassIAKerb])
-        mech = [GSSMechanism IAKerbMechanism];
-    else
-        mech = [GSSMechanism defaultMechanism];
-    
-    return mech;
+    NSString *mechClass = (__bridge NSString *)GSSItemGetValue((__bridge GSSItemRef)self, kGSSAttrClass);
+
+    return [GSSMechanism mechanismWithClass:mechClass];
 }
 
 - (const NSString *)_credKeyForItemKey:(NSString *)key
@@ -67,8 +57,8 @@
                         queue:(dispatch_queue_t)queue
             completionHandler:(void (^)(GSSCredential *cred, NSError *))fun
 {
-    GSSName *name = [self _itemGssName];
-    GSSMechanism *mech = [self _itemGssMech];
+    GSSName *name = [self _itemGSSName];
+    GSSMechanism *mech = [self _itemGSSMech];
     GSSCredential *cred = nil;
     NSError *error = nil;
     NSMutableDictionary *gssAttrs = [NSMutableDictionary dictionary];
