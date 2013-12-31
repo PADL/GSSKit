@@ -192,7 +192,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
                      GSSCredential * __autoreleasing *pCredential,
                      NSError * __autoreleasing *pError)
 {
-    OM_uint32 major, minor;
+    OM_uint32 major = GSS_S_FAILURE, minor = 0;
     gss_cred_usage_t credUsage = GSS_C_INITIATE;
     gss_cred_id_t credHandle = GSS_C_NO_CREDENTIAL;
     

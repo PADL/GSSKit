@@ -37,12 +37,12 @@
 /*
  * Renew credential.
  */
-- (void)renewCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
+- (BOOL)renewCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
 - (GSSCredential *)getGSSCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
 - (BOOL)destroyTransient:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
 - (BOOL)removeBackingCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
-- (void)changePassword:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
-- (void)setDefault:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
+- (BOOL)changePassword:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
+- (BOOL)setDefault:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
 - (NSArray *)credentialDiagnostics:(NSDictionary *)options error:(NSError * __autoreleasing *)error;
 
 @end

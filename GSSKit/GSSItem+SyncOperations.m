@@ -12,32 +12,44 @@
 
 - (GSSCredential *)acquire:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
-    return [self _performOperationSynchronously:kGSSOperationAcquire
-                                    withOptions:options
-                                          error:error];
+    id cred;
+    
+    [self _performOperationSynchronously:kGSSOperationAcquire
+                             withOptions:options
+                                  object:&cred
+                                   error:error];
+    
+    return cred;
 }
 
-- (void)renewCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error
+- (BOOL)renewCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
-    [self _performOperationSynchronously:kGSSOperationRenewCredential
-                             withOptions:options
-                                   error:error];
+    return [self _performOperationSynchronously:kGSSOperationRenewCredential
+                                    withOptions:options
+                                         object:NULL
+                                          error:error];
 }
 
 - (GSSCredential *)getGSSCredential:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
-    return [self _performOperationSynchronously:kGSSOperationGetGSSCredential
-                                    withOptions:options
-                                          error:error];
+    id cred;
+    
+    [self _performOperationSynchronously:kGSSOperationGetGSSCredential
+                             withOptions:options
+                                  object:&cred
+                                   error:error];
+    
+    return cred;
 }
 
 - (BOOL)destroyTransient:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
     id ret;
     
-    ret = [self _performOperationSynchronously:kGSSOperationDestoryTransient
-                                   withOptions:options
-                                         error:error];
+    [self _performOperationSynchronously:kGSSOperationDestoryTransient
+                             withOptions:options
+                                  object:&ret
+                                   error:error];
     
     return [ret booleanValue];
 }
@@ -46,32 +58,40 @@
 {
     id ret;
     
-    ret = [self _performOperationSynchronously:kGSSOperationRemoveBackingCredential
-                                   withOptions:options
-                                         error:error];
+    [self _performOperationSynchronously:kGSSOperationRemoveBackingCredential
+                            withOptions:options
+                                 object:&ret
+                                  error:error];
 
     return [ret booleanValue];
 }
 
-- (void)changePassword:(NSDictionary *)options error:(NSError * __autoreleasing *)error
+- (BOOL)changePassword:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
-    [self _performOperationSynchronously:kGSSOperationChangePassword
-                             withOptions:options
-                                   error:error];
+    return [self _performOperationSynchronously:kGSSOperationChangePassword
+                                    withOptions:options
+                                         object:NULL
+                                          error:error];
 }
 
-- (void)setDefault:(NSDictionary *)options error:(NSError * __autoreleasing *)error
+- (BOOL)setDefault:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
-    [self _performOperationSynchronously:kGSSOperationSetDefault
-                             withOptions:options
-                                   error:error];
+    return [self _performOperationSynchronously:kGSSOperationSetDefault
+                                    withOptions:options
+                                         object:NULL
+                                          error:error];
 }
 
 - (NSArray *)credentialDiagnostics:(NSDictionary *)options error:(NSError * __autoreleasing *)error
 {
-    return [self _performOperationSynchronously:kGSSOperationCredentialDiagnostics
-                                    withOptions:options
-                                          error:error];
+    id diags;
+    
+    [self _performOperationSynchronously:kGSSOperationCredentialDiagnostics
+                             withOptions:options
+                                  object:&diags
+                                   error:error];
+    
+    return diags;
 }
 
 @end
