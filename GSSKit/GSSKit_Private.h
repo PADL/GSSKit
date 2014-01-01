@@ -28,6 +28,8 @@
 
 #import <objc/runtime.h>
 
+#define GSSKIT_EXPORT __attribute__((visibility("default")))
+
 extern CFStringRef __GSSKitIdentity;
 extern dispatch_queue_t __GSSKitBackgroundQueue;
 

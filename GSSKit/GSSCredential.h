@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
+__attribute__((visibility("default")))
 @interface GSSCredential : NSObject
 
 // primitive methods

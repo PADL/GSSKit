@@ -185,7 +185,7 @@ GSSUsageFromAttributeDictionary(NSDictionary *attributes,
  * this is a variant of gss_aapl_initial_cred() that is more generalised
  */
 
-OM_uint32
+GSSKIT_EXPORT OM_uint32
 GSSAcquireCredFunnel(GSSName *desiredName,
                      GSSMechanism *desiredMech,
                      NSDictionary *attributes,

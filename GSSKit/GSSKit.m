@@ -11,21 +11,21 @@
 CFStringRef __GSSKitIdentity = CFSTR("GSSKit@gss.padl.com");
 dispatch_queue_t __GSSKitBackgroundQueue = NULL;
 
-NSString * const GSSICPassword = (__bridge NSString *)kGSSICPassword;
-NSString * const GSSICCertificate = (__bridge NSString *)kGSSICCertificate;
-NSString * const GSSICVerifyCredential = (__bridge NSString *)kGSSICVerifyCredential;
+GSSKIT_EXPORT NSString * const GSSICPassword = (__bridge NSString *)kGSSICPassword;
+GSSKIT_EXPORT NSString * const GSSICCertificate = (__bridge NSString *)kGSSICCertificate;
+GSSKIT_EXPORT NSString * const GSSICVerifyCredential = (__bridge NSString *)kGSSICVerifyCredential;
 
-NSString * const GSSCredentialUsage = (__bridge NSString *)kGSSCredentialUsage;
-NSString * const GSSCredentialUsageInitiate = (__bridge NSString *)kGSS_C_INITIATE;
-NSString * const GSSCredentialUsageAccept = (__bridge NSString *)kGSS_C_ACCEPT;
-NSString * const GSSCredentialUsageBoth = (__bridge NSString *)kGSS_C_BOTH;
+GSSKIT_EXPORT NSString * const GSSCredentialUsage = (__bridge NSString *)kGSSCredentialUsage;
+GSSKIT_EXPORT NSString * const GSSCredentialUsageInitiate = (__bridge NSString *)kGSS_C_INITIATE;
+GSSKIT_EXPORT NSString * const GSSCredentialUsageAccept = (__bridge NSString *)kGSS_C_ACCEPT;
+GSSKIT_EXPORT NSString * const GSSCredentialUsageBoth = (__bridge NSString *)kGSS_C_BOTH;
 
-NSString * const GSSICLKDCHostname = (__bridge NSString *)kGSSICLKDCHostname;
-NSString * const GSSICKerberosCacheName = (__bridge NSString *)kGSSICKerberosCacheName;
-NSString * const GSSICAppIdentifierACL = (__bridge NSString *)kGSSICAppIdentifierACL;
+GSSKIT_EXPORT NSString * const GSSICLKDCHostname = (__bridge NSString *)kGSSICLKDCHostname;
+GSSKIT_EXPORT NSString * const GSSICKerberosCacheName = (__bridge NSString *)kGSSICKerberosCacheName;
+GSSKIT_EXPORT NSString * const GSSICAppIdentifierACL = (__bridge NSString *)kGSSICAppIdentifierACL;
 
-NSString * const GSSChangePasswordOldPassword = (__bridge NSString *)kGSSChangePasswordOldPassword;
-NSString * const GSSChangePasswordNewPassword = (__bridge NSString *)kGSSChangePasswordNewPassword;
+GSSKIT_EXPORT NSString * const GSSChangePasswordOldPassword = (__bridge NSString *)kGSSChangePasswordOldPassword;
+GSSKIT_EXPORT NSString * const GSSChangePasswordNewPassword = (__bridge NSString *)kGSSChangePasswordNewPassword;
 
 __attribute__((constructor))
 static void

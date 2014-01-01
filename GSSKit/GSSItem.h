@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
+__attribute__((visibility("default")))
 @interface GSSItem : NSObject
 
 + (GSSItem *)add:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error;

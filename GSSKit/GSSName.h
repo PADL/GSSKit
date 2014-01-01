@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
+__attribute__((visibility("default")))
 @interface GSSName : NSObject
 + (GSSName *)nameWithHostBasedService:(NSString *)name;
 + (GSSName *)nameWithHostBasedService: (NSString *)service withHostName: (NSString *)hostname;

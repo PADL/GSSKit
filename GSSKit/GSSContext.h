@@ -27,6 +27,7 @@ typedef NS_ENUM(uint32_t, GSSQopState) {
     GSSQopDefault = 0,
 };
 
+__attribute__((visibility("default")))
 @interface GSSContext : NSObject
 
 @property(nonatomic, retain) dispatch_queue_t queue;
