@@ -13,11 +13,10 @@
 @interface GSSPlaceholderItem : GSSItem
 @end
 
-static GSSPlaceholderItem *placeholderItem;
-
 @implementation GSSPlaceholderItem
 + (id)allocWithZone:(NSZone *)zone
 {
+    static GSSPlaceholderItem *placeholderItem;
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{
@@ -80,6 +79,11 @@ static GSSPlaceholderItem *placeholderItem;
 {
     NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
     return nil;
+}
+
+- (id)objectForKeyedSubscript:(id)key
+{
+    return [self valueForKey:key];
 }
 @end
 

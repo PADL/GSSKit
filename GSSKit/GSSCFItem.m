@@ -26,54 +26,16 @@
 
 #pragma mark Bridging
 
-- (id)retain
-{
-    return CFRetain((GSSItemRef)self);
-}
-
-- (oneway void)release
-{
-    CFRelease((GSSItemRef)self);
-}
-
-- (NSUInteger)retainCount
-{
-    return CFGetRetainCount((GSSItemRef)self);
-}
-
-- (BOOL)isEqual:(id)anObject
-{
-    return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
-}
-
-- (NSUInteger)hash
-{
-    return CFHash((CFTypeRef)self);
-}
+CF_CLASSIMPLEMENTATION(GSSCFItem)
 
 - (NSString *)description
 {
     CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
     
-    return CFBridgingRelease(copyDesc);
-}
-
-- (BOOL)allowsWeakReference
-{
-    return !_CFIsDeallocating(self);
-}
-
-- (BOOL)retainWeakReference
-{
-    return _CFTryRetain(self) != nil;
+    return [NSMakeCollectable(copyDesc) autorelease];
 }
 
 - (CFTypeID)_cfTypeID
-{
-    return GSSItemGetTypeID();
-}
-
-+ (CFTypeID)_cfTypeID
 {
     return GSSItemGetTypeID();
 }
@@ -86,9 +48,9 @@
     
     res = GSSItemAdd((CFDictionaryRef)attributes, (CFErrorRef *)error);
     if (error)
-        CFBridgingRelease(*error);
+        [NSMakeCollectable(*error) autorelease];
     
-    return CFBridgingRelease(res);
+    return [NSMakeCollectable(res) autorelease];
 }
 
 + (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error
@@ -97,7 +59,7 @@
     
     res = GSSItemUpdate((CFDictionaryRef)query, (CFDictionaryRef)attributes, (CFErrorRef *)error);
     if (error)
-        CFBridgingRelease(*error);
+        [NSMakeCollectable(*error) autorelease];
     
     return res;
 }
@@ -108,7 +70,7 @@
     
     res = GSSItemDelete((CFDictionaryRef)query, (CFErrorRef *)error);
     if (error)
-        CFBridgingRelease(*error);
+        [NSMakeCollectable(*error) autorelease];
     
     return res;
 }
@@ -119,7 +81,7 @@
     
     res = GSSItemDeleteItem((GSSItemRef)self, (CFErrorRef *)error);
     if (error)
-        CFBridgingRelease(*error);
+        [NSMakeCollectable(*error) autorelease];
     
     return res;
 }
@@ -130,7 +92,7 @@
     
     res = (NSArray *)GSSItemCopyMatching((CFDictionaryRef)query, (CFErrorRef *)error);
     if (error)
-        CFBridgingRelease(*error);
+        [NSMakeCollectable(*error) autorelease];
     
     return res;
 }
@@ -163,9 +125,5 @@
     return GSSItemGetValue((GSSItemRef)self, (CFStringRef)key);
 }
 
-- (id)objectForKeyedSubscript:(id)key
-{
-    return [self valueForKey:key];
-}
 
 @end

@@ -69,10 +69,8 @@ static CFTypeID _gssCredTypeID;
 
     NSAssert([newCred class] == [GSSCFCredential class], @"GSSCFCredential class not mapped");
 
-    return CFBridgingRelease(newCred);
+    return [NSMakeCollectable(newCred) autorelease];
 }
-
-#pragma mark Bridging
 
 - (void)destroy
 {
@@ -82,46 +80,15 @@ static CFTypeID _gssCredTypeID;
     gss_destroy_cred(&minor, &cred);
 }
 
-- (id)retain
-{
-    return CFRetain((CFTypeRef)self);
-}
+#pragma mark Bridging
 
-- (oneway void)release
-{
-    CFRelease((CFTypeRef)self);
-}
-
-- (NSUInteger)retainCount
-{
-    return CFGetRetainCount((CFTypeRef)self);
-}
-
-- (BOOL)isEqual:(id)anObject
-{
-    return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
-}
-
-- (NSUInteger)hash
-{
-    return CFHash((CFTypeRef)self);
-}
+CF_CLASSIMPLEMENTATION(GSSCFCredential)
 
 - (NSString *)description
 {
     CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
     
-    return CFBridgingRelease(copyDesc);
-}
-
-- (BOOL)allowsWeakReference
-{
-    return !_CFIsDeallocating(self);
-}
-
-- (BOOL)retainWeakReference
-{
-    return _CFTryRetain(self) != nil;
+    return [NSMakeCollectable(copyDesc) autorelease];
 }
 
 - (CFTypeID)_cfTypeID
@@ -143,19 +110,13 @@ GSSChangePasswordWrapper(GSSName *desiredName,
                          NSError * __autoreleasing *pError)
 {
     OM_uint32 major;
-    CFErrorRef error = NULL;
     
     major = gss_aapl_change_password([desiredName _gssName],
                                      [desiredMech oid],
                                      (CFDictionaryRef)attributes,
-                                     &error);
-    
-    if (error != NULL) {
-        if (pError != NULL)
-            *pError = CFBridgingRelease(error);
-        else
-            CFRelease(error);
-    }
+                                     (CFErrorRef *)pError);
+    if (pError != NULL)
+        *pError = [NSMakeCollectable(*pError) autorelease];
 
     return major;
 }

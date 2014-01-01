@@ -14,11 +14,10 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
 @interface GSSPlaceholderCredential : GSSCredential
 @end
 
-static GSSPlaceholderCredential *placeholderCred;
-
 @implementation GSSPlaceholderCredential
 + (id)allocWithZone:(NSZone *)zone
 {
+    static GSSPlaceholderCredential *placeholderCred;
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{

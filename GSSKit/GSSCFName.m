@@ -39,63 +39,23 @@ static CFTypeID _gssNameTypeID;
 }
 
 + (GSSName *)nameWithGSSName:(gss_name_t)name
-                freeWhenDone:(BOOL)flag
+                freeWhenDone:(BOOL)freeWhenDone
 {
     id newName;
 
-    if (flag)
+    if (freeWhenDone)
         newName = (id)name;
     else
         newName = (id)CFRetain(name);
 
     NSAssert([newName class] == [GSSCFName class], @"GSSCFName class not mapped");
 
-    return CFBridgingRelease(newName);
+    return [NSMakeCollectable(newName) autorelease];
 }
 
 #pragma mark Bridging
 
-- (id)retain
-{
-    return CFRetain((CFTypeRef)self);
-}
-
-- (oneway void)release
-{
-    CFRelease((CFTypeRef)self);
-}
-
-- (NSUInteger)retainCount
-{
-    return CFGetRetainCount((CFTypeRef)self);
-}
-
-- (BOOL)isEqual:(id)anObject
-{
-    return CFEqual((CFTypeRef)self, (CFTypeRef)anObject);
-}
-
-- (NSUInteger)hash
-{
-    return CFHash((CFTypeRef)self);
-}
-
-- (NSString *)description
-{
-    CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
-    
-    return CFBridgingRelease(copyDesc);
-}
-
-- (BOOL)allowsWeakReference
-{
-    return !_CFIsDeallocating(self);
-}
-
-- (BOOL)retainWeakReference
-{
-    return _CFTryRetain(self) != nil;
-}
+CF_CLASSIMPLEMENTATION(GSSCFName)
 
 - (CFTypeID)_cfTypeID
 {

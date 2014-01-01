@@ -11,11 +11,10 @@
 @interface GSSPlaceholderName : GSSName
 @end
 
-static GSSPlaceholderName *placeholderName;
-
 @implementation GSSPlaceholderName
 + (id)allocWithZone:(NSZone *)zone
 {
+    static GSSPlaceholderName *placeholderName;
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{
@@ -48,7 +47,7 @@ static GSSPlaceholderName *placeholderName;
     name = GSSCreateName((__bridge CFDataRef)data, nameType, &cfError);
     if (name == nil) {
         if (error != NULL)
-            *error = (__bridge_transfer NSError *)cfError;
+            *error = CFBridgingRelease(cfError);
         else
             CFRelease(cfError);
         return nil;
@@ -127,7 +126,7 @@ static GSSPlaceholderName *placeholderName;
 {
     CFStringRef description = GSSNameCreateDisplayString([self _gssName]);
     
-    return (__bridge_transfer NSString *)description;
+    return CFBridgingRelease(description);
 }
 
 @end
