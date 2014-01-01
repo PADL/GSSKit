@@ -27,6 +27,7 @@
 #import "NSArray+GSSOIDHelper.h"
 
 #import <objc/runtime.h>
+#import "CFBridgeHelper.h"
 
 #define GSSKIT_EXPORT __attribute__((visibility("default")))
 
@@ -97,39 +98,3 @@ __ApplePrivate_gss_cred_label_set (
 	gss_buffer_t /*value*/);
 
 #define gss_cred_label_set __ApplePrivate_gss_cred_label_set
-
-#define CF_CLASSIMPLEMENTATION(ClassName)                                       \
-- (id)retain                                                                    \
-{                                                                               \
-return CFRetain((CFTypeRef)self);                                           \
-}                                                                               \
-\
-- (oneway void)release                                                          \
-{                                                                               \
-CFRelease((CFTypeRef)self);                                                 \
-}                                                                               \
-\
-- (NSUInteger)retainCount                                                       \
-{                                                                               \
-return CFGetRetainCount((CFTypeRef)self);                                   \
-}                                                                               \
-\
-- (BOOL)isEqual:(id)anObject                                                    \
-{                                                                               \
-return (BOOL)CFEqual((CFTypeRef)self, (CFTypeRef)anObject);                 \
-}                                                                               \
-\
-- (NSUInteger)hash                                                              \
-{                                                                               \
-return CFHash((CFTypeRef)self);                                             \
-}                                                                               \
-\
-- (BOOL)allowsWeakReference                                                     \
-{                                                                               \
-return !_CFIsDeallocating(self);                                            \
-}                                                                               \
-\
-- (BOOL)retainWeakReference                                                     \
-{                                                                               \
-return _CFTryRetain(self) != nil;                                           \
-}                                                                               \
