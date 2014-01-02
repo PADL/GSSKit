@@ -46,6 +46,9 @@ CF_CLASSIMPLEMENTATION(GSSCFItem)
 {
     GSSItemRef res;
     
+    if (attributes == nil)
+        return nil;
+    
     res = GSSItemAdd((CFDictionaryRef)attributes, (CFErrorRef *)error);
     if (error)
         [NSMakeCollectable(*error) autorelease];
@@ -57,6 +60,9 @@ CF_CLASSIMPLEMENTATION(GSSCFItem)
 {
     BOOL res;
     
+    if (query == nil)
+        return NO;
+    
     res = GSSItemUpdate((CFDictionaryRef)query, (CFDictionaryRef)attributes, (CFErrorRef *)error);
     if (error)
         [NSMakeCollectable(*error) autorelease];
@@ -67,6 +73,9 @@ CF_CLASSIMPLEMENTATION(GSSCFItem)
 + (BOOL)delete:(NSDictionary *)query error:(NSError * __autoreleasing *)error
 {
     BOOL res;
+    
+    if (query == nil)
+        return NO;
     
     res = GSSItemDelete((CFDictionaryRef)query, (CFErrorRef *)error);
     if (error)
@@ -89,6 +98,9 @@ CF_CLASSIMPLEMENTATION(GSSCFItem)
 + (NSArray *)copyMatching:(NSDictionary *)query error:(NSError * __autoreleasing *)error
 {
     NSArray *res;
+    
+    if (query == nil)
+        return nil;
     
     res = (NSArray *)GSSItemCopyMatching((CFDictionaryRef)query, (CFErrorRef *)error);
     if (error)
