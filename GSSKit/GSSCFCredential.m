@@ -84,13 +84,6 @@ static CFTypeID _gssCredTypeID;
 
 CF_CLASSIMPLEMENTATION(GSSCFCredential)
 
-- (NSString *)description
-{
-    CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
-    
-    return [NSMakeCollectable(copyDesc) autorelease];
-}
-
 - (CFTypeID)_cfTypeID
 {
     return _gssCredTypeID;

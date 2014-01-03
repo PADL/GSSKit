@@ -28,13 +28,6 @@
 
 CF_CLASSIMPLEMENTATION(GSSCFItem)
 
-- (NSString *)description
-{
-    CFStringRef copyDesc = CFCopyDescription((CFTypeRef)self);
-    
-    return [NSMakeCollectable(copyDesc) autorelease];
-}
-
 - (CFTypeID)_cfTypeID
 {
     return GSSItemGetTypeID();
