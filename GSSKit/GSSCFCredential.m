@@ -22,6 +22,9 @@ static const gss_OID_desc GSSCredSecIdentityDesc = { 7, "\x2a\x85\x70\x2b\x0d\x8
 /* GSS_C_CRED_CFDictionary - 1.3.6.1.4.1.5322.25.1.1 */
 static const gss_OID_desc GSSCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x19\x01\x01" };
 
+/* GSS_SET_CRED_CFDictionary - 1.3.6.1.4.1.5322.25.4.1 */
+static const gss_OID_desc GSSSetCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x19\x04\x01" };
+
 static CFTypeID _gssCredTypeID;
 
 @implementation GSSCFCredential
@@ -149,6 +152,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
     OM_uint32 major = GSS_S_FAILURE, minor = 0;
     gss_cred_usage_t credUsage = GSS_C_INITIATE;
     gss_cred_id_t credHandle = GSS_C_NO_CREDENTIAL;
+    gss_buffer_desc credBuffer = GSS_C_EMPTY_BUFFER;
     
     if (pError != NULL)
         *pError = nil;
@@ -167,6 +171,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
      * First, try passing the CFDictionary directly to the mechanism, as some
      * mechanisms (for example BrowserID) might use this.
      */ 
+#if 0
     major = gss_acquire_cred_ext(&minor,
                                  [desiredName _gssName],
                                  &GSSCredCFDictionary,
@@ -175,14 +180,23 @@ GSSAcquireCredFunnel(GSSName *desiredName,
                                  [desiredMech oid],
                                  credUsage,
                                  &credHandle);
+#else
+    credBuffer.value = (void *)attributes;
+    credBuffer.length = sizeof(attributes);
+
+    major = gss_set_cred_option(&minor,
+                                &credHandle,
+                                (gss_OID)&GSSSetCredCFDictionary,
+                                &credBuffer);
+#endif
     if (major == GSS_S_FAILURE || major == GSS_S_UNAVAILABLE) {
         /* try password or certificate fallback */
         id password = attributes[GSSICPassword];
         id certificate = attributes[GSSICCertificate];
-        gss_buffer_desc credBuffer = GSS_C_EMPTY_BUFFER;
+
         void *credData = NULL;
         gss_const_OID credOid = GSS_C_NO_OID;
-        
+
         if (password && [password respondsToSelector:@selector(_gssBuffer)]) {
             credBuffer = [password _gssBuffer];
             credOid = &GSSCredPasswordDesc;
@@ -191,7 +205,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
             credOid = &GSSCredSecIdentityDesc;
             credData = certificate;
         }
-        
+
         if (credOid != GSS_C_NO_OID) {
             major = gss_acquire_cred_ext(&minor,
                                          [desiredName _gssName],
