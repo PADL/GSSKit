@@ -12,6 +12,7 @@ __attribute__((visibility("default")))
 + (GSSName *)nameWithHostBasedService: (NSString *)service withHostName: (NSString *)hostname;
 + (GSSName *)nameWithUserName: (NSString *)username;
 + (GSSName *)nameWithExportedName:(NSData *)name;
++ (GSSName *)nameWithURL:(NSURL *)url;
 
 - (NSData *)exportName;
 - (NSString *)description;

@@ -107,6 +107,17 @@
     return [self nameWithData:name nameType:GSS_C_NT_EXPORT_NAME error:&error];
 }
 
++ (GSSName *)nameWithURL:(NSURL *)url
+{
+    NSString *service;
+
+    service = GSSURLSchemeToServiceNameMap[url.scheme];
+    if (service == nil)
+        service = url.scheme;
+    
+    return [self nameWithHostBasedService:service withHostName:url.host];
+}
+
 - (NSData *)exportName
 {
     OM_uint32 major, minor;

@@ -31,13 +31,10 @@
 
 #define GSSKIT_EXPORT __attribute__((visibility("default")))
 
+extern NSDictionary *GSSURLSchemeToServiceNameMap;
+
 extern CFStringRef __GSSKitIdentity;
 extern dispatch_queue_t __GSSKitBackgroundQueue;
-
-void _CFRuntimeBridgeClasses(CFTypeID cf_typeID, const char *objc_classname);
-
-CF_EXPORT CFTypeRef _CFTryRetain(CFTypeRef cf);
-CF_EXPORT Boolean _CFIsDeallocating(CFTypeRef cf);
 
 void NSRequestConcreteImplementation(id self, SEL _cmd, Class absClass);
 

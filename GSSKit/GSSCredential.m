@@ -119,9 +119,11 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
             name = [GSSName nameWithHostBasedService:name];
         else
             name = [GSSName nameWithUserName:name];
+    } else if ([name isKindOfClass:[NSURL class]]) {
+        name = [GSSName nameWithURL:name];
     } else if (![name isKindOfClass:[GSSName class]]) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:[NSString stringWithFormat:@"-[GSSCredential initWithName:...] requires a NSString or GSSName"]
+                                       reason:[NSString stringWithFormat:@"-[GSSCredential initWithName:...] requires a NSString, NSURL or GSSName"]
                                      userInfo:nil];
     }
     

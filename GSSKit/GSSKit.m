@@ -27,10 +27,18 @@ GSSKIT_EXPORT NSString * const GSSICAppIdentifierACL = (__bridge NSString *)kGSS
 GSSKIT_EXPORT NSString * const GSSChangePasswordOldPassword = (__bridge NSString *)kGSSChangePasswordOldPassword;
 GSSKIT_EXPORT NSString * const GSSChangePasswordNewPassword = (__bridge NSString *)kGSSChangePasswordNewPassword;
 
+NSDictionary *GSSURLSchemeToServiceNameMap = NULL;
+
 __attribute__((constructor))
 static void
 __GSSKitInit(void)
 {
     __GSSKitBackgroundQueue = dispatch_queue_create("com.padl.gss.BackgroundQueue", DISPATCH_QUEUE_CONCURRENT);
     NSCAssert(__GSSKitBackgroundQueue != NULL, @"Failed to initialize __GSSKitBackgroundQueue");
+
+    GSSURLSchemeToServiceNameMap =  @{
+        @"telnet" : @"host",
+        @"https": @"http",
+        @"ldaps": @"ldap"
+    };
 }

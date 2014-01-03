@@ -36,9 +36,11 @@
 {
     if ([someName isKindOfClass:[NSString class]])
         someName = [GSSName nameWithHostBasedService:someName];
+    else if ([someName isKindOfClass:[NSURL class]])
+        someName = [GSSName nameWithURL:someName];
     else if (![someName isKindOfClass:[GSSName class]])
         @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:[NSString stringWithFormat:@"-[GSSContext setTargetName:...] requires a NSString or GSSName"]
+                                       reason:[NSString stringWithFormat:@"-[GSSContext setTargetName:...] requires a NSString, NSURL or GSSName"]
                                      userInfo:nil];
 
     _targetName = ((GSSName *)someName);
