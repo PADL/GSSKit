@@ -62,6 +62,7 @@
 		D336E2E9182D0B6E009271CD /* NSArray+GSSOIDHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2E7182D0B6E009271CD /* NSArray+GSSOIDHelper.h */; };
 		D336E2EA182D0B6E009271CD /* NSArray+GSSOIDHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2E8182D0B6E009271CD /* NSArray+GSSOIDHelper.m */; };
 		D39EB1041872D6B500C43A24 /* Heimdal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D39EB1031872D6B500C43A24 /* Heimdal.framework */; };
+		D3B0942E1877CFB3006DB1DE /* mechqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = D3B0942D1877CFB3006DB1DE /* mechqueue.h */; };
 		D3BED8FE1873E6F700623B92 /* CFBridgeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D3BED8FD1873E6F700623B92 /* CFBridgeHelper.h */; };
 /* End PBXBuildFile section */
 
@@ -139,6 +140,7 @@
 		D336E2E7182D0B6E009271CD /* NSArray+GSSOIDHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+GSSOIDHelper.h"; sourceTree = "<group>"; };
 		D336E2E8182D0B6E009271CD /* NSArray+GSSOIDHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+GSSOIDHelper.m"; sourceTree = "<group>"; };
 		D39EB1031872D6B500C43A24 /* Heimdal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Heimdal.framework; path = ../../../../../System/Library/PrivateFrameworks/Heimdal.framework; sourceTree = "<group>"; };
+		D3B0942D1877CFB3006DB1DE /* mechqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mechqueue.h; sourceTree = "<group>"; };
 		D3BED8FD1873E6F700623B92 /* CFBridgeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFBridgeHelper.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -232,6 +234,7 @@
 				D336E239182AE174009271CD /* GSSKit.h */,
 				D336E26B182B4D21009271CD /* GSSKit_Private.h */,
 				D336E23A182AE174009271CD /* GSSKit.m */,
+				D3B0942D1877CFB3006DB1DE /* mechqueue.h */,
 				D3BED8FD1873E6F700623B92 /* CFBridgeHelper.h */,
 				D336E2E7182D0B6E009271CD /* NSArray+GSSOIDHelper.h */,
 				D336E2E8182D0B6E009271CD /* NSArray+GSSOIDHelper.m */,
@@ -320,6 +323,7 @@
 				D336E2E5182D0B16009271CD /* NSString+GSSBufferHelper.h in Headers */,
 				D336E2C7182C622F009271CD /* GSSBuffer.h in Headers */,
 				D30C96D5182F52750036FD8C /* GSSMechanism+Private.h in Headers */,
+				D3B0942E1877CFB3006DB1DE /* mechqueue.h in Headers */,
 				D3BED8FE1873E6F700623B92 /* CFBridgeHelper.h in Headers */,
 				D336E267182AF7DA009271CD /* GSSItem+SyncOperations.h in Headers */,
 				D336E2CB182C686C009271CD /* GSSCredential+Private.h in Headers */,

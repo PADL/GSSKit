@@ -51,7 +51,11 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
 + (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
 {
-    return [[self alloc] initWithName:name mechanism:desiredMech attributes:nil error:NULL];
+    NSDictionary *attributes = @{
+                                 GSSCredentialUsage: GSSCredentialUsageInitiate
+                                 };
+    
+    return [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:NULL];
 }
 
 + (GSSCredential *)credentialWithName:(id)name

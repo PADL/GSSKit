@@ -198,13 +198,15 @@ der_free_oid (heim_oid *k);
 - (NSString *)oidString
 {
     OM_uint32 major, minor;
-    gss_buffer_desc oidString = GSS_C_EMPTY_BUFFER;
+    gss_buffer_desc oidStringBuf = GSS_C_EMPTY_BUFFER;
+    NSString *oidString;
     
-    major = gss_oid_to_str(&minor, (gss_OID)_oid, &oidString);
+    major = gss_oid_to_str(&minor, (gss_OID)_oid, &oidStringBuf);
     if (GSS_ERROR(major))
         return nil;
     
-    return [NSString stringWithGSSBuffer:&oidString freeWhenDone:YES];
+    oidString = [NSString stringWithGSSBuffer:&oidStringBuf freeWhenDone:YES];
+    return [oidString stringByReplacingOccurrencesOfString:@" " withString:@"."];
 }
 
 - (NSString *)name
