@@ -139,6 +139,52 @@ GSSUsageFromAttributeDictionary(NSDictionary *attributes,
 }
 
 /*
+ * XXX very naughty bug workaround for Heimdal not setting mech cred OID
+ */
+#include <GSS/GSS.h>
+#include <CoreFoundation/CFRuntime.h>
+#include "mechqueue.h"
+
+typedef struct gssapi_mech_interface_desc {
+    unsigned                        gm_version;
+    const char                      *gm_name;
+    gss_OID_desc                    gm_mech_oid;
+    unsigned                        gm_flags;
+    uintptr_t                       gm_pad[58];
+} gssapi_mech_interface_desc, *gssapi_mech_interface;
+
+struct _gss_mechanism_cred {
+    HEIM_SLIST_ENTRY(_gss_mechanism_cred) gmc_link;
+    gssapi_mech_interface   gmc_mech;       /* mechanism ops for MC */
+    gss_OID                 gmc_mech_oid;   /* mechanism oid for MC */
+    gss_cred_id_t           gmc_cred;       /* underlying MC */
+};
+HEIM_SLIST_HEAD(_gss_mechanism_cred_list, _gss_mechanism_cred);
+
+struct _gss_cred {
+    CFRuntimeBase base;
+    struct _gss_mechanism_cred_list gc_mc;
+};
+
+extern struct _gss_mech_switch_list _gss_mechs;
+
+static void
+__GSSMechanismCredentialPatch(gss_cred_id_t cred)
+{
+    struct _gss_cred *c = (struct _gss_cred *)cred;
+    struct _gss_mechanism_cred *mc;
+  
+    HEIM_SLIST_FOREACH(mc, &c->gc_mc, gmc_link) {
+        if (mc->gmc_mech_oid->elements == NULL) {
+            NSLog(@"__GSSMechanismCredentialPatch: patching cred %@", cred);
+            mc->gmc_mech_oid = &mc->gmc_mech->gm_mech_oid;
+            NSCAssert(mc->gmc_mech_oid->elements != NULL, @"__GSSMechanismCredentialPatch elements check");
+            NSCAssert(mc->gmc_mech_oid->length != 0, @"__GSSMechanismCredentialPatch length check");
+        }
+    }
+}
+
+/*
  * this is a variant of gss_aapl_initial_cred() that is more generalised
  */
 
@@ -227,6 +273,8 @@ GSSAcquireCredFunnel(GSSName *desiredName,
     if (GSS_ERROR(major))
         goto cleanup;
 
+    __GSSMechanismCredentialPatch(credHandle);
+    
     *pCredential = [GSSCFCredential credentialWithGSSCred:credHandle freeWhenDone:YES];
 
     if (attributes[GSSICVerifyCredential]) {
