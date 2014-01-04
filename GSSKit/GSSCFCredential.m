@@ -181,13 +181,21 @@ GSSAcquireCredFunnel(GSSName *desiredName,
                                  credUsage,
                                  &credHandle);
 #else
-    credBuffer.value = (void *)attributes;
-    credBuffer.length = sizeof(attributes);
+    NSMutableDictionary *setCredAttrs = [attributes mutableCopy];
+    
+    setCredAttrs[GSSCredentialName] = desiredName;
+    if (![desiredMech isSPNEGOMechanism])
+        setCredAttrs[GSSCredentialMechanismOID] = [desiredMech oidString];
+    
+    credBuffer.value = (void *)setCredAttrs;
+    credBuffer.length = sizeof(setCredAttrs);
 
     major = gss_set_cred_option(&minor,
                                 &credHandle,
                                 (gss_OID)&GSSSetCredCFDictionary,
                                 &credBuffer);
+    
+    [setCredAttrs release];
 #endif
     if (credHandle == GSS_C_NO_CREDENTIAL) {
         /* try password or certificate fallback */
@@ -206,27 +214,14 @@ GSSAcquireCredFunnel(GSSName *desiredName,
             credData = certificate;
         }
 
-        if (credOid != GSS_C_NO_OID) {
-            major = gss_acquire_cred_ext(&minor,
-                                         [desiredName _gssName],
-                                         credOid,
-                                         credData,
-                                         GSS_C_INDEFINITE,
-                                         [desiredMech oid],
-                                         credUsage,
-                                         &credHandle);
-        } else {
-            gss_OID_set_desc desiredMechs = { 1, (gss_OID)[desiredMech oid] };
-            
-            major = gss_acquire_cred(&minor,
+        major = gss_acquire_cred_ext(&minor,
                                      [desiredName _gssName],
+                                     credOid,
+                                     credData,
                                      GSS_C_INDEFINITE,
-                                     &desiredMechs,
+                                     [desiredMech oid],
                                      credUsage,
-                                     (gss_cred_id_t *)&credHandle,
-                                     NULL,
-                                     NULL);
-        }
+                                     &credHandle);
     }
     
     if (GSS_ERROR(major))

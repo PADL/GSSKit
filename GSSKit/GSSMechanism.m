@@ -212,7 +212,7 @@ der_free_oid (heim_oid *k);
     const char *name = gss_oid_to_name(_oid);
     
     if (name == NULL)
-        return nil;
+        return [self oidString];
     
     return [NSString stringWithUTF8String:name];    
 }

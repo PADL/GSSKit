@@ -42,6 +42,11 @@ void NSRequestConcreteImplementation(id self, SEL _cmd, Class absClass);
 #define GSS_S_PROMPTING_NEEDED (1 << (GSS_C_SUPPLEMENTARY_OFFSET + 5))
 #endif
 
+// private interface whilst we have to use gss_set_cred_option for passing dictionary to mech
+// this can go away when gss_acquire_cred_ext works
+extern NSString * const GSSCredentialName;
+extern NSString * const GSSCredentialMechanismOID;
+
 GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
 gss_inquire_mech_for_saslname(OM_uint32 *minor_status,
                               const gss_buffer_t sasl_mech_name,

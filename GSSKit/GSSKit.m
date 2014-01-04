@@ -15,6 +15,10 @@ GSSKIT_EXPORT NSString * const GSSICPassword = (__bridge NSString *)kGSSICPasswo
 GSSKIT_EXPORT NSString * const GSSICCertificate = (__bridge NSString *)kGSSICCertificate;
 GSSKIT_EXPORT NSString * const GSSICVerifyCredential = (__bridge NSString *)kGSSICVerifyCredential;
 
+// workaround whilst we have to use set_cred_option
+GSSKIT_EXPORT NSString * const GSSCredentialName = @"kGSSCredentialName";
+GSSKIT_EXPORT NSString * const GSSCredentialMechanismOID = @"kGSSCredentialMechanismOID";
+
 GSSKIT_EXPORT NSString * const GSSCredentialUsage = (__bridge NSString *)kGSSCredentialUsage;
 GSSKIT_EXPORT NSString * const GSSCredentialUsageInitiate = (__bridge NSString *)kGSS_C_INITIATE;
 GSSKIT_EXPORT NSString * const GSSCredentialUsageAccept = (__bridge NSString *)kGSS_C_ACCEPT;
