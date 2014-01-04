@@ -64,6 +64,9 @@ static CFTypeID _gssCredTypeID;
 {
     id newCred;
 
+    if (cred == GSS_C_NO_CREDENTIAL)
+        return nil;
+    
     // cred is a CF object, so it needs to be autoreleased
     if (flag)
         newCred = (id)cred;

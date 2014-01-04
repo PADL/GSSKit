@@ -41,12 +41,14 @@ __attribute__((visibility("default")))
 @property(nonatomic, readonly) GSSMechanism *finalMechanism;
 @property(nonatomic, readonly) GSSFlags finalFlags;
 @property(nonatomic, readonly) GSSCredential *delegatedCredentials;
-@property(nonatomic, readonly) NSError *lastError;
+@property(nonatomic, readonly, retain) NSError *lastError;
 
 @property(nonatomic, readonly) GSSName *initiatorName;
 @property(nonatomic, readonly) GSSName *acceptorName;
 
 @property(nonatomic, readonly) BOOL isInitiator;
+@property(nonatomic, assign) BOOL promptForCredentials; // requires GSSKitUI
+@property(nonatomic, retain) id window; // requires GSSKitUI
 
 - (id)initWithRequestFlags:(GSSFlags)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator;
 

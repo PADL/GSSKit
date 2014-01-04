@@ -118,7 +118,9 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
 {
     self = nil;
     
-    if ([name isKindOfClass:[NSString class]]) {
+    if (name == nil) {
+        return nil;
+    } else if ([name isKindOfClass:[NSString class]]) {
         if ([attributes[GSSCredentialUsage] isEqualToString:GSSCredentialUsageAccept])
             name = [GSSName nameWithHostBasedService:name];
         else

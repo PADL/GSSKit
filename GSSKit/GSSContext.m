@@ -8,6 +8,10 @@
 
 #import "GSSKit_Private.h"
 
+@interface GSSContext (CredUI)
+- (BOOL)_promptForCredentials:(NSError **)error;
+@end
+
 @implementation GSSContext
 {
     OM_uint32 _major, _minor;
@@ -237,19 +241,35 @@
     gss_release_name(&tmp, &sourceName);
 }
 
+- (BOOL)_maybePromptForCredentials:(NSError **)promptError
+{
+    if ([self.lastError _gssPromptingNeeded] &&
+        self.promptForCredentials &&
+        [self respondsToSelector:@selector(_promptForCredentials:)])
+        return [self _promptForCredentials:promptError];
+    else
+        return NO;
+}
+
 - (void)stepWithData:(NSData *)reqData
    completionHandler:(void (^)(NSData *, NSError *))handler
 {
     dispatch_async(__GSSKitBackgroundQueue, ^{
         NSData *retData = nil;
-        
-        if (_isInitiator)
-            [self _initSecContext:reqData :&retData];
-        else
-            [self _acceptSecContext:reqData :&retData];
+        NSError *promptError = nil;
 
+        if (_isInitiator) {
+        retryISC:
+            promptError = nil;
+            [self _initSecContext:reqData :&retData];
+            if ([self _maybePromptForCredentials:&promptError])
+                goto retryISC;
+        } else {
+            [self _acceptSecContext:reqData :&retData];
+        }
+        
         dispatch_async(_queue, ^{
-            handler(retData, self.lastError);
+            handler(retData, promptError ? promptError : self.lastError);
         });
     });
 }
