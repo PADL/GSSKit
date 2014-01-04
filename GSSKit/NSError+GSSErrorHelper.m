@@ -88,4 +88,12 @@ NSString * const GSSMechanismKey = @"kGSSMechanism";
     return GSS_ERROR(major.unsignedIntValue); 
 }
 
+- (BOOL)_gssPromptingNeeded
+{
+    NSNumber *major = self.userInfo[GSSMajorErrorCodeKey];
+
+    return (GSS_ROUTINE_ERROR(major.unsignedIntValue) == GSS_S_NO_CRED ||
+            (major.unsignedIntValue & GSS_S_PROMPTING_NEEDED));
+}
+
 @end

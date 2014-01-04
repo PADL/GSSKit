@@ -189,7 +189,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
                                 (gss_OID)&GSSSetCredCFDictionary,
                                 &credBuffer);
 #endif
-    if (major == GSS_S_FAILURE || major == GSS_S_UNAVAILABLE) {
+    if (credHandle == GSS_C_NO_CREDENTIAL) {
         /* try password or certificate fallback */
         id password = attributes[GSSICPassword];
         id certificate = attributes[GSSICCertificate];

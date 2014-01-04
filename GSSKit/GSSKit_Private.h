@@ -38,6 +38,10 @@ extern dispatch_queue_t __GSSKitBackgroundQueue;
 
 void NSRequestConcreteImplementation(id self, SEL _cmd, Class absClass);
 
+#ifndef GSS_S_PROMPTING_NEEDED
+#define GSS_S_PROMPTING_NEEDED (1 << (GSS_C_SUPPLEMENTARY_OFFSET + 5))
+#endif
+
 GSSAPI_LIB_FUNCTION OM_uint32 GSSAPI_LIB_CALL
 gss_inquire_mech_for_saslname(OM_uint32 *minor_status,
                               const gss_buffer_t sasl_mech_name,

@@ -19,4 +19,6 @@
 
 - (BOOL)_gssContinueNeeded;
 - (BOOL)_gssError;
+- (BOOL)_gssPromptingNeeded;
+
 @end
