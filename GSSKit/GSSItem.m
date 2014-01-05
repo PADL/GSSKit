@@ -88,6 +88,12 @@
 @end
 
 @implementation GSSItem (Private)
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return nil;
+}
+
 - (BOOL)_performOperation:(GSSOperation)op
               withOptions:(NSDictionary *)options
                     queue:(dispatch_queue_t)queue

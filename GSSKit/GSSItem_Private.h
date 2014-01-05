@@ -34,6 +34,8 @@
  */
 
 #import <CoreFoundation/CoreFoundation.h>
+#import <CoreFoundation/CFRuntime.h>
+
 #import <dispatch/dispatch.h>
 #import <Availability.h>
 
@@ -132,6 +134,11 @@ __OSX_AVAILABLE_STARTING(__MAC_10_8, __IPHONE_6_0);
  * Credentials needs a type, name
  */
 
+struct GSSItem {
+    CFRuntimeBase base;
+    CFMutableDictionaryRef keys;
+};
+
 typedef struct GSSItem *GSSItemRef;
 
 GSSItemRef
@@ -224,6 +231,7 @@ __OSX_AVAILABLE_STARTING(__MAC_10_8, __IPHONE_6_0);
 @class GSSItem;
 
 @interface GSSItem (Private)
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 - (BOOL)_performOperation:(GSSOperation)op
               withOptions:(NSDictionary *)options
                     queue:(dispatch_queue_t)queue
