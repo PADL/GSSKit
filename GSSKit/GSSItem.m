@@ -85,6 +85,7 @@
 {
     return [self valueForKey:key];
 }
+
 @end
 
 @implementation GSSItem (Private)

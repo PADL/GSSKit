@@ -27,36 +27,56 @@ static const gss_OID_desc GSSSetCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\x
 
 static CFTypeID _gssCredTypeID;
 
+static gss_cred_id_t
+__GSSCreateCred(CFAllocatorRef allocator)
+{
+    OM_uint32 major, minor;
+    CFErrorRef error = NULL;
+    gss_name_t name = GSSCreateName(__GSSKitIdentity, GSS_C_NT_USER_NAME, &error);
+    gss_cred_id_t cred = GSS_C_NO_CREDENTIAL;
+    
+    major = gss_acquire_cred(&minor, name, GSS_C_INDEFINITE,
+                             GSS_C_NO_OID_SET, GSS_C_ACCEPT,
+                             &cred, NULL, NULL);
+
+    if (error)
+        CFRelease(error);
+    CFRelease(name);
+
+    if (GSS_ERROR(major))
+        return NULL;
+    
+    return cred;
+}
+ 
 @implementation GSSCFCredential
 
 #pragma mark Initialization
 
 + (void)load
 {
-    OM_uint32 major, minor;
-    CFErrorRef error = NULL;
-    gss_name_t name = GSSCreateName(__GSSKitIdentity, GSS_C_NT_USER_NAME, &error);
-    gss_cred_id_t cred;
-    
-    major = gss_acquire_cred(&minor, name, GSS_C_INDEFINITE,
-                             GSS_C_NO_OID_SET, GSS_C_ACCEPT,
-                             &cred, NULL, NULL);
-    
+    gss_cred_id_t cred = __GSSCreateCred(kCFAllocatorDefault);
+   
     NSAssert(cred != GSS_C_NO_CREDENTIAL, @"failed to initialize cred");
-    
-    if (major == GSS_S_COMPLETE) {
+
+    if (cred) {
         _gssCredTypeID = CFGetTypeID((CFTypeRef)cred);
         CFRelease(cred);
         _CFRuntimeBridgeClasses(_gssCredTypeID, "GSSCFCredential");
     }
-    
-    if (error != NULL)
-        CFRelease(error);
 }
 
 + (id)allocWithZone:(NSZone *)zone
 {
-    return nil;
+    static id placeholderCred = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        if (placeholderCred == nil)
+            placeholderCred = (id)__GSSCreateCred(kCFAllocatorDefault);
+    });
+
+    return placeholderCred;
 }
 
 + (GSSCredential *)credentialWithGSSCred:(gss_cred_id_t)cred

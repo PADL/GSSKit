@@ -32,65 +32,32 @@ CF_EXPORT Boolean _CFIsDeallocating(CFTypeRef cf);
 - (CFTypeID)_cfTypeID;
 @end
 
-#define CF_IS_SWIZZLED(obj) ([obj class] != object_getClass(obj))
-
-#define CF_DESWIZZLE                                                            \
-    Class swizzledClass = NULL;                                                 \
-    @synchronized(self) {                                                       \
-    if (CF_IS_SWIZZLED(self)) {                                                 \
-        swizzledClass = object_getClass(self);                                  \
-        object_setClass(self, [self class]);                                    \
-    }                                                                           \
-
-#define CF_RESWIZZLE                                                            \
-    if (swizzledClass)                                                          \
-        object_setClass(self, swizzledClass);                                   \
-    }                                                                           \
-
 #define CF_CLASSIMPLEMENTATION(ClassName)                                       \
 - (id)retain                                                                    \
 {                                                                               \
-    id obj = nil;                                                               \
-    CF_DESWIZZLE                                                                \
-    obj = CFRetain((CFTypeRef)self);                                            \
-    CF_RESWIZZLE                                                                \
-    return obj;                                                                 \
+    return CFRetain((CFTypeRef)self);                                           \
 }                                                                               \
                                                                                 \
 - (oneway void)release                                                          \
 {                                                                               \
-    CF_DESWIZZLE                                                                \
     CFRelease((CFTypeRef)self);                                                 \
-    CF_RESWIZZLE                                                                \
 }                                                                               \
                                                                                 \
 - (NSUInteger)retainCount                                                       \
 {                                                                               \
-    NSUInteger rc;                                                              \
-    CF_DESWIZZLE                                                                \
-    rc = CFGetRetainCount((CFTypeRef)self);                                     \
-    CF_RESWIZZLE                                                                \
-    return rc;                                                                  \
+    return CFGetRetainCount((CFTypeRef)self);                                   \
 }                                                                               \
                                                                                 \
 - (BOOL)isEqual:(id)anObject                                                    \
 {                                                                               \
-    BOOL ret;                                                                   \
     if (anObject == nil)                                                        \
         return NO;                                                              \
-    CF_DESWIZZLE                                                                \
-    ret = CFEqual((CFTypeRef)self, (CFTypeRef)anObject);                        \
-    CF_RESWIZZLE                                                                \
-    return ret;                                                                 \
+    return CFEqual((CFTypeRef)self, (CFTypeRef)anObject);                       \
 }                                                                               \
                                                                                 \
 - (NSUInteger)hash                                                              \
 {                                                                               \
-    NSUInteger hash;                                                            \
-    CF_DESWIZZLE                                                                \
-    hash = CFHash((CFTypeRef)self);                                             \
-    CF_RESWIZZLE                                                                \
-    return hash;                                                                \
+    return CFHash((CFTypeRef)self);                                             \
 }                                                                               \
                                                                                 \
 - (BOOL)allowsWeakReference                                                     \
@@ -105,32 +72,20 @@ CF_EXPORT Boolean _CFIsDeallocating(CFTypeRef cf);
                                                                                 \
 - (BOOL)_isDeallocating                                                         \
 {                                                                               \
-    BOOL ret;                                                                   \
-    CF_DESWIZZLE                                                                \
-    ret = _CFIsDeallocating((CFTypeRef)self);                                   \
-    CF_RESWIZZLE                                                                \
-    return ret;                                                                 \
+    return _CFIsDeallocating((CFTypeRef)self);                                  \
 }                                                                               \
                                                                                 \
 - (BOOL)_tryRetain                                                              \
 {                                                                               \
-    BOOL ret;                                                                   \
-    CF_DESWIZZLE                                                                \
-    ret = _CFTryRetain((CFTypeRef)self) != NULL;                                \
-    CF_RESWIZZLE                                                                \
-    return ret;                                                                 \
+    return _CFTryRetain((CFTypeRef)self) != NULL;                               \
 }                                                                               \
                                                                                 \
 - (NSString *)description                                                       \
 {                                                                               \
-    NSString *desc;                                                             \
-    CF_DESWIZZLE                                                                \
-    desc = [NSMakeCollectable(CFCopyDescription((CFTypeRef)self)) autorelease]; \
-    CF_RESWIZZLE                                                                \
-    return desc;                                                                \
+    return [NSMakeCollectable(CFCopyDescription((CFTypeRef)self)) autorelease]; \
 }                                                                               \
 
-#else
+#endif /* __OBJC__ */
 
 /*
  * Copyright (c) 2003 Apple Computer, Inc. All rights reserved.
@@ -163,78 +118,36 @@ CF_EXPORT Boolean _CFIsDeallocating(CFTypeRef cf);
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+#define CF_IS_OBJC(typeID, obj) (objc_msgSend != NULL && _CFIsObjC(typeID, (CFTypeRef)obj))
 
-static inline Boolean
-__CFIsReallyObjC(CFTypeID typeID, CFTypeRef obj)
-{
-    if (objc_msgSend == NULL || !_CFIsObjC(typeID, obj))
-        return 0;
-    
-    static SEL s = NULL;
-    Class (*func)(const void *, SEL) = (Class (*)(const void *, SEL))objc_msgSend;
-    
-    if (!s)
-        s = sel_registerName("class");
-    
-    assert(s);
-    
-    Class swizzledClass = object_getClass((id)obj);
-    Class reportedClass = func(obj, s);
-    
-    assert(swizzledClass);
-    assert(reportedClass);
-    
-    if (swizzledClass == reportedClass)
-        return 1; /* is non-swizzled ObjC object */
-    
-    /* OK, now the tricky part */
-    objc_sync_enter((id)obj);
-    object_setClass((id)obj, reportedClass);
-    Boolean ret = _CFIsObjC(typeID, obj);
-    object_setClass((id)obj, swizzledClass);
-    objc_sync_exit((id)obj);
-    
-    return ret;
-}
+#define CF_OBJC_CALLV(rettype, var, obj, sel, ...) \
+{rettype (*func)(const void *, SEL, ...) = (rettype (*)(const void *, SEL, ...))objc_msgSend; \
+static SEL s = NULL; if (!s) s = sel_registerName(sel); \
+var = func((const void *)obj, s, ##__VA_ARGS__ );}
 
-#define CF_OBJC_FUNCDISPATCH0(typeID, rettype, obj, sel) \
-if (__CFIsReallyObjC(typeID, (CFTypeRef)obj)) \
-{rettype (*func)(const void *, SEL) = (rettype (*)(const void *, SEL))objc_msgSend; \
+#define CF_OBJC_VOIDCALLV(obj, sel, ...) \
+{void (*func)(const void *, SEL, ...) = (void (*)(const void *, SEL, ...))objc_msgSend; \
 static SEL s = NULL; if (!s) s = sel_registerName(sel); \
-return func((const void *)obj, s);}
-#define CF_OBJC_FUNCDISPATCH1(typeID, rettype, obj, sel, a1) \
-if (__CFIsReallyObjC(typeID, (CFTypeRef)obj)) \
+func((const void *)obj, s, ##__VA_ARGS__ );}
+
+#define CF_OBJC_FUNCDISPATCHV(typeID, rettype, obj, sel, ...) \
+if (CF_IS_OBJC(typeID, obj)) \
 {rettype (*func)(const void *, SEL, ...) = (rettype (*)(const void *, SEL, ...))objc_msgSend; \
 static SEL s = NULL; if (!s) s = sel_registerName(sel); \
-return func((const void *)obj, s, (a1));}
-#define CF_OBJC_FUNCDISPATCH2(typeID, rettype, obj, sel, a1, a2) \
-if (__CFIsReallyObjC(typeID, (CFTypeRef)obj)) \
-{rettype (*func)(const void *, SEL, ...) = (rettype (*)(const void *, SEL, ...))objc_msgSend; \
-static SEL s = NULL; if (!s) s = sel_registerName(sel); \
-return func((const void *)obj, s, (a1), (a2));}
-#define CF_OBJC_FUNCDISPATCH3(typeID, rettype, obj, sel, a1, a2, a3) \
-if (__CFIsReallyObjC(typeID, (CFTypeRef)obj)) \
-{rettype (*func)(const void *, SEL, ...) = (rettype (*)(const void *, SEL, ...))objc_msgSend; \
-static SEL s = NULL; if (!s) s = sel_registerName(sel); \
-return func((const void *)obj, s, (a1), (a2), (a3));}
-#define CF_OBJC_FUNCDISPATCH4(typeID, rettype, obj, sel, a1, a2, a3, a4) \
-if (__CFIsReallyObjC(typeID, (CFTypeRef)obj)) \
-{rettype (*func)(const void *, SEL, ...) = (rettype (*)(const void *, SEL, ...))objc_msgSend; \
-static SEL s = NULL; if (!s) s = sel_registerName(sel); \
-return func((const void *)obj, s, (a1), (a2), (a3), (a4));}
+return func((const void *)obj, s, ##__VA_ARGS__ );}
     
 #define CF_OBJC_KVO_WILLCHANGE(obj, key) \
 if (objc_msgSend != NULL) \
 {void (*func)(const void *, SEL, CFStringRef) = (void (*)(const void *, SEL, CFStringRef))objc_msgSend; \
 static SEL s = NULL; if (!s) s = sel_registerName("willChangeValueForKey:"); \
 func((const void *)obj, s, (key));}
+
 #define CF_OBJC_KVO_DIDCHANGE(obj, key) \
 if (objc_msgSend != NULL) \
 {void (*func)(const void *, SEL, CFStringRef) = (void (*)(const void *, SEL, CFStringRef))objc_msgSend; \
 static SEL s = NULL; if (!s) s = sel_registerName("didChangeValueForKey:"); \
 func((const void *)obj, s, (key));}
-    
-#endif /* __OBJC__ */
     
 #ifdef __cplusplus
 }

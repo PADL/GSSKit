@@ -12,6 +12,20 @@
 
 static CFTypeID _gssNameTypeID;
 
+static gss_name_t
+__GSSCreateName(CFAllocatorRef allocator)
+{
+    gss_name_t name;
+    CFErrorRef error = NULL;
+
+    name = GSSCreateName(__GSSKitIdentity, GSS_C_NT_USER_NAME, &error);
+
+    if (error)
+        CFRelease(error);
+
+    return name;
+}
+
 @implementation GSSCFName
 
 #pragma mark Initialization
@@ -19,23 +33,27 @@ static CFTypeID _gssNameTypeID;
 + (void)load
 {
     CFTypeRef name;
-    CFErrorRef error = nil;
     
-    name = GSSCreateName(__GSSKitIdentity, GSS_C_NT_USER_NAME, &error);
+    name = __GSSCreateName(kCFAllocatorDefault);
     NSAssert(name != nil, @"failed to create temporary GSS name");
 
     _gssNameTypeID = CFGetTypeID((CFTypeRef)name);
     
-    if (error)
-        CFRelease(error);
     CFRelease(name);
-    
     _CFRuntimeBridgeClasses(_gssNameTypeID, "GSSCFName");
 }
 
 + (id)allocWithZone:(NSZone *)zone
 {
-    return nil;
+    static id placeholderName = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        if (placeholderName == nil)
+            placeholderName = (id)__GSSCreateName(kCFAllocatorDefault);
+    });
+
+    return placeholderName;
 }
 
 + (GSSName *)nameWithGSSName:(gss_name_t)name

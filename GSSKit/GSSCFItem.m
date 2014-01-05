@@ -10,18 +10,51 @@
 
 // ARC disabled
 
+static id __GSSItemCreate(CFAllocatorRef allocator, NSDictionary *dictionary)
+{
+    GSSItemRef item;
+    
+    item = (GSSItemRef)_CFRuntimeCreateInstance(allocator, GSSItemGetTypeID(),
+                                                sizeof(struct GSSItem) - sizeof(CFRuntimeBase), NULL);
+    if (item == NULL)
+        return NULL;
+    
+    if (dictionary)
+        item->keys = CFDictionaryCreateMutableCopy(allocator, 0,
+                                                   (CFDictionaryRef)dictionary);
+    else
+        item->keys = CFDictionaryCreateMutable(allocator, 0,
+                                               &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+
+    return (GSSItem *)item;
+}
+
+static NSDictionary *__GSSItemGetKeys(GSSCFItem *item)
+{
+    return (NSDictionary *)((GSSItemRef)item)->keys;
+}
+
+static void __GSSItemSetKeys(GSSCFItem *__item, NSDictionary *keys)
+{
+    GSSItemRef item = (GSSItemRef)__item;
+    
+    if (item->keys)
+        CFRelease(item->keys);
+    item->keys = (CFMutableDictionaryRef)CFBridgingRetain([keys mutableCopy]);
+}
+
 @implementation GSSCFItem
 
 #pragma mark Initialization
 
++ (id)allocWithZone:(NSZone *)zone
+{
+    return __GSSItemCreate(kCFAllocatorDefault, NULL);
+}
+
 + (void)load
 {
     _CFRuntimeBridgeClasses(GSSItemGetTypeID(), "GSSCFItem");
-}
-
-+ (id)allocWithZone:(NSZone *)zone
-{
-    return nil;
 }
 
 #pragma mark Bridging
@@ -33,58 +66,36 @@ CF_CLASSIMPLEMENTATION(GSSCFItem)
     return GSSItemGetTypeID();
 }
 
-- (NSDictionary *)_GSSItem_keys
-{
-    return (NSDictionary *)((GSSItemRef)self)->keys;
-}
-
 #pragma mark Encoding
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary
++ (BOOL)supportsSecureCoding
 {
-    GSSItemRef item;
-    
-    item = (GSSItemRef)_CFRuntimeCreateInstance(kCFAllocatorDefault, GSSItemGetTypeID(),
-                                                sizeof(struct GSSItem) - sizeof(CFRuntimeBase), NULL);
-    if (item == NULL)
-        return NULL;
-    
-    if (dictionary)
-        item->keys = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0,
-                                                   (CFDictionaryRef)dictionary);
-    else
-        item->keys = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
-                                               &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    
-    self = (GSSCFItem *)item;
-    
-    return self;
+    return YES;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    NSSet *codeableKeys = [self._GSSItem_keys keysOfEntriesPassingTest:^ BOOL (id key, id obj, BOOL *stop) {
+    NSSet *codeableKeys = [__GSSItemGetKeys(self) keysOfEntriesPassingTest:^ BOOL (id key, id obj, BOOL *stop) {
         return [obj respondsToSelector:@selector(encodeWithCoder:)];
     }];
     
     NSDictionary *codeableAttrs =
-    [[NSDictionary alloc] initWithObjects:[self._GSSItem_keys objectsForKeys:codeableKeys.allObjects notFoundMarker:[NSNull null]]
-                                  forKeys:codeableKeys.allObjects];
-    [coder encodeObject:codeableAttrs];
+        [[NSDictionary alloc] initWithObjects:[__GSSItemGetKeys(self) objectsForKeys:codeableKeys.allObjects notFoundMarker:[NSNull null]]
+                                      forKeys:codeableKeys.allObjects];
+    [coder encodeObject:codeableAttrs forKey:@"keys"];
     
     [codeableAttrs release];
-    
 }
 
 - (id)initWithCoder:(NSCoder *)coder
 {
     NSDictionary *itemAttributes;
     
-    itemAttributes = [coder decodeObject];
+    itemAttributes = [coder decodeObjectOfClass:[NSDictionary class] forKey:@"keys"];
     if (itemAttributes == nil)
         return nil;
     
-    self = [self initWithDictionary:itemAttributes];
+    __GSSItemSetKeys(self, itemAttributes);
     
     return self;
 }
