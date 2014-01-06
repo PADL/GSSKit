@@ -174,8 +174,13 @@ CF_CLASSIMPLEMENTATION(GSSCFItem)
                     queue:(dispatch_queue_t)queue
         completionHandler:(void (^)(id, NSError *))fun
 {
-    if (op == kGSSOperationAcquire) {
-        // This is a hack to deal with extensible dictionary funnelling
+    /*
+     * This hack is to deal with the fact that the shipped Heimdal does not
+     * support arbitrary options dictionaries, so we dispatch to our own
+     * version of gss_aapl_initial_cred(), only if the caller supplies a
+     * password;
+     */
+    if (op == kGSSOperationAcquire && options[(id)kGSSAttrCredentialPassword]) {
         dispatch_async(__GSSKitBackgroundQueue, ^{
             [self _itemAcquireOperation:options queue:queue completionHandler:fun];
         });
