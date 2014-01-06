@@ -312,7 +312,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
             goto cleanup;
         }
     }
-    
+
     credHandle = GSS_C_NO_CREDENTIAL;
 
 cleanup:

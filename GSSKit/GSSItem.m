@@ -106,31 +106,33 @@
 
 - (BOOL)_performOperationSynchronously:(GSSOperation)op
                           withOptions:(NSDictionary *)options
-                               object:(id __autoreleasing *)object
-                                error:(NSError * __autoreleasing *)error
+                               object:(id __autoreleasing *)pObject
+                                error:(NSError * __autoreleasing *)pError
 {
     BOOL bResult;
     dispatch_queue_t queue = dispatch_queue_create("com.padl.gss.ItemOperationSynchronousQueue", DISPATCH_QUEUE_SERIAL);
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-   
-    if (object != NULL)
-        *object = nil; 
-    if (error != NULL)
-        *error = nil;
+    __block id object;
+    __block NSError *error;
     
     bResult = [self _performOperation:op
                           withOptions:options
                                 queue:queue
                     completionHandler:^(id o, NSError *e) {
                         if (object != NULL)
-                            *object = o;
+                            object = o;
                         if (error != NULL)
-                            *error = e;
+                            error = e;
                         dispatch_semaphore_signal(semaphore);
                     }];
     
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 
+    if (pObject)
+        *pObject = object;
+    if (pError)
+        *pError = error;
+    
     return bResult;
 }
 @end

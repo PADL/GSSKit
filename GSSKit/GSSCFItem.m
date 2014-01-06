@@ -197,5 +197,4 @@ CF_CLASSIMPLEMENTATION(GSSCFItem)
     return GSSItemGetValue((GSSItemRef)self, (CFStringRef)key);
 }
 
-
 @end
