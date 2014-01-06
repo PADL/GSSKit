@@ -19,8 +19,8 @@ static const gss_OID_desc GSSCredCertificateDesc = { 7, "\x2a\x85\x70\x2b\x0d\x8
 /* GSS_C_CRED_SecIdentity - 1.2.752.43.13.202 */
 static const gss_OID_desc GSSCredSecIdentityDesc = { 7, "\x2a\x85\x70\x2b\x0d\x81\x4a" };
 
-/* GSS_C_CRED_CFDictionary - 1.3.6.1.4.1.5322.25.1.1 */
-static const gss_OID_desc GSSCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x19\x01\x01" };
+/* GSS_C_CRED_HEIMBASE - 1.2.752.43.13.203 */
+static const gss_OID_desc GSSCredHeimbase = { 7, "\x2a\x85\x70\x2b\x0d\x81\x4b" };
 
 /* GSS_SET_CRED_CFDictionary - 1.3.6.1.4.1.5322.25.4.1 */
 static const gss_OID_desc GSSSetCredCFDictionary = { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x19\x04\x01" };
@@ -243,7 +243,7 @@ GSSAcquireCredFunnel(GSSName *desiredName,
 #if 0
     major = gss_acquire_cred_ext(&minor,
                                  [desiredName _gssName],
-                                 &GSSCredCFDictionary,
+                                 &GSSCredHeimbase,
                                  attributes,
                                  GSS_C_INDEFINITE,
                                  [desiredMech oid],
