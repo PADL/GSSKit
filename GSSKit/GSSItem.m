@@ -112,25 +112,25 @@
     BOOL bResult;
     dispatch_queue_t queue = dispatch_queue_create("com.padl.gss.ItemOperationSynchronousQueue", DISPATCH_QUEUE_SERIAL);
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    __block id object;
-    __block NSError *error;
+    __block id object = NULL;
+    __block NSError *error = NULL;
     
     bResult = [self _performOperation:op
                           withOptions:options
                                 queue:queue
                     completionHandler:^(id o, NSError *e) {
-                        if (object != NULL)
+                        if (o != nil)
                             object = o;
-                        if (error != NULL)
+                        if (e != nil)
                             error = e;
                         dispatch_semaphore_signal(semaphore);
                     }];
     
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 
-    if (pObject)
+    if (pObject != NULL)
         *pObject = object;
-    if (pError)
+    if (pError != NULL)
         *pError = error;
     
     return bResult;
