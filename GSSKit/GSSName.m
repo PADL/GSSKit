@@ -140,4 +140,36 @@
     return CFBridgingRelease(description);
 }
 
+- (BOOL)isEqualToName:(GSSName *)name
+{
+    OM_uint32 major, minor;
+    int equal;
+
+    if (name == nil)
+        return NO;
+
+    major = gss_compare_name(&minor, [self _gssName], [name _gssName], &equal);
+    if (GSS_ERROR(major))
+        return NO;
+
+    return equal;
+}
+
+- (BOOL)isEqual:(id)name
+{
+    if (name == self)
+        return YES;
+    else if (![name isKindOfClass:[GSSName class]])
+        return NO;
+    else
+        return [self isEqualToName:name];
+}
+
+- (NSUInteger)hash
+{
+    NSData *data = [self exportName];
+
+    return [data hash];
+}
+
 @end
