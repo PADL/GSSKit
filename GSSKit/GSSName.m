@@ -133,7 +133,7 @@
     return data;
 }
 
-- (NSString *)description
+- (NSString *)displayString
 {
     CFStringRef description = GSSNameCreateDisplayString([self _gssName]);
     
@@ -142,6 +142,7 @@
 
 - (BOOL)isEqualToName:(GSSName *)name
 {
+#if 0
     OM_uint32 major, minor;
     int equal;
 
@@ -153,6 +154,9 @@
         return NO;
 
     return equal;
+#else
+    return [self.displayString isEqualToString:name.displayString];
+#endif
 }
 
 - (BOOL)isEqual:(id)name

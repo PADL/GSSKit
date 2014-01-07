@@ -15,6 +15,6 @@ __attribute__((visibility("default")))
 + (GSSName *)nameWithURL:(NSURL *)url;
 
 - (NSData *)exportName;
-- (NSString *)description;
+- (NSString *)displayString;
 - (BOOL)isEqualToName:(GSSName *)name;
 @end
