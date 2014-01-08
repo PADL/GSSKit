@@ -8,17 +8,16 @@
 
 #import "GSSKit_Private.h"
 
-NSString * const GSSMajorErrorCodeKey = @"kGSSMajorErrorCode";
-NSString * const GSSMinorErrorCodeKey = @"kGSSMinorErrorCode";
+GSSKIT_EXPORT NSString * const GSSMajorErrorCodeKey = @"kGSSMajorErrorCode";
+GSSKIT_EXPORT NSString * const GSSMinorErrorCodeKey = @"kGSSMinorErrorCode";
 
 #if 0
-NSString * const GSSMajorErrorDescriptionKey = @"kGSSMajorErrorDescription";
-NSString * const GSSMinorErrorDescriptionKey = @"kGSSMinorErrorDescription";
+GSSKIT_EXPORT NSString * const GSSMajorErrorDescriptionKey = @"kGSSMajorErrorDescription";
+GSSKIT_EXPORT NSString * const GSSMinorErrorDescriptionKey = @"kGSSMinorErrorDescription";
 #endif
 
-NSString * const GSSMechanismOIDKey = @"kGSSMechanismOID";
-NSString * const GSSMechanismKey = @"kGSSMechanism";
-
+GSSKIT_EXPORT NSString * const GSSMechanismOIDKey = @"kGSSMechanismOID";
+GSSKIT_EXPORT NSString * const GSSMechanismKey = @"kGSSMechanism";
 
 @implementation NSError (GSSKitErrorHelper)
 
