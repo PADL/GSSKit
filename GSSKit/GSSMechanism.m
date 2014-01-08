@@ -202,6 +202,8 @@ der_free_oid (heim_oid *k);
         return (__bridge NSString *)kGSSAttrClassNTLM;
     else if ([self isIAKerbMechanism])
         return (__bridge NSString *)kGSSAttrClassIAKerb;
+    else if ([self isSPNEGOMechanism])
+        return nil; /* pseudo-mechanisms are all classes, potentially */
     else
         return [self oidString];
 }
