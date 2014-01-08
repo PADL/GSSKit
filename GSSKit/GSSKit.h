@@ -19,29 +19,33 @@
 #import <GSSKit/GSSContext.h>
 #import <GSSKit/GSSURLSessionAuthenticationDelegate.h>
 
-extern NSString * const GSSICPassword;
-extern NSString * const GSSICCertificate;
-extern NSString * const GSSICVerifyCredential;
-
-extern NSString * const GSSCredentialUsage;
-extern NSString * const GSSCredentialUsageInitiate;
-extern NSString * const GSSCredentialUsageAccept;
-extern NSString * const GSSCredentialUsageBoth;
-
-extern NSString * const GSSICLKDCHostname;
-extern NSString * const GSSICKerberosCacheName;
-extern NSString * const GSSICAppIdentifierACL;
-
-extern NSString * const GSSChangePasswordOldPassword;
-extern NSString * const GSSChangePasswordNewPassword;
-
-extern NSString * const GSSMajorErrorCodeKey;
-extern NSString * const GSSMinorErrorCodeKey;
-
-#if 0
-extern NSString * const GSSMajorErrorDescriptionKey;
-extern NSString * const GSSMinorErrorDescriptionKey;
+#ifndef GSSKIT_EXPORT
+#define GSSKIT_EXPORT extern
 #endif
 
-extern NSString * const GSSMechanismOIDKey;
-extern NSString * const GSSMechanismKey;
+GSSKIT_EXPORT NSString * const GSSICPassword;
+GSSKIT_EXPORT NSString * const GSSICCertificate;
+GSSKIT_EXPORT NSString * const GSSICVerifyCredential;
+
+GSSKIT_EXPORT NSString * const GSSCredentialUsage;
+GSSKIT_EXPORT NSString * const GSSCredentialUsageInitiate;
+GSSKIT_EXPORT NSString * const GSSCredentialUsageAccept;
+GSSKIT_EXPORT NSString * const GSSCredentialUsageBoth;
+
+GSSKIT_EXPORT NSString * const GSSICLKDCHostname;
+GSSKIT_EXPORT NSString * const GSSICKerberosCacheName;
+GSSKIT_EXPORT NSString * const GSSICAppIdentifierACL;
+
+GSSKIT_EXPORT NSString * const GSSChangePasswordOldPassword;
+GSSKIT_EXPORT NSString * const GSSChangePasswordNewPassword;
+
+GSSKIT_EXPORT NSString * const GSSMajorErrorCodeKey;
+GSSKIT_EXPORT NSString * const GSSMinorErrorCodeKey;
+
+#if 0
+GSSKIT_EXPORT NSString * const GSSMajorErrorDescriptionKey;
+GSSKIT_EXPORT NSString * const GSSMinorErrorDescriptionKey;
+#endif
+
+GSSKIT_EXPORT NSString * const GSSMechanismOIDKey;
+GSSKIT_EXPORT NSString * const GSSMechanismKey;

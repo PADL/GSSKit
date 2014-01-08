@@ -29,6 +29,7 @@
 #import <objc/runtime.h>
 #import "CFBridgeHelper.h"
 
+#undef GSSKIT_EXPORT
 #define GSSKIT_EXPORT __attribute__((visibility("default")))
 
 extern NSDictionary *GSSURLSchemeToServiceNameMap;
