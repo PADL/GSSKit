@@ -194,6 +194,17 @@ der_free_oid (heim_oid *k);
 #endif
 }
 
+- (NSString *)mechanismClass
+{
+    if ([self isKerberosMechanism])
+        return (__bridge NSString *)kGSSAttrClassKerberos;
+    else if ([self isNTLMMechanism])
+        return (__bridge NSString *)kGSSAttrClassNTLM;
+    else if ([self isIAKerbMechanism])
+        return (__bridge NSString *)kGSSAttrClassIAKerb;
+    else
+        return [self oidString];
+}
 
 - (NSString *)oidString
 {
@@ -266,6 +277,16 @@ der_free_oid (heim_oid *k);
 - (BOOL)isKerberosMechanism
 {
     return [self isEqualToOID:GSS_KRB5_MECHANISM];
+}
+
+- (BOOL)isNTLMMechanism
+{
+    return [self isEqualToOID:GSS_NTLM_MECHANISM];
+}
+
+- (BOOL)isIAKerbMechanism
+{
+    return [self isEqualToOID:GSS_IAKERB_MECHANISM];
 }
 
 - (BOOL)isEqual:(id)anObject

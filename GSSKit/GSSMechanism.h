@@ -27,9 +27,12 @@ __attribute__((visibility("default")))
 - (NSString *)name;
 - (NSString *)SASLName;
 - (NSString *)oidString;
+- (NSString *)mechanismClass;
 
 - (BOOL)isSPNEGOMechanism;
 - (BOOL)isKerberosMechanism;
 
 - (BOOL)isEqual:(id)anObject;
+
+
 @end
