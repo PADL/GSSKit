@@ -165,7 +165,6 @@ GSSUsageFromAttributeDictionary(NSDictionary *attributes,
  * XXX very naughty bug workaround for Heimdal not setting mech cred OID
  */
 #include <GSS/GSS.h>
-#include <CoreFoundation/CFRuntime.h>
 #include "mechqueue.h"
 
 typedef struct gssapi_mech_interface_desc {

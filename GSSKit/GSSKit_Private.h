@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 PADL Software Pty Ltd. All rights reserved.
 //
 
+#import <CoreFoundation/CFBridgingPriv.h>
+#import <CoreFoundation/CFRuntime.h>
+
 #import <GSS/gssapi.h>
 #import <GSS/gssapi_krb5.h>
 #import <GSS/gssapi_spnego.h>
@@ -25,9 +28,6 @@
 #import "NSError+GSSErrorHelper.h"
 #import "NSString+GSSBufferHelper.h"
 #import "NSArray+GSSOIDHelper.h"
-
-#import <objc/runtime.h>
-#import "CFBridgeHelper.h"
 
 #undef GSSKIT_EXPORT
 #define GSSKIT_EXPORT __attribute__((visibility("default")))
