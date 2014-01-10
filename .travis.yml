@@ -1,0 +1,8 @@
+language: objective-c
+
+xcode_project: GSSKit.xcodeproj
+
+notifications:
+  email:
+    - lukeh@padl.com
+
