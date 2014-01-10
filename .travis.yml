@@ -1,6 +1,7 @@
 language: objective-c
 
 xcode_project: GSSKit.xcodeproj
+xcode_scheme: GSSKit
 
 notifications:
   email:
