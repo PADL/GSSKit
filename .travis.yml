@@ -3,6 +3,8 @@ language: objective-c
 xcode_project: GSSKit.xcodeproj
 xcode_scheme: GSSKit
 
+script: xctool -project GSSKit.xcodeproj -scheme GSSKit build
+
 notifications:
   email:
     - lukeh@padl.com
