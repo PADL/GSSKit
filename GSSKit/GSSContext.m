@@ -88,7 +88,7 @@
     OM_uint32 major, minor;
     gss_name_t initiatorName = GSS_C_NO_NAME;
     
-    major = gss_inquire_context(&minor, _ctx, &initiatorName,
+    major = gss_inquire_context(&minor, self._gssContext, &initiatorName,
                                 NULL, NULL, NULL, NULL, NULL, NULL);
     if (GSS_ERROR(major))
         return nil;
@@ -101,7 +101,7 @@
     OM_uint32 major, minor;
     gss_name_t acceptorName = GSS_C_NO_NAME;
     
-    major = gss_inquire_context(&minor, _ctx, NULL,
+    major = gss_inquire_context(&minor, self._gssContext, NULL,
                                 &acceptorName, NULL, NULL, NULL, NULL, NULL);
     if (GSS_ERROR(major))
         return nil;
@@ -283,7 +283,7 @@
     gss_buffer_desc outputMessageBuffer = GSS_C_EMPTY_BUFFER;
     
     _major = gss_wrap(&_minor,
-                      _ctx,
+                      self._gssContext,
                       !!(confState & GSS_C_CONF_FLAG),
                       qopState,
                       &inputMessageBuffer,
@@ -311,7 +311,7 @@
     int confState;
     
     _major = gss_unwrap(&_minor,
-                        _ctx,
+                        self._gssContext,
                         &inputMessageBuffer,
                         &outputMessageBuffer,
                         &confState,
@@ -339,7 +339,7 @@
     gss_buffer_desc messageToken = GSS_C_EMPTY_BUFFER;
 
     _major = gss_get_mic(&_minor,
-                         _ctx,
+                         self._gssContext,
                          qopState,
                          &messageBuffer,
                          &messageToken);
@@ -364,7 +364,7 @@
     gss_buffer_desc messageToken = [self _decodeToken:mic cookie:&cookie];
     
     _major = gss_verify_mic(&_minor,
-                            _ctx,
+                            self._gssContext,
                             &messageBuffer,
                             &messageToken,
                             qopState);
@@ -380,6 +380,11 @@
     GSSQopState qopState;
     
     return [self verifyMessageIntegrityCodeFromData:data withCode:mic qopState:&qopState];
+}
+
+- (gss_ctx_id_t)_gssContext
+{
+    return _ctx;
 }
 
 @end
