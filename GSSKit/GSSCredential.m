@@ -45,7 +45,15 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
 
 + (GSSCredential *)credentialWithName:(id)name
 {
-    return [[self alloc] initWithName:name mechanism:[GSSMechanism defaultMechanism] attributes:nil error:NULL];
+    GSSCredential *cred;
+    
+    cred = [[self alloc] initWithName:name mechanism:[GSSMechanism defaultMechanism] attributes:nil error:NULL];
+    
+#if !__has_feature(objc_arc)
+    [cred autorelease];
+#endif
+    
+    return cred;
 }
 
 + (GSSCredential *)credentialWithName:(id)name
@@ -55,14 +63,30 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
                                  GSSCredentialUsage: GSSCredentialUsageInitiate
                                  };
     
-    return [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:NULL];
+    GSSCredential *cred;
+    
+    cred = [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:NULL];
+    
+#if !__has_feature(objc_arc)
+    [cred autorelease];
+#endif
+
+    return cred;
 }
 
 + (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
                            attributes:(NSDictionary *)attributes
 {
-    return [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:NULL];
+    GSSCredential *cred;
+    
+    cred = [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:NULL];
+    
+#if !__has_feature(objc_arc)
+    [cred autorelease];
+#endif
+
+    return cred;
 }
 
 + (GSSCredential *)credentialWithName:(id)name
@@ -70,7 +94,15 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
                            attributes:(NSDictionary *)attributes
                                 error:(NSError * __autoreleasing *)error
 {
-    return [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:error];
+    GSSCredential *cred;
+    
+    cred = [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:error];
+    
+#if !__has_feature(objc_arc)
+    [cred autorelease];
+#endif
+
+    return cred;
 }
 
 + (NSString *)usageFlagsToString:(uint32_t)flags

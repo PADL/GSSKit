@@ -20,11 +20,23 @@
     
     if (_freeIt)
         gss_release_buffer(&minor, &_data);
+    
+#if !__has_feature(objc_arc)
+    [super dealloc];
+#endif
 }
 
 + (NSData *)dataWithGSSBufferNoCopy:(gss_buffer_t)buffer freeWhenDone:(BOOL)flag
 {
-    return [[self alloc] initWithGSSBufferNoCopy:buffer freeWhenDone:flag];
+    NSData *data;
+    
+    data = [[self alloc] initWithGSSBufferNoCopy:buffer freeWhenDone:flag];
+    
+#if !__has_feature(objc_arc)
+    [data autorelease];
+#endif
+
+    return data;
 }
 
 - (instancetype)initWithGSSBufferNoCopy:(gss_buffer_t)buffer freeWhenDone:(BOOL)flag

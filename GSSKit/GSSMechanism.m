@@ -98,12 +98,24 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 
 + (GSSMechanism *)mechanismWithOID:(gss_const_OID)oid
 {
-    return [[self alloc] initWithOID: oid];
+    GSSMechanism *mech = [[self alloc] initWithOID: oid];
+    
+#if !__has_feature(objc_arc)
+    [mech autorelease];
+#endif
+
+    return mech;
 }
 
 + (GSSMechanism *)mechanismWithDERData: (NSData *)data
 {
-    return [[self alloc] initWithDERData:data];
+    GSSMechanism *mech = [[self alloc] initWithDERData:data];
+    
+#if !__has_feature(objc_arc)
+    [mech autorelease];
+#endif
+
+    return mech;
 }
 
 typedef struct heim_oid {
@@ -152,7 +164,7 @@ der_free_oid (heim_oid *k);
 
 + (GSSMechanism *)mechanismWithClass:(NSString *)type
 {
-    GSSMechanism *mech;
+    GSSMechanism *mech = nil;
     
     if ([type isEqual:(__bridge id)kGSSAttrClassKerberos])
         mech = [self kerberosMechanism];

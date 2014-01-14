@@ -17,8 +17,13 @@
 + (NSString *)stringWithGSSBuffer:(gss_buffer_t)buffer freeWhenDone:(BOOL)flag
 {
     NSData *data = [GSSBuffer dataWithGSSBufferNoCopy:buffer freeWhenDone:flag];
+    NSString *string = [[self alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
-    return [[self alloc] initWithData:data encoding:NSUTF8StringEncoding];
+#if !__has_feature(objc_arc)
+    [string autorelease];
+#endif
+    
+    return string;
 }
 
 - (gss_buffer_desc)_gssBuffer

@@ -42,7 +42,7 @@ GSSKIT_EXPORT NSString * const GSSMechanismKey = @"kGSSMechanism";
                      :(OM_uint32)minorStatus
                      :(GSSMechanism *)mech
 {
-    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     NSString *majorDesc, *minorDesc;
 
     userInfo[GSSMajorErrorCodeKey] = [NSNumber numberWithUnsignedInt:majorStatus];

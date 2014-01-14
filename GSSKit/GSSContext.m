@@ -53,6 +53,17 @@
 - (oneway void)dealloc
 {
     gss_delete_sec_context(&_minor, &_ctx, GSS_C_NO_BUFFER);
+    
+#if !__has_feature(objc_arc)
+    [_mechanism release];
+    [_credential release];
+    [_channelBindings release];
+    [_queue release];
+    [_finalMechanism release];
+    [_delegatedCredentials release];
+
+    [super dealloc];
+#endif
 }
 
 - (NSError *)lastError
@@ -121,11 +132,16 @@
     if ((self = [super init]) == nil)
         return nil;
     
-    if (!someQueue)
+    if (someQueue == NULL) {
         someQueue = dispatch_queue_create("com.padl.gss.DefaultContextQueue", DISPATCH_QUEUE_SERIAL);
+#if !__has_feature(objc_arc)
+        [someQueue autorelease];
+#endif
+    }
     
     self.requestFlags = flags;
     self.queue = someQueue;
+    
     _isInitiator = initiator;
     _major = GSS_S_FAILURE;
     
@@ -143,10 +159,13 @@
 }
 
 - (gss_buffer_desc)_decodeToken:(NSData *)data
-                         cookie:(id *)pData
+                         cookie:(id __autoreleasing *)pData
 {
     if (self.encoding == GSSEncodingBase64) {
         data = [[NSData alloc] initWithBase64EncodedData:data options:0];
+#if !__has_feature(objc_arc)
+        [data autorelease];
+#endif
         *pData = data;
     }
 
