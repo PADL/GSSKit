@@ -50,8 +50,6 @@
 		D336E2D2182CA2DC009271CD /* GSSChannelBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2D0182CA2DC009271CD /* GSSChannelBindings.m */; };
 		D336E2D5182CA4C8009271CD /* GSSContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2D3182CA4C8009271CD /* GSSContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D336E2D6182CA4C8009271CD /* GSSContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2D4182CA4C8009271CD /* GSSContext.m */; };
-		D336E2DD182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2DB182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D336E2DE182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2DC182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m */; };
 		D336E2E1182D0A9A009271CD /* NSError+GSSErrorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2DF182D0A9A009271CD /* NSError+GSSErrorHelper.h */; };
 		D336E2E2182D0A9A009271CD /* NSError+GSSErrorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2E0182D0A9A009271CD /* NSError+GSSErrorHelper.m */; };
 		D336E2E5182D0B16009271CD /* NSString+GSSBufferHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D336E2E3182D0B16009271CD /* NSString+GSSBufferHelper.h */; };
@@ -115,8 +113,6 @@
 		D336E2D0182CA2DC009271CD /* GSSChannelBindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSChannelBindings.m; sourceTree = "<group>"; };
 		D336E2D3182CA4C8009271CD /* GSSContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSContext.h; sourceTree = "<group>"; };
 		D336E2D4182CA4C8009271CD /* GSSContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSContext.m; sourceTree = "<group>"; };
-		D336E2DB182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSURLSessionAuthenticationDelegate.h; sourceTree = "<group>"; };
-		D336E2DC182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSURLSessionAuthenticationDelegate.m; sourceTree = "<group>"; };
 		D336E2DF182D0A9A009271CD /* NSError+GSSErrorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+GSSErrorHelper.h"; sourceTree = "<group>"; };
 		D336E2E0182D0A9A009271CD /* NSError+GSSErrorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+GSSErrorHelper.m"; sourceTree = "<group>"; };
 		D336E2E3182D0B16009271CD /* NSString+GSSBufferHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+GSSBufferHelper.h"; sourceTree = "<group>"; };
@@ -199,8 +195,6 @@
 			children = (
 				D336E2D3182CA4C8009271CD /* GSSContext.h */,
 				D336E2D4182CA4C8009271CD /* GSSContext.m */,
-				D336E2DB182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h */,
-				D336E2DC182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m */,
 				D336E257182AE1C8009271CD /* GSSItem.h */,
 				D336E269182B4CF2009271CD /* GSSItem.m */,
 				D336E2AB182B52BF009271CD /* GSSItem_Private.h */,
@@ -274,7 +268,6 @@
 				D336E2E1182D0A9A009271CD /* NSError+GSSErrorHelper.h in Headers */,
 				D30C96CD182E0CCF0036FD8C /* GSSCFItem.h in Headers */,
 				D336E2D5182CA4C8009271CD /* GSSContext.h in Headers */,
-				D336E2DD182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.h in Headers */,
 				D30C96D1182F522C0036FD8C /* GSSChannelBindings+Private.h in Headers */,
 				D30C96C9182E0CC80036FD8C /* GSSCFCredential.h in Headers */,
 				D30C96DD1830F6490036FD8C /* GSSItem+AcquireCredGlue.h in Headers */,
@@ -361,7 +354,6 @@
 				D336E2E2182D0A9A009271CD /* NSError+GSSErrorHelper.m in Sources */,
 				D30C96D6182F52750036FD8C /* GSSMechanism+Private.m in Sources */,
 				D30C96C6182E0CBE0036FD8C /* GSSCFName.m in Sources */,
-				D336E2DE182CC51F009271CD /* GSSURLSessionAuthenticationDelegate.m in Sources */,
 				D336E2B8182BA733009271CD /* GSSCredential.m in Sources */,
 				D30C96D2182F522C0036FD8C /* GSSChannelBindings+Private.m in Sources */,
 				D336E26F182B4E7E009271CD /* GSSItem+AsyncOperations.m in Sources */,

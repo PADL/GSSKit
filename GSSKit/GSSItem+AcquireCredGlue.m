@@ -67,10 +67,10 @@
         const NSString *mappedKey = [self _credKeyForItemKey:key];
         
         if (mappedKey)
-            gssAttrs[mappedKey] = obj;
+            [gssAttrs setObject:obj forKey:mappedKey];
     }];
     
-    gssAttrs[GSSCredentialUsage] = GSSCredentialUsageInitiate;
+    [gssAttrs setObject:GSSCredentialUsageInitiate forKey:GSSCredentialUsage];
     
     GSSAcquireCredFunnel(name, mech, gssAttrs, &cred, &error);
     GSSItemGetValue((__bridge GSSItemRef)self, kGSSAttrCredentialExists);

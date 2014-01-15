@@ -50,6 +50,20 @@
     _targetName = ((GSSName *)someName);
 }
 
+- (dispatch_queue_t)queue
+{
+    return _queue;
+}
+
+- (void)setQueue:(dispatch_queue_t)aQueue
+{
+    if (aQueue != _queue) {
+        dispatch_release(_queue);
+        dispatch_retain(aQueue);
+        _queue = aQueue;
+    }
+}
+
 - (oneway void)dealloc
 {
     gss_delete_sec_context(&_minor, &_ctx, GSS_C_NO_BUFFER);
@@ -61,6 +75,8 @@
     [_queue release];
     [_finalMechanism release];
     [_delegatedCredentials release];
+    if (_queue)
+        dispatch_release(_queue);
 
     [super dealloc];
 #endif
@@ -129,14 +145,18 @@
                                queue:(dispatch_queue_t)someQueue
                          isInitiator:(BOOL)initiator
 {
+    static dispatch_once_t defaultQueueOnceToken;
+    __block dispatch_queue_t defaultQueue = NULL;
+
     if ((self = [super init]) == nil)
         return nil;
     
     if (someQueue == NULL) {
-        someQueue = dispatch_queue_create("com.padl.gss.DefaultContextQueue", DISPATCH_QUEUE_SERIAL);
-#if !__has_feature(objc_arc)
-        [someQueue autorelease];
-#endif
+        dispatch_once(&defaultQueueOnceToken, ^{
+            defaultQueue = dispatch_queue_create("com.padl.gss.DefaultContextQueue", DISPATCH_QUEUE_SERIAL);
+        });
+
+        someQueue = defaultQueue;
     }
     
     self.requestFlags = flags;

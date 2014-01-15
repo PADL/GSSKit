@@ -49,6 +49,7 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
     
     cred = [[self alloc] initWithName:name mechanism:[GSSMechanism defaultMechanism] attributes:nil error:NULL];
     
+    [cred release];
 #if !__has_feature(objc_arc)
     [cred autorelease];
 #endif
@@ -153,7 +154,7 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
     if (name == nil) {
         return nil;
     } else if ([name isKindOfClass:[NSString class]]) {
-        if ([attributes[GSSCredentialUsage] isEqualToString:GSSCredentialUsageAccept])
+        if ([[attributes objectForKey:GSSCredentialUsage] isEqualToString:GSSCredentialUsageAccept])
             name = [GSSName nameWithHostBasedService:name];
         else
             name = [GSSName nameWithUserName:name];
@@ -199,13 +200,13 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
 + (GSSCredential *)credentialWithURLCredential:(NSURLCredential *)urlCred
                                      mechanism:(GSSMechanism *)mech
 {
-    NSMutableDictionary *attributes = nil;
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     NSError *error = nil;
     
     if ([urlCred hasPassword])
-        attributes[GSSICPassword] = [urlCred password];
+        [attributes setObject:[urlCred password] forKey:GSSICPassword];
     else if ([urlCred identity])
-        attributes[GSSICCertificate] = (__bridge id)[urlCred identity];
+        [attributes setObject:(__bridge id)[urlCred identity] forKey:GSSICCertificate];
 
     return [self credentialWithName:[GSSName nameWithUserName:[urlCred user]]
                           mechanism:mech

@@ -147,7 +147,7 @@ GSSUsageFromAttributeDictionary(NSDictionary *attributes,
     gss_cred_usage_t credUsage;
     NSString *usage;
     
-    usage = attributes[GSSCredentialUsage];
+    usage = [attributes objectForKey:GSSCredentialUsage];
     if ([usage isEqualToString:GSSCredentialUsageInitiate])
         credUsage = GSS_C_INITIATE;
     else if ([usage isEqualToString:GSSCredentialUsageAccept])
@@ -251,9 +251,9 @@ GSSAcquireCredFunnel(GSSName *desiredName,
 #else
     NSMutableDictionary *setCredAttrs = [attributes mutableCopy];
     
-    setCredAttrs[GSSCredentialName] = desiredName;
+    [setCredAttrs setObject:desiredName forKey:GSSCredentialName];
     if (![desiredMech isSPNEGOMechanism])
-        setCredAttrs[GSSCredentialMechanismOID] = [desiredMech oidString];
+        [setCredAttrs setObject:desiredMech.oidString forKey:GSSCredentialMechanismOID];
     
     credBuffer.value = (void *)setCredAttrs;
     credBuffer.length = sizeof(setCredAttrs);
@@ -267,8 +267,8 @@ GSSAcquireCredFunnel(GSSName *desiredName,
 #endif
     if (credHandle == GSS_C_NO_CREDENTIAL) {
         /* try password or certificate fallback */
-        id password = attributes[GSSICPassword];
-        id certificate = attributes[GSSICCertificate];
+        id password = [attributes objectForKey:GSSICPassword];
+        id certificate = [attributes objectForKey:GSSICCertificate];
 
         void *credData = NULL;
         gss_const_OID credOid = GSS_C_NO_OID;
@@ -299,11 +299,11 @@ GSSAcquireCredFunnel(GSSName *desiredName,
     
     *pCredential = [GSSCFCredential credentialWithGSSCred:credHandle freeWhenDone:YES];
 
-    if (attributes[GSSICVerifyCredential]) {
+    if ([attributes objectForKey:GSSICVerifyCredential]) {
         NSError *error = nil;
         
         if (![*pCredential validate:&error]) {
-            major = [error.userInfo[GSSMajorErrorCodeKey] unsignedIntValue];
+            major = [[error.userInfo objectForKey:GSSMajorErrorCodeKey] unsignedIntValue];
 
             if (pError != NULL)
                 *pError = error;

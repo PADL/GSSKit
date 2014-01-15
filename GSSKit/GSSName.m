@@ -111,7 +111,7 @@
 {
     NSString *service;
 
-    service = GSSURLSchemeToServiceNameMap[url.scheme];
+    service = [GSSURLSchemeToServiceNameMap objectForKey:url.scheme];
     if (service == nil)
         service = url.scheme;
     

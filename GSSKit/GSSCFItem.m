@@ -180,7 +180,7 @@ CF_CLASSIMPLEMENTATION(GSSCFItem)
      * version of gss_aapl_initial_cred(), only if the caller supplies a
      * password;
      */
-    if (op == kGSSOperationAcquire && options[(id)kGSSAttrCredentialPassword]) {
+    if (op == kGSSOperationAcquire && [options objectForKey:(id)kGSSAttrCredentialPassword]) {
         dispatch_async(__GSSKitBackgroundQueue, ^{
             [self _itemAcquireOperation:options queue:queue completionHandler:fun];
         });
