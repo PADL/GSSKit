@@ -35,6 +35,8 @@
     GSSFlags _finalFlags;
     GSSCredential *_delegatedCredentials;
     BOOL _isInitiator;
+    BOOL _promptForCredentials;
+    id _window;
 }
 @end
 
@@ -157,13 +159,19 @@
 
 @synthesize mechanism = _mechanism;
 @synthesize requestFlags = _requestFlags;
+@synthesize targetName = _targetName;
 @synthesize credential = _credential;
 @synthesize channelBindings = _channelBindings;
 @synthesize encoding = _encoding;
+@synthesize queue = _queue;
+
 @synthesize finalMechanism = _finalMechanism;
 @synthesize finalFlags = _finalFlags;
 @synthesize delegatedCredentials = _delegatedCredentials;
+
 @synthesize isInitiator = _isInitiator;
+@synthesize promptForCredentials = _promptForCredentials;
+@synthesize window = _window;
 
 - (id)targetName
 {
@@ -217,6 +225,8 @@
     [_delegatedCredentials release];
     if (_queue)
         dispatch_release(_queue);
+    if (_window)
+        [_window release];
 
     [super dealloc];
 #endif
