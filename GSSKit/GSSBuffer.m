@@ -9,10 +9,6 @@
 #import "GSSKit_Private.h"
 
 @implementation GSSBuffer
-{
-    gss_buffer_desc _data;
-    BOOL _freeIt;
-}
 
 - (void)dealloc
 {

@@ -9,6 +9,11 @@
 #import "GSSKit_Private.h"
 
 @interface GSSBuffer : NSData
+{
+    gss_buffer_desc _data;
+    BOOL _freeIt;
+}
+
 + (NSData *)dataWithGSSBufferNoCopy:(gss_buffer_t)buffer freeWhenDone:(BOOL)flag;
 - (instancetype)initWithGSSBufferNoCopy:(gss_buffer_t)buffer freeWhenDone:(BOOL)flag;
 - (gss_buffer_desc)_gssBuffer;

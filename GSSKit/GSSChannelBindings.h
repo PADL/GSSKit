@@ -8,6 +8,13 @@
 
 __attribute__((visibility("default")))
 @interface GSSChannelBindings : NSObject
+{
+    uint32_t _initiatorAddressType;
+    NSData *_initiatorAddress;
+    uint32_t _acceptorAddressType;
+    NSData *_acceptorAddress;
+    NSData *_applicationData;
+}
 
 @property(nonatomic, assign) uint32_t initiatorAddressType;
 @property(nonatomic, copy) NSData *initiatorAddress;
