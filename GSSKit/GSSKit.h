@@ -17,7 +17,7 @@
 #import <GSSKit/GSSCredential.h>
 #import <GSSKit/GSSChannelBindings.h>
 #import <GSSKit/GSSContext.h>
-#import <GSSKit/GSSURLSessionAuthenticationDelegate.h>
+//#import <GSSKit/GSSURLSessionAuthenticationDelegate.h>
 
 #ifndef GSSKIT_EXPORT
 #define GSSKIT_EXPORT extern
