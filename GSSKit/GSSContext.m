@@ -40,7 +40,6 @@
 
 @implementation GSSContext
 
-@dynamic queue;
 @dynamic mechanism;
 @dynamic requestFlags;
 @dynamic targetName;
@@ -64,8 +63,9 @@
 
 - (id)initWithRequestFlags:(GSSFlags)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator
 {
+#if !__has_feature(objc_arc)
     [self release];
-
+#endif
     return ((self = [[GSSConcreteContext alloc] initWithRequestFlags:flags queue:queue isInitiator:initiator]));
 }
 
@@ -159,7 +159,6 @@
 @synthesize credential = _credential;
 @synthesize channelBindings = _channelBindings;
 @synthesize encoding = _encoding;
-@synthesize queue = _queue;
 @synthesize finalMechanism = _finalMechanism;
 @synthesize finalFlags = _finalFlags;
 @synthesize delegatedCredentials = _delegatedCredentials;
@@ -184,19 +183,18 @@
     _targetName = ((GSSName *)someName);
 }
 
-- (dispatch_queue_t)queue
-{
-    return _queue;
-}
-
 - (void)setQueue:(dispatch_queue_t)aQueue
 {
+#if __has_feature(objc_arc)
+    _queue = aQueue;
+#else
     if (aQueue != _queue) {
         if (_queue)
             dispatch_release(_queue);
         dispatch_retain(aQueue);
         _queue = aQueue;
     }
+#endif
 }
 
 - (oneway void)dealloc
