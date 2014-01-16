@@ -38,6 +38,7 @@ __attribute__((visibility("default")))
 @property(nonatomic, retain) GSSCredential *credential;
 @property(nonatomic, retain) GSSChannelBindings *channelBindings;
 @property(nonatomic, assign) GSSEncoding encoding;
+@property(nonatomic, readonly) dispatch_queue_t queue;
 
 @property(nonatomic, readonly) GSSMechanism *finalMechanism;
 @property(nonatomic, readonly) GSSFlags finalFlags;

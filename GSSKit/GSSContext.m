@@ -46,6 +46,7 @@
 @dynamic credential;
 @dynamic channelBindings;
 @dynamic encoding;
+@dynamic queue;
 
 @dynamic finalMechanism;
 @dynamic finalFlags;
@@ -181,6 +182,11 @@
                                      userInfo:nil];
 
     _targetName = ((GSSName *)someName);
+}
+
+- (dispatch_queue_t)queue
+{
+    return _queue;
 }
 
 - (void)setQueue:(dispatch_queue_t)aQueue
