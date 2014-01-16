@@ -146,7 +146,7 @@
                          isInitiator:(BOOL)initiator
 {
     static dispatch_once_t defaultQueueOnceToken;
-    __block dispatch_queue_t defaultQueue = NULL;
+    static dispatch_queue_t defaultQueue;
 
     if ((self = [super init]) == nil)
         return nil;

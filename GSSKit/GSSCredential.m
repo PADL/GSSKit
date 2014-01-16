@@ -11,6 +11,38 @@
 static const gss_OID_desc
 GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
 
+static GSSCredential *
+GSSCredentialWithName(id name,
+                      GSSMechanism *desiredMech,
+                      NSDictionary *attributes,
+                      NSError * __autoreleasing *error)
+{
+    GSSCredential *cred;
+
+    if (name == nil) {
+        return nil;
+    } else if ([name isKindOfClass:[NSString class]]) {
+        if ([[attributes objectForKey:GSSCredentialUsage] isEqualToString:GSSCredentialUsageAccept])
+            name = [GSSName nameWithHostBasedService:name];
+        else
+            name = [GSSName nameWithUserName:name];
+    } else if ([name isKindOfClass:[NSURL class]]) {
+        name = [GSSName nameWithURL:name];
+    } else if (![name isKindOfClass:[GSSName class]]) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"-[GSSCredential initWithName:...] requires a NSString, NSURL or GSSName"]
+                                     userInfo:nil];
+    }
+    
+    GSSAcquireCredFunnel(name, desiredMech, attributes, &cred, error);
+   
+#if !__has_feature(objc_arc)
+    [cred retain]; /* object was autoreleased */
+#endif
+
+    return cred;
+}
+
 @interface GSSPlaceholderCredential : GSSCredential
 @end
 
@@ -45,11 +77,8 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
 
 + (GSSCredential *)credentialWithName:(id)name
 {
-    GSSCredential *cred;
+    GSSCredential *cred = GSSCredentialWithName(name, [GSSMechanism defaultMechanism], nil, NULL);
     
-    cred = [[self alloc] initWithName:name mechanism:[GSSMechanism defaultMechanism] attributes:nil error:NULL];
-    
-    [cred release];
 #if !__has_feature(objc_arc)
     [cred autorelease];
 #endif
@@ -63,10 +92,7 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
     NSDictionary *attributes = @{
                                  GSSCredentialUsage: GSSCredentialUsageInitiate
                                  };
-    
-    GSSCredential *cred;
-    
-    cred = [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:NULL];
+    GSSCredential *cred = GSSCredentialWithName(name, [GSSMechanism defaultMechanism], attributes, NULL);
     
 #if !__has_feature(objc_arc)
     [cred autorelease];
@@ -79,9 +105,7 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
                             mechanism:(GSSMechanism *)desiredMech
                            attributes:(NSDictionary *)attributes
 {
-    GSSCredential *cred;
-    
-    cred = [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:NULL];
+    GSSCredential *cred = GSSCredentialWithName(name, desiredMech, attributes, NULL);
     
 #if !__has_feature(objc_arc)
     [cred autorelease];
@@ -95,9 +119,7 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
                            attributes:(NSDictionary *)attributes
                                 error:(NSError * __autoreleasing *)error
 {
-    GSSCredential *cred;
-    
-    cred = [[self alloc] initWithName:name mechanism:desiredMech attributes:attributes error:error];
+    GSSCredential *cred = GSSCredentialWithName(name, [GSSMechanism defaultMechanism], attributes, error);
     
 #if !__has_feature(objc_arc)
     [cred autorelease];
@@ -149,26 +171,7 @@ GSSCredValidateOidDesc = { 6, "\x2a\x85\x70\x2b\x0d\x25" }; // XXX
         attributes:(NSDictionary *)attributes
              error:(NSError * __autoreleasing *)error
 {
-    self = nil;
-    
-    if (name == nil) {
-        return nil;
-    } else if ([name isKindOfClass:[NSString class]]) {
-        if ([[attributes objectForKey:GSSCredentialUsage] isEqualToString:GSSCredentialUsageAccept])
-            name = [GSSName nameWithHostBasedService:name];
-        else
-            name = [GSSName nameWithUserName:name];
-    } else if ([name isKindOfClass:[NSURL class]]) {
-        name = [GSSName nameWithURL:name];
-    } else if (![name isKindOfClass:[GSSName class]]) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:[NSString stringWithFormat:@"-[GSSCredential initWithName:...] requires a NSString, NSURL or GSSName"]
-                                     userInfo:nil];
-    }
-    
-    GSSAcquireCredFunnel(name, desiredMech, attributes, &self, error);
-    
-    return self;
+    return GSSCredentialWithName(name, desiredMech, attributes, error);
 }
 
 - (id)init
