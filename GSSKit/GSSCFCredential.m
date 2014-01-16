@@ -122,7 +122,7 @@ CF_CLASSIMPLEMENTATION(GSSCFCredential)
 
 @end
 
-OM_uint32
+BOOL
 GSSChangePasswordWrapper(GSSName *desiredName,
                          GSSMechanism *desiredMech,
                          NSDictionary *attributes,
@@ -137,7 +137,7 @@ GSSChangePasswordWrapper(GSSName *desiredName,
     if (pError != NULL)
         *pError = [NSMakeCollectable(*pError) autorelease];
 
-    return major;
+    return !GSS_ERROR(major);
 }
 
 static OM_uint32
@@ -210,21 +210,20 @@ __GSSMechanismCredentialPatch(gss_cred_id_t cred)
  * this is a variant of gss_aapl_initial_cred() that is more generalised
  */
 
-GSSKIT_EXPORT OM_uint32
+GSSKIT_EXPORT GSSCredential *
 GSSAcquireCredFunnel(GSSName *desiredName,
                      GSSMechanism *desiredMech,
                      NSDictionary *attributes,
-                     GSSCredential * __autoreleasing *pCredential,
                      NSError * __autoreleasing *pError)
 {
     OM_uint32 major = GSS_S_FAILURE, minor = 0;
     gss_cred_usage_t credUsage = GSS_C_INITIATE;
     gss_cred_id_t credHandle = GSS_C_NO_CREDENTIAL;
     gss_buffer_desc credBuffer = GSS_C_EMPTY_BUFFER;
+    GSSCredential *cred = NULL;
     
     if (pError != NULL)
         *pError = nil;
-    *pCredential = nil;
     
     if (desiredMech == nil) {
         major = GSS_S_BAD_MECH;
@@ -297,12 +296,12 @@ GSSAcquireCredFunnel(GSSName *desiredName,
 
     __GSSMechanismCredentialPatch(credHandle);
     
-    *pCredential = [GSSCFCredential credentialWithGSSCred:credHandle freeWhenDone:YES];
+    cred = [GSSCFCredential credentialWithGSSCred:credHandle freeWhenDone:NO];
 
     if ([attributes objectForKey:GSSICVerifyCredential]) {
         NSError *error = nil;
         
-        if (![*pCredential validate:&error]) {
+        if (![cred validate:&error]) {
             major = [[error.userInfo objectForKey:GSSMajorErrorCodeKey] unsignedIntValue];
 
             if (pError != NULL)
@@ -312,15 +311,14 @@ GSSAcquireCredFunnel(GSSName *desiredName,
         }
     }
 
-    credHandle = GSS_C_NO_CREDENTIAL;
-
 cleanup:
     if (GSS_ERROR(major)) {
         if (pError != NULL && *pError == nil)
             *pError = [NSError GSSError:major :minor :desiredMech];
-        if (credHandle != GSS_C_NO_CREDENTIAL)
-            gss_destroy_cred(&minor, &credHandle);
     }
-    
-    return major;
+   
+    if (credHandle) 
+        CFRelease(credHandle);
+
+    return cred;
 }

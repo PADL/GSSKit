@@ -72,11 +72,14 @@
     
     [gssAttrs setObject:GSSCredentialUsageInitiate forKey:GSSCredentialUsage];
     
-    GSSAcquireCredFunnel(name, mech, gssAttrs, &cred, &error);
+    cred = GSSAcquireCredFunnel(name, mech, gssAttrs, &error);
     GSSItemGetValue((__bridge GSSItemRef)self, kGSSAttrCredentialExists);
     
     dispatch_async(queue, ^{
         fun(cred, error);
+#if !__has_feature(objc_arc)
+        [cred release];
+#endif
     });
 }
 

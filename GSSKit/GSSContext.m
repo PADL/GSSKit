@@ -8,7 +8,13 @@
 
 #import "GSSKit_Private.h"
 
+@interface GSSContext ()
+@property(nonatomic, retain) GSSMechanism *finalMechanism;
+@property(nonatomic, retain) GSSCredential *delegatedCredentials;
+@end
+
 @interface GSSContext (CredUI)
+/* make this read-write */
 - (BOOL)_promptForCredentials:(NSError **)error;
 @end
 
@@ -58,7 +64,8 @@
 - (void)setQueue:(dispatch_queue_t)aQueue
 {
     if (aQueue != _queue) {
-        dispatch_release(_queue);
+        if (_queue)
+            dispatch_release(_queue);
         dispatch_retain(aQueue);
         _queue = aQueue;
     }
@@ -224,7 +231,7 @@
                                   &timeRec);
 
     if (actualMechType != GSS_C_NO_OID)
-        _finalMechanism = [GSSMechanism mechanismWithOID:actualMechType];
+        self.finalMechanism = [GSSMechanism mechanismWithOID:actualMechType];
     if (outputToken.value != NULL)
         *retData = [self _encodeToken:&outputToken];
     if (timeRec)
@@ -269,13 +276,13 @@
                                     &delegCred);
 
     if (actualMechType != GSS_C_NO_OID)
-        _finalMechanism = [GSSMechanism mechanismWithOID:actualMechType];
+        self.finalMechanism = [GSSMechanism mechanismWithOID:actualMechType];
     if (outputToken.value != NULL)
         *retData = [self _encodeToken:&outputToken];
     if (timeRec)
         _expiryTime = time(NULL) + timeRec;
     if (delegCred)
-        _delegatedCredentials = [GSSCredential credentialWithGSSCred:delegCred freeWhenDone:YES];
+        self.delegatedCredentials = [GSSCredential credentialWithGSSCred:delegCred freeWhenDone:YES];
     
     gss_release_name(&tmp, &sourceName);
 }

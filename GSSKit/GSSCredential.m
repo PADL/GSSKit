@@ -34,12 +34,8 @@ GSSCredentialWithName(id name,
                                      userInfo:nil];
     }
     
-    GSSAcquireCredFunnel(name, desiredMech, attributes, &cred, error);
-   
-#if !__has_feature(objc_arc)
-    [cred retain]; /* object was autoreleased */
-#endif
-
+    cred = GSSAcquireCredFunnel(name, desiredMech, attributes, error);
+  
     return cred;
 }
 

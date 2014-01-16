@@ -11,15 +11,14 @@
 @interface GSSCFCredential : GSSCredential
 @end
 
-OM_uint32
+BOOL
 GSSChangePasswordWrapper(GSSName *desiredName,
                          GSSMechanism *desiredMech,
                          NSDictionary *attributes,
                          NSError * __autoreleasing *pError);
 
-OM_uint32
+GSSCredential *
 GSSAcquireCredFunnel(GSSName *desiredName,
                      GSSMechanism *desiredMech,
                      NSDictionary *attributes,
-                     GSSCredential * __autoreleasing *pCredential,
                      NSError *__autoreleasing *pError);
