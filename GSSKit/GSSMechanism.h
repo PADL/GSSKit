@@ -8,6 +8,7 @@
 
 __attribute__((visibility("default")))
 @interface GSSMechanism : NSObject
+
 + (GSSMechanism *)defaultMechanism;
 + (GSSMechanism *)SPNEGOMechanism;
 + (GSSMechanism *)kerberosMechanism;
@@ -33,6 +34,5 @@ __attribute__((visibility("default")))
 - (BOOL)isKerberosMechanism;
 
 - (BOOL)isEqual:(id)anObject;
-
 
 @end

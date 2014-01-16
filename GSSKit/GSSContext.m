@@ -18,13 +18,118 @@
 - (BOOL)_promptForCredentials:(NSError **)error;
 @end
 
-@implementation GSSContext
+@interface GSSConcreteContext : GSSContext
 {
     OM_uint32 _major, _minor;
     id _targetName;
     gss_ctx_id_t _ctx;
     time_t _expiryTime;
+
+    GSSMechanism *_mechanism;
+    GSSFlags _requestFlags;
+    GSSCredential *_credential;
+    GSSChannelBindings *_channelBindings;
+    GSSEncoding _encoding;
+    dispatch_queue_t _queue;
+    GSSMechanism *_finalMechanism;
+    GSSFlags _finalFlags;
+    GSSCredential *_delegatedCredentials;
+    BOOL _isInitiator;
 }
+@end
+
+@implementation GSSContext
+- (id)initWithRequestFlags:(GSSFlags)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator
+{
+    [self release];
+
+    return ((self = [[GSSConcreteContext alloc] initWithRequestFlags:flags queue:queue isInitiator:initiator]));
+}
+
+- (void)stepWithData:(NSData *)reqData
+   completionHandler:(void (^)(NSData *, NSError *))handler
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+}
+
+- (NSData *)wrapData:(NSData *)data
+             encrypt:(GSSFlags)confState
+{
+    return [self wrapData:data encrypt:confState qopState:GSS_C_QOP_DEFAULT];
+}
+
+- (NSData *)wrapData:(NSData *)data encrypt:(GSSFlags)confState qopState:(GSSQopState)qopState
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return nil;
+}
+
+- (NSData *)unwrapData:(NSData *)data
+            didEncrypt:(GSSFlags *)confState
+{
+    GSSQopState qopState;
+    
+    return [self unwrapData:data didEncrypt:confState qopState:&qopState];
+}
+
+
+- (NSData *)unwrapData:(NSData *)data didEncrypt:(GSSFlags *)confState qopState:(GSSQopState *)qopState
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return nil;
+}
+
+- (NSData *)messageIntegrityCodeFromData:(NSData *)data
+{
+    return [self messageIntegrityCodeFromData:data qopState:GSS_C_QOP_DEFAULT];
+}
+
+- (NSData *)messageIntegrityCodeFromData:(NSData *)data qopState:(GSSQopState)qopState
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return nil;
+}
+
+- (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data withCode:(NSData *)mic
+{
+    GSSQopState qopState;
+    
+    return [self verifyMessageIntegrityCodeFromData:data withCode:mic qopState:&qopState];
+}
+
+- (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data withCode:(NSData *)mic qopState:(GSSQopState *)qopState
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return NO;
+}
+
+- (BOOL)isContextEstablished
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return NO;
+}
+
+- (BOOL)isContextExpired
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return NO;
+}
+
+- (BOOL)isContinueNeeded
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return NO;
+}
+
+- (BOOL)didError
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return NO;
+}
+
+@end
+
+@implementation GSSConcreteContext
 
 @synthesize mechanism = _mechanism;
 @synthesize requestFlags = _requestFlags;
@@ -341,12 +446,6 @@
     return [self _encodeToken:&outputMessageBuffer];
 }
 
-- (NSData *)wrapData:(NSData *)data
-             encrypt:(GSSFlags)confState
-{
-    return [self wrapData:data encrypt:confState qopState:GSS_C_QOP_DEFAULT];
-}
-
 - (NSData *)unwrapData:(NSData *)data
             didEncrypt:(GSSFlags *)didEncrypt
               qopState:(GSSQopState *)qopState
@@ -370,14 +469,6 @@
     return [GSSBuffer dataWithGSSBufferNoCopy:&outputMessageBuffer freeWhenDone:YES];
 }
 
-- (NSData *)unwrapData:(NSData *)data
-            didEncrypt:(GSSFlags *)confState
-{
-    GSSQopState qopState;
-    
-    return [self unwrapData:data didEncrypt:confState qopState:&qopState];
-}
-
 - (NSData *)messageIntegrityCodeFromData:(NSData *)data
                                 qopState:(GSSQopState)qopState
 {
@@ -394,11 +485,6 @@
         return nil;
     
     return [self _encodeToken:&messageToken];
-}
-
-- (NSData *)messageIntegrityCodeFromData:(NSData *)data
-{
-    return [self messageIntegrityCodeFromData:data qopState:GSS_C_QOP_DEFAULT];
 }
 
 - (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data
@@ -418,14 +504,6 @@
         return NO;
     
     return YES;
-}
-
-- (BOOL)verifyMessageIntegrityCodeFromData:(NSData *)data
-                                  withCode:(NSData *)mic
-{
-    GSSQopState qopState;
-    
-    return [self verifyMessageIntegrityCodeFromData:data withCode:mic qopState:&qopState];
 }
 
 - (gss_ctx_id_t)_gssContext

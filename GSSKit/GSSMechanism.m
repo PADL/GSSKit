@@ -20,12 +20,31 @@ static const gss_OID_desc GSSEapAes128MechDesc =
 static const gss_OID_desc GSSEapAes256MechDesc =
 { 9, "\x2B\x06\x01\x05\x05\x0f\x01\x01\x12" };
 
-@implementation GSSMechanism
+typedef struct heim_oid {
+    size_t length;
+    unsigned *components;
+} heim_oid;
+
+
+int
+der_parse_heim_oid (const char *str, const char *sep, heim_oid *data);
+
+int
+der_put_oid (unsigned char *p, size_t len,
+             const heim_oid *data, size_t *size);
+
+void
+der_free_oid (heim_oid *k);
+
+@interface GSSConcreteMechanism : GSSMechanism
 {
     gss_const_OID _oid;
     gss_OID_desc _oidBuffer;
     NSData *_data;
 }
+@end
+
+@implementation GSSMechanism
 
 + (GSSMechanism *)defaultMechanism
 {
@@ -81,24 +100,19 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 
 - (GSSMechanism *)initWithOID:(gss_const_OID)oid
 {
-    if ((self = [super init]) != nil)
-        _oid = oid;
-    
-    return self;
+    NSRequestConcreteImplementation(self, _cmd, [GSSMechanism class]);
+    return nil;
 }
 
 - (GSSMechanism *)initWithDERData:(NSData *)data
 {
-    _data = [data copy];
-    _oidBuffer.elements = (void *)[data bytes];
-    _oidBuffer.length = (OM_uint32)[data length];
-
-    return [self initWithOID:&_oidBuffer];
+    NSRequestConcreteImplementation(self, _cmd, [GSSMechanism class]);
+    return nil;
 }
 
 + (GSSMechanism *)mechanismWithOID:(gss_const_OID)oid
 {
-    GSSMechanism *mech = [[self alloc] initWithOID: oid];
+    GSSMechanism *mech = [[GSSConcreteMechanism alloc] initWithOID: oid];
     
 #if !__has_feature(objc_arc)
     [mech autorelease];
@@ -109,7 +123,7 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 
 + (GSSMechanism *)mechanismWithDERData: (NSData *)data
 {
-    GSSMechanism *mech = [[self alloc] initWithDERData:data];
+    GSSMechanism *mech = [[GSSConcreteMechanism alloc] initWithDERData:data];
     
 #if !__has_feature(objc_arc)
     [mech autorelease];
@@ -117,22 +131,6 @@ static const gss_OID_desc GSSEapAes256MechDesc =
 
     return mech;
 }
-
-typedef struct heim_oid {
-    size_t length;
-    unsigned *components;
-} heim_oid;
-
-
-int
-der_parse_heim_oid (const char *str, const char *sep, heim_oid *data);
-
-int
-der_put_oid (unsigned char *p, size_t len,
-             const heim_oid *data, size_t *size);
-
-void
-der_free_oid (heim_oid *k);
 
 + (GSSMechanism *)mechanismWithOIDString:(NSString *)oidString
 {
@@ -226,7 +224,7 @@ der_free_oid (heim_oid *k);
     gss_buffer_desc oidStringBuf = GSS_C_EMPTY_BUFFER;
     NSString *oidString;
     
-    major = gss_oid_to_str(&minor, (gss_OID)_oid, &oidStringBuf);
+    major = gss_oid_to_str(&minor, (gss_OID)self.oid, &oidStringBuf);
     if (GSS_ERROR(major))
         return nil;
     
@@ -236,7 +234,7 @@ der_free_oid (heim_oid *k);
 
 - (NSString *)name
 {
-    const char *name = gss_oid_to_name(_oid);
+    const char *name = gss_oid_to_name(self.oid);
     
     if (name == NULL)
         return [self oidString];
@@ -250,7 +248,7 @@ der_free_oid (heim_oid *k);
     OM_uint32 major, minor;
     gss_buffer_desc buffer = GSS_C_EMPTY_BUFFER;
     
-    major = gss_inquire_saslname_for_mech(&minor, _oid,
+    major = gss_inquire_saslname_for_mech(&minor, self.oid,
                                           GSS_C_NO_BUFFER, &buffer, GSS_C_NO_BUFFER);
     if (GSS_ERROR(major))
         return nil;
@@ -272,7 +270,7 @@ der_free_oid (heim_oid *k);
     OM_uint32 major, minor;
     gss_buffer_desc buffer = GSS_C_EMPTY_BUFFER;
     
-    major = gss_inquire_saslname_for_mech(&minor, _oid,
+    major = gss_inquire_saslname_for_mech(&minor, self.oid,
                                           GSS_C_NO_BUFFER, GSS_C_NO_BUFFER, &buffer);
     if (GSS_ERROR(major))
         return nil;
@@ -313,12 +311,39 @@ der_free_oid (heim_oid *k);
 
 - (gss_const_OID)oid
 {
-    return _oid;
+    NSRequestConcreteImplementation(self, _cmd, [GSSMechanism class]);
+    return GSS_C_NO_OID;
 }
 
 - (BOOL)isEqualToOID:(gss_const_OID)someOid
 {
-    return gss_oid_equal(_oid, someOid);
+    return gss_oid_equal(self.oid, someOid);
+}
+
+@end
+
+@implementation GSSConcreteMechanism
+
+- (GSSMechanism *)initWithOID:(gss_const_OID)oid
+{
+    if ((self = [super init]) != nil)
+        _oid = oid;
+    
+    return self;
+}
+
+- (GSSMechanism *)initWithDERData:(NSData *)data
+{
+    _data = [data copy];
+    _oidBuffer.elements = (void *)[data bytes];
+    _oidBuffer.length = (OM_uint32)[data length];
+
+    return [self initWithOID:&_oidBuffer];
+}
+
+- (gss_const_OID)oid
+{
+    return _oid;
 }
 
 @end
