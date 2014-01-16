@@ -39,6 +39,29 @@
 @end
 
 @implementation GSSContext
+
+@dynamic queue;
+@dynamic mechanism;
+@dynamic requestFlags;
+@dynamic targetName;
+@dynamic credential;
+@dynamic channelBindings;
+@dynamic encoding;
+
+@dynamic finalMechanism;
+@dynamic finalFlags;
+@dynamic delegatedCredentials;
+@dynamic lastError;
+
+@dynamic initiatorName;
+@dynamic acceptorName;
+
+@dynamic isInitiator;
+@dynamic promptForCredentials; // requires GSSKitUI
+@dynamic window; // requires GSSKitUI
+
+@dynamic _gssContext;
+
 - (id)initWithRequestFlags:(GSSFlags)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator
 {
     [self release];
@@ -184,7 +207,8 @@
     [_mechanism release];
     [_credential release];
     [_channelBindings release];
-    [_queue release];
+    if (_queue)
+        dispatch_release(_queue);
     [_finalMechanism release];
     [_delegatedCredentials release];
     if (_queue)
