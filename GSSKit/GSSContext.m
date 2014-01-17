@@ -189,7 +189,14 @@
                                        reason:[NSString stringWithFormat:@"-[GSSContext setTargetName:...] requires a NSString, NSURL or GSSName"]
                                      userInfo:nil];
 
+#if __has_feature(objc_arc)
     _targetName = ((GSSName *)someName);
+#else
+    if (someName != _targetName) {
+        [_targetName release];
+        _targetName = [((GSSName *)someName) retain];
+    }
+#endif
 }
 
 - (dispatch_queue_t)queue
