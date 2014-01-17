@@ -290,7 +290,7 @@ GSSCredentialWithName(id name,
     OM_uint32 minor;
     
     gss_iter_creds(&minor, flags, [mech oid],
-                   ^(gss_iter_OID mechOid, gss_cred_id_t mechCred){
+                   ^(gss_iter_OID mechOid, gss_cred_id_t mechCred) {
                        GSSMechanism *m = [GSSMechanism mechanismWithOID:mechOid];
                        GSSCredential *c = [GSSCredential credentialWithGSSCred:mechCred freeWhenDone:NO];
                        fun(m, c);

@@ -220,7 +220,6 @@ GSSAcquireCredFunnel(GSSName *desiredName,
     gss_cred_usage_t credUsage = GSS_C_INITIATE;
     gss_cred_id_t credHandle = GSS_C_NO_CREDENTIAL;
     gss_buffer_desc credBuffer = GSS_C_EMPTY_BUFFER;
-    GSSCredential *cred = NULL;
     
     if (pError != NULL)
         *pError = nil;
@@ -296,12 +295,10 @@ GSSAcquireCredFunnel(GSSName *desiredName,
 
     __GSSMechanismCredentialPatch(credHandle);
     
-    cred = [GSSCFCredential credentialWithGSSCred:credHandle freeWhenDone:NO];
-
     if ([attributes objectForKey:GSSICVerifyCredential]) {
         NSError *error = nil;
         
-        if (![cred validate:&error]) {
+        if (![(GSSCredential *)credHandle validate:&error]) {
             major = [[error.userInfo objectForKey:GSSMajorErrorCodeKey] unsignedIntValue];
 
             if (pError != NULL)
@@ -311,14 +308,18 @@ GSSAcquireCredFunnel(GSSName *desiredName,
         }
     }
 
+    NSCAssert([(id)credHandle class] == [GSSCFCredential class], @"GSSCFCredential class not mapped");
+
 cleanup:
     if (GSS_ERROR(major)) {
         if (pError != NULL && *pError == nil)
             *pError = [NSError GSSError:major :minor :desiredMech];
+
+        if (credHandle) {
+            CFRelease(credHandle);
+            credHandle = GSS_C_NO_CREDENTIAL;
+        }
     }
    
-    if (credHandle) 
-        CFRelease(credHandle);
-
-    return cred;
+    return (GSSCredential *)credHandle;
 }
