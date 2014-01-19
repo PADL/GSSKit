@@ -9,6 +9,7 @@
 #import "GSSKit_Private.h"
 
 @interface GSSContext ()
+@property(nonatomic, readonly) gss_ctx_id_t _gssContext;
 @property(nonatomic, retain) GSSMechanism *finalMechanism;
 @property(nonatomic, retain) GSSCredential *delegatedCredentials;
 @end

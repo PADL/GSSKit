@@ -52,8 +52,6 @@ __attribute__((visibility("default")))
 @property(nonatomic, assign) BOOL promptForCredentials; // requires GSSKitUI
 @property(nonatomic, retain) id window; // requires GSSKitUI
 
-@property(nonatomic, readonly) gss_ctx_id_t _gssContext;
-
 - (id)initWithRequestFlags:(GSSFlags)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator;
 
 - (void)stepWithData:(NSData *)reqData
