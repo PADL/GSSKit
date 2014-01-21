@@ -320,6 +320,38 @@ der_free_oid (heim_oid *k);
     return gss_oid_equal(self.oid, someOid);
 }
 
+- (NSData *)DERData
+{
+    gss_const_OID oid = self.oid;
+    
+    if (oid == GSS_C_NO_OID)
+        return nil;
+    
+    return [NSData dataWithBytes:oid->elements length:oid->length];
+}
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.DERData forKey:@"oid"];
+}
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    NSData *oid;
+    GSSMechanism *mech = nil;
+
+    oid = [coder decodeObjectOfClass:[NSData class] forKey:@"oid"];
+    if (oid)
+        mech = [[GSSMechanism alloc] initWithDERData:oid];
+
+    return mech;
+}
+
 @end
 
 @implementation GSSConcreteMechanism
