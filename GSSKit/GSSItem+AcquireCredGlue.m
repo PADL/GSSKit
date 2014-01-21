@@ -29,7 +29,7 @@
     else if ([type isEqual:(__bridge id)kGSSAttrNameTypeGSSHostBasedService])
         return [GSSName nameWithHostBasedService:name];
     else if ([type isEqual:(__bridge id)kGSSAttrNameTypeGSSExportedName])
-        return [GSSName nameWithExportedName:name];
+        return [GSSName nameWithExportedData:name];
     
     return nil;
 }

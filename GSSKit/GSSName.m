@@ -100,7 +100,7 @@
                      nameType:GSS_C_NT_USER_NAME error:&error];
 }
 
-+ (GSSName *)nameWithExportedName:(NSData *)name
++ (GSSName *)nameWithExportedData:(NSData *)name
 {
     NSError *error;
 
@@ -196,7 +196,7 @@
 
     exportName = [coder decodeObjectOfClass:[NSData class] forKey:@"export-name"];
     if (exportName) {
-        name = [GSSName nameWithExportedName:exportName];
+        name = [GSSName nameWithExportedData:exportName];
     }
 
 #if !__has_feature(objc_arc)
