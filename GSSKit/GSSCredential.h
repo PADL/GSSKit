@@ -52,13 +52,12 @@ __attribute__((visibility("default")))
 - (NSData *)export;
 - (NSData *)labelForKey:(NSString *)key;
 - (void)setLabel:(NSData *)label forKey:(NSString *)key;
+- (NSUUID *)UUID;
 
 - (BOOL)validate;
 - (BOOL)validate:(NSError * __autoreleasing *)error;
 
 - (void)iterateWithFlags:(uint32_t)flags ofMechanism:(GSSMechanism *)mech
                 callback:(void (^)(GSSMechanism *, GSSCredential *))fun;
-
-- (NSUUID *)UUID;
 
 @end
