@@ -124,6 +124,28 @@ GSSCredentialWithName(id name,
     return cred;
 }
 
++ (GSSCredential *)credentialWithUUID:(NSUUID *)uuid
+{
+    GSSCredential *cred;
+
+    if (uuid == nil)
+        return nil;
+
+    CFUUIDRef cfUuid = CFUUIDCreateFromString(kCFAllocatorDefault, (__bridge CFStringRef)[uuid UUIDString]);
+    if (cfUuid == NULL)
+        return nil;
+
+    cred = (__bridge GSSCredential *)GSSCreateCredentialFromUUID(cfUuid);
+
+    CFRelease(cfUuid);
+
+#if !__has_feature(objc_arc)
+    [cred autorelease];
+#endif
+
+    return cred;
+}
+
 + (NSString *)usageFlagsToString:(uint32_t)flags
 {
     NSString *credUsage = nil;
@@ -331,6 +353,69 @@ GSSCredentialWithName(id name,
     OM_uint32 minor;
     
     gss_cred_unhold(&minor, [self _gssCred]);
+}
+
+- (NSUUID *)UUID
+{
+    CFUUIDRef uuid = GSSCredentialCopyUUID([self _gssCred]);
+    NSUUID *nsUuid;
+
+    if (uuid == NULL)
+        return NULL;
+
+    CFStringRef uuidString = CFUUIDCreateString(kCFAllocatorDefault, uuid);
+    if (uuidString == NULL) {
+        CFRelease(uuid);
+        return NULL;
+    }
+
+    nsUuid = [[NSUUID alloc] initWithUUIDString:(__bridge NSString *)uuidString];
+#if !__has_feature(objc_arc)
+    [nsUuid autorelease];
+#endif
+
+    CFRelease(uuidString);
+    CFRelease(uuid);
+
+    return nsUuid;
+}
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    NSData *exportCred = [self export];
+    NSUUID *uuid = [self UUID];
+
+    if (exportCred)
+        [coder encodeObject:exportCred forKey:@"export-cred"];
+    if (uuid)
+        [coder encodeObject:uuid forKey:@"uuid"];
+}
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    NSData *exportCred;
+    NSUUID *uuid;
+    GSSCredential *cred = nil;
+
+    exportCred = [coder decodeObjectOfClass:[NSData class] forKey:@"export-cred"];
+    if (exportCred) {
+        cred = [GSSCredential credentialWithExportedData:exportCred];
+    } else {
+        uuid = [coder decodeObjectOfClass:[NSUUID class] forKey:@"uuid"];
+        if (uuid)
+            cred = [GSSCredential credentialWithUUID:uuid];
+    }
+
+#if !__has_feature(objc_arc)
+    [cred retain];
+#endif
+
+    return cred;
 }
 
 @end

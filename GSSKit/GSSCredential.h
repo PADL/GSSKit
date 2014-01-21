@@ -7,7 +7,7 @@
 //
 
 __attribute__((visibility("default")))
-@interface GSSCredential : NSObject
+@interface GSSCredential : NSObject <NSSecureCoding>
 
 // primitive methods
 
@@ -38,6 +38,8 @@ __attribute__((visibility("default")))
 + (GSSCredential *)credentialWithURLCredential:(NSURLCredential *)urlCred
                                      mechanism:(GSSMechanism *)mech;
 
++ (GSSCredential *)credentialWithUUID:(NSUUID *)uuid;
+
 - (id)initWithName:(id)name
          mechanism:(GSSMechanism *)desiredMech
         attributes:(NSDictionary *)attributes
@@ -56,5 +58,7 @@ __attribute__((visibility("default")))
 
 - (void)iterateWithFlags:(uint32_t)flags ofMechanism:(GSSMechanism *)mech
                 callback:(void (^)(GSSMechanism *, GSSCredential *))fun;
+
+- (NSUUID *)UUID;
 
 @end
