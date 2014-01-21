@@ -176,4 +176,34 @@
     return [data hash];
 }
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    NSData *exportName = [self exportName];
+
+    if (exportName)
+        [coder encodeObject:exportName forKey:@"export-name"];
+}
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    NSData *exportName;
+    GSSName *name = nil;
+
+    exportName = [coder decodeObjectOfClass:[NSData class] forKey:@"export-name"];
+    if (exportName) {
+        name = [GSSName nameWithExportedName:exportName];
+    }
+
+#if !__has_feature(objc_arc)
+    [name retain];
+#endif
+
+    return name;
+}
+
 @end
