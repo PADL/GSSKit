@@ -387,13 +387,13 @@ GSSCredentialWithName(id name,
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    NSData *exportCred = [self export];
-    NSUUID *uuid = [self UUID];
+    NSUUID *uuid;
+    NSData *exportCred;
 
-    if (exportCred)
-        [coder encodeObject:exportCred forKey:@"export-cred"];
-    if (uuid)
+    if ((uuid = [self UUID]))
         [coder encodeObject:uuid forKey:@"uuid"];
+    else if ((exportCred = [self export]))
+        [coder encodeObject:exportCred forKey:@"export-cred"];
 }
 
 - (id)initWithCoder:(NSCoder *)coder
