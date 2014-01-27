@@ -266,19 +266,8 @@ der_free_oid (heim_oid *k);
 
 - (NSString *)description
 {
-#if 0
-    OM_uint32 major, minor;
-    gss_buffer_desc buffer = GSS_C_EMPTY_BUFFER;
-    
-    major = gss_inquire_saslname_for_mech(&minor, self.oid,
-                                          GSS_C_NO_BUFFER, GSS_C_NO_BUFFER, &buffer);
-    if (GSS_ERROR(major))
-        return nil;
-    
-    return [NSString stringWithGSSBuffer:&buffer];
-#else
-    return [self name];
-#endif
+    return [NSString stringWithFormat:@"<GSSMechanism %p>{name = %@, oid = %@}",
+                                      self, self.name, self.oidString];
 }
 
 - (BOOL)isSPNEGOMechanism
