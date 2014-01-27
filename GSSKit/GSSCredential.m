@@ -73,13 +73,7 @@ GSSCredentialWithName(id name,
 
 + (GSSCredential *)credentialWithName:(id)name
 {
-    GSSCredential *cred = GSSCredentialWithName(name, [GSSMechanism defaultMechanism], nil, NULL);
-    
-#if !__has_feature(objc_arc)
-    [cred autorelease];
-#endif
-    
-    return cred;
+    return [self credentialWithName:name mechanism:[GSSMechanism defaultMechanism]];
 }
 
 + (GSSCredential *)credentialWithName:(id)name
@@ -88,26 +82,15 @@ GSSCredentialWithName(id name,
     NSDictionary *attributes = @{
                                  GSSCredentialUsage: GSSCredentialUsageInitiate
                                  };
-    GSSCredential *cred = GSSCredentialWithName(name, [GSSMechanism defaultMechanism], attributes, NULL);
-    
-#if !__has_feature(objc_arc)
-    [cred autorelease];
-#endif
 
-    return cred;
+    return [self credentialWithName:name mechanism:desiredMech attributes:attributes];
 }
 
 + (GSSCredential *)credentialWithName:(id)name
                             mechanism:(GSSMechanism *)desiredMech
                            attributes:(NSDictionary *)attributes
 {
-    GSSCredential *cred = GSSCredentialWithName(name, desiredMech, attributes, NULL);
-    
-#if !__has_feature(objc_arc)
-    [cred autorelease];
-#endif
-
-    return cred;
+    return [self credentialWithName:name mechanism:desiredMech attributes:attributes error:NULL];
 }
 
 + (GSSCredential *)credentialWithName:(id)name
@@ -115,7 +98,7 @@ GSSCredentialWithName(id name,
                            attributes:(NSDictionary *)attributes
                                 error:(NSError * __autoreleasing *)error
 {
-    GSSCredential *cred = GSSCredentialWithName(name, [GSSMechanism defaultMechanism], attributes, error);
+    GSSCredential *cred = GSSCredentialWithName(name, desiredMech, attributes, error);
     
 #if !__has_feature(objc_arc)
     [cred autorelease];
