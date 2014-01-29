@@ -206,4 +206,16 @@
     return name;
 }
 
+- (GSSName *)mechanismName:(GSSMechanism *)mechanism
+{
+    OM_uint32 major, minor;
+    gss_name_t mechName;
+
+    major = gss_canonicalize_name(&minor, [self _gssName], (gss_OID)[mechanism oid], &mechName);
+    if (GSS_ERROR(major))
+        return nil;
+
+    return [GSSCFName nameWithGSSName:mechName freeWhenDone:YES];    
+}
+
 @end

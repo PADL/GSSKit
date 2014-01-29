@@ -17,4 +17,6 @@ __attribute__((visibility("default")))
 - (NSData *)exportName;
 - (NSString *)displayString;
 - (BOOL)isEqualToName:(GSSName *)name;
+- (GSSName *)mechanismName:(GSSMechanism *)mechanism;
+
 @end
