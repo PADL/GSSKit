@@ -653,21 +653,21 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeObject:[NSNumber numberWithUnsignedInt:_major] forKey:@"major"];
-    [coder encodeObject:[NSNumber numberWithUnsignedInt:_minor] forKey:@"minor"];
-    [coder encodeObject:_targetName forKey:@"target-name"];
-    [coder encodeObject:self.exportContext forKey:@"export-context"];
-    [coder encodeObject:[NSDate dateWithTimeIntervalSince1970:_expiryTime] forKey:@"expiry-time"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:_major]             forKey:@"major"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:_minor]             forKey:@"minor"];
+    [coder encodeObject:_targetName                                         forKey:@"target-name"];
+    [coder encodeObject:self.exportContext                                  forKey:@"export-context"];
+    [coder encodeObject:[NSDate dateWithTimeIntervalSince1970:_expiryTime]  forKey:@"expiry-time"];
     
-    [coder encodeObject:_mechanism forKey:@"mechanism"];
-    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.requestFlags] forKey:@"req-flags"];
-    [coder encodeObject:_credential forKey:@"credential"];
-    [coder encodeObject:_channelBindings forKey:@"channel-bindings"];
-    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.encoding] forKey:@"encoding"];
-    [coder encodeObject:_finalMechanism forKey:@"final-mechanism"];
-    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.finalFlags] forKey:@"final-flags"];
-    [coder encodeObject:self.delegatedCredentials forKey:@"delegated-credential"];
-    [coder encodeObject:[NSNumber numberWithBool:self.isInitiator] forKey:@"initiator"];
+    [coder encodeObject:_mechanism                                          forKey:@"mechanism"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.requestFlags]  forKey:@"req-flags"];
+    [coder encodeObject:_credential                                         forKey:@"credential"];
+    [coder encodeObject:_channelBindings                                    forKey:@"channel-bindings"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.encoding]      forKey:@"encoding"];
+    [coder encodeObject:_finalMechanism                                     forKey:@"final-mechanism"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.finalFlags]    forKey:@"final-flags"];
+    [coder encodeObject:self.delegatedCredentials                           forKey:@"delegated-credential"];
+    [coder encodeObject:[NSNumber numberWithBool:self.isInitiator]          forKey:@"initiator"];
     [coder encodeObject:[NSNumber numberWithBool:self.promptForCredentials] forKey:@"prompt"];
 }
 
@@ -675,22 +675,22 @@
 {
     self = [[[self class] alloc] init];
 
-    _major = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"major"] unsignedIntValue];
-    _minor = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"minor"] unsignedIntValue];
-    self.targetName = [coder decodeObjectOfClass:[GSSName class] forKey:@"target-name"];
-    [self importContext:[coder decodeObjectOfClass:[NSData class] forKey:@"export-context"]];
-    _expiryTime = [[coder decodeObjectOfClass:[NSDate class] forKey:@"expiry-time"] timeIntervalSince1970];
+    _major                      = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"major"] unsignedIntValue];
+    _minor                      = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"minor"] unsignedIntValue];
+    self.targetName             = [coder decodeObjectOfClass:[GSSName class]        forKey:@"target-name"];
+              [self importContext:[coder decodeObjectOfClass:[NSData class]         forKey:@"export-context"]];
+    _expiryTime                 = [[coder decodeObjectOfClass:[NSDate class]        forKey:@"expiry-time"] timeIntervalSince1970];
     
-    self.mechanism = [coder decodeObjectOfClass:[GSSMechanism class] forKey:@"mechanism"];
-    self.requestFlags = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"req-flags"] unsignedIntValue];
-    self.credential = [coder decodeObjectOfClass:[GSSCredential class] forKey:@"credential"];
-    self.channelBindings = [coder decodeObjectOfClass:[GSSChannelBindings class] forKey:@"channel-bindings"];
-    self.encoding = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"encoding"] unsignedIntValue];
-    self.finalMechanism = [coder decodeObjectOfClass:[GSSMechanism class] forKey:@"final-mechanism"];
-    _finalFlags = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"final-flags"] unsignedIntValue];
-    self.delegatedCredentials = [coder decodeObjectOfClass:[GSSCredential class] forKey:@"delegated-credential"];
-    _isInitiator = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"initiator"] boolValue];
-    self.promptForCredentials = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"prompt"] boolValue];
+    self.mechanism              =  [coder decodeObjectOfClass:[GSSMechanism class]  forKey:@"mechanism"];
+    self.requestFlags           = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"req-flags"] unsignedIntValue];
+    self.credential             =  [coder decodeObjectOfClass:[GSSCredential class] forKey:@"credential"];
+    self.channelBindings        =  [coder decodeObjectOfClass:[GSSChannelBindings class] forKey:@"channel-bindings"];
+    self.encoding               = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"encoding"] unsignedIntValue];
+    self.finalMechanism         =  [coder decodeObjectOfClass:[GSSMechanism class]  forKey:@"final-mechanism"];
+    _finalFlags                 = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"final-flags"] unsignedIntValue];
+    self.delegatedCredentials   =  [coder decodeObjectOfClass:[GSSCredential class] forKey:@"delegated-credential"];
+    _isInitiator                = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"initiator"] boolValue];
+    self.promptForCredentials   = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"prompt"] boolValue];
 
     return self;
 }
