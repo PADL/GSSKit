@@ -669,7 +669,6 @@
     [coder encodeObject:self.delegatedCredentials forKey:@"delegated-credential"];
     [coder encodeObject:[NSNumber numberWithBool:self.isInitiator] forKey:@"initiator"];
     [coder encodeObject:[NSNumber numberWithBool:self.promptForCredentials] forKey:@"prompt"];
-    [coder encodeObject:self.window forKey:@"window"];
 }
 
 - (id)initWithCoder:(NSCoder *)coder
@@ -692,10 +691,6 @@
     self.delegatedCredentials = [coder decodeObjectOfClass:[GSSCredential class] forKey:@"delegated-credential"];
     _isInitiator = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"initiator"] boolValue];
     self.promptForCredentials = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"prompt"] boolValue];
-
-    Class windowClass = NSClassFromString(@"NSWindow"); // XXX don't want to link againt AppKit
-    if (windowClass)
-        self.window = [coder decodeObjectOfClass:windowClass forKey:@"window"];
 
     return self;
 }
