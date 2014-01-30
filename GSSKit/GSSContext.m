@@ -8,8 +8,15 @@
 
 #import "GSSKit_Private.h"
 
-@interface GSSContext ()
-@property(nonatomic, readonly) gss_ctx_id_t _gssContext;
+@protocol CUIContextBoxing
+@property (nonatomic, assign) void *context;
+
+- (NSData *)exportContext;
+- (BOOL)importContext:(NSData *)data;
+
+@end
+
+@interface GSSContext () <CUIContextBoxing>
 @property(nonatomic, retain) GSSMechanism *finalMechanism;
 @property(nonatomic, retain) GSSCredential *delegatedCredentials;
 @end
@@ -43,6 +50,7 @@
 
 @implementation GSSContext
 
+@dynamic context;
 @dynamic mechanism;
 @dynamic requestFlags;
 @dynamic targetName;
@@ -62,8 +70,6 @@
 @dynamic isInitiator;
 @dynamic promptForCredentials; // requires GSSKitUI
 @dynamic window; // requires GSSKitUI
-
-@dynamic _gssContext;
 
 - (id)initWithRequestFlags:(GSSFlags)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator
 {
@@ -152,6 +158,46 @@
 {
     NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
     return NO;
+}
+
+- (NSData *)exportContext
+{
+    NSData *data;
+    OM_uint32 major, minor;
+    gss_buffer_desc exportedContext = GSS_C_EMPTY_BUFFER;
+    gss_ctx_id_t context = self.context;
+
+    major = gss_export_sec_context(&minor, &context, &exportedContext);
+    if (GSS_ERROR(major))
+        return nil;
+    
+    data = [NSData dataWithBytes:exportedContext.value length:exportedContext.length];
+    gss_release_buffer(&minor, &exportedContext);
+   
+    self.context = GSS_C_NO_CONTEXT;
+ 
+    return data;
+}
+
+- (BOOL)importContext:(NSData *)data
+{
+    OM_uint32 major, minor;
+    gss_buffer_desc exportedContext;
+    void *context = GSS_C_NO_CONTEXT;
+    
+    if (!data.length)
+        return NO;
+    
+    exportedContext.length = data.length;
+    exportedContext.value = (void *)data.bytes;
+    
+    major = gss_import_sec_context(&minor, &exportedContext, (gss_ctx_id_t *)&context);
+    if (GSS_ERROR(major))
+        return NO;
+
+    self.context = context;
+
+    return YES;
 }
 
 @end
@@ -273,7 +319,7 @@
     OM_uint32 major, minor;
     gss_name_t initiatorName = GSS_C_NO_NAME;
     
-    major = gss_inquire_context(&minor, self._gssContext, &initiatorName,
+    major = gss_inquire_context(&minor, self.context, &initiatorName,
                                 NULL, NULL, NULL, NULL, NULL, NULL);
     if (GSS_ERROR(major))
         return nil;
@@ -286,7 +332,7 @@
     OM_uint32 major, minor;
     gss_name_t acceptorName = GSS_C_NO_NAME;
     
-    major = gss_inquire_context(&minor, self._gssContext, NULL,
+    major = gss_inquire_context(&minor, self.context, NULL,
                                 &acceptorName, NULL, NULL, NULL, NULL, NULL);
     if (GSS_ERROR(major))
         return nil;
@@ -480,7 +526,7 @@
     gss_buffer_desc outputMessageBuffer = GSS_C_EMPTY_BUFFER;
     
     _major = gss_wrap(&_minor,
-                      self._gssContext,
+                      self.context,
                       !!(confState & GSS_C_CONF_FLAG),
                       qopState,
                       &inputMessageBuffer,
@@ -502,7 +548,7 @@
     int confState;
     
     _major = gss_unwrap(&_minor,
-                        self._gssContext,
+                        self.context,
                         &inputMessageBuffer,
                         &outputMessageBuffer,
                         &confState,
@@ -522,7 +568,7 @@
     gss_buffer_desc messageToken = GSS_C_EMPTY_BUFFER;
 
     _major = gss_get_mic(&_minor,
-                         self._gssContext,
+                         self.context,
                          qopState,
                          &messageBuffer,
                          &messageToken);
@@ -542,7 +588,7 @@
     gss_buffer_desc messageToken = [self _decodeToken:mic cookie:&cookie];
     
     _major = gss_verify_mic(&_minor,
-                            self._gssContext,
+                            self.context,
                             &messageBuffer,
                             &messageToken,
                             qopState);
@@ -552,7 +598,16 @@
     return YES;
 }
 
-- (gss_ctx_id_t)_gssContext
+- (void)setContext:(void *)aContext
+{
+    if (aContext != _ctx) {
+        OM_uint32 minor;
+        gss_delete_sec_context(&minor, &_ctx, GSS_C_NO_BUFFER);
+        _ctx = aContext;
+    }
+}
+
+- (void *)context
 {
     return _ctx;
 }
