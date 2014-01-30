@@ -14,3 +14,13 @@
 - (gss_const_OID)oid;
 - (BOOL)isEqualToOID:(gss_const_OID)someOid;
 @end
+
+@interface GSSConcreteMechanism : GSSMechanism
+{
+    gss_const_OID _oid;
+    gss_OID_desc _oidBuffer;
+    NSData *_data;
+}
+@end
+
+

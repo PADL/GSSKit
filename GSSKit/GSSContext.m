@@ -26,7 +26,7 @@
 - (BOOL)_promptForCredentials:(NSError **)error;
 @end
 
-@interface GSSConcreteContext : GSSContext
+@interface GSSConcreteContext : GSSContext <NSSecureCoding>
 {
     OM_uint32 _major, _minor;
     id _targetName;
@@ -71,12 +71,18 @@
 @dynamic promptForCredentials; // requires GSSKitUI
 @dynamic window; // requires GSSKitUI
 
++ allocWithZone:(NSZone *)zone
+{
+    if ([self class] == [GSSContext class])
+        return [GSSConcreteContext allocWithZone:zone];
+    else
+        return [super allocWithZone:zone];
+}
+
 - (id)initWithRequestFlags:(GSSFlags)flags queue:(dispatch_queue_t)queue isInitiator:(BOOL)initiator
 {
-#if !__has_feature(objc_arc)
-    [self release];
-#endif
-    return ((self = [[GSSConcreteContext alloc] initWithRequestFlags:flags queue:queue isInitiator:initiator]));
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return nil;
 }
 
 - (void)stepWithData:(NSData *)reqData
@@ -162,42 +168,14 @@
 
 - (NSData *)exportContext
 {
-    NSData *data;
-    OM_uint32 major, minor;
-    gss_buffer_desc exportedContext = GSS_C_EMPTY_BUFFER;
-    gss_ctx_id_t context = self.context;
-
-    major = gss_export_sec_context(&minor, &context, &exportedContext);
-    if (GSS_ERROR(major))
-        return nil;
-    
-    data = [NSData dataWithBytes:exportedContext.value length:exportedContext.length];
-    gss_release_buffer(&minor, &exportedContext);
-   
-    self.context = GSS_C_NO_CONTEXT;
- 
-    return data;
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return nil;
 }
 
 - (BOOL)importContext:(NSData *)data
 {
-    OM_uint32 major, minor;
-    gss_buffer_desc exportedContext;
-    void *context = GSS_C_NO_CONTEXT;
-    
-    if (!data.length)
-        return NO;
-    
-    exportedContext.length = data.length;
-    exportedContext.value = (void *)data.bytes;
-    
-    major = gss_import_sec_context(&minor, &exportedContext, (gss_ctx_id_t *)&context);
-    if (GSS_ERROR(major))
-        return NO;
-
-    self.context = context;
-
-    return YES;
+    NSRequestConcreteImplementation(self, _cmd, [GSSContext class]);
+    return NO;
 }
 
 @end
@@ -227,14 +205,16 @@
 
 - (void)setTargetName:(id)someName
 {
-    if ([someName isKindOfClass:[NSString class]])
-        someName = [GSSName nameWithHostBasedService:someName];
-    else if ([someName isKindOfClass:[NSURL class]])
-        someName = [GSSName nameWithURL:someName];
-    else if (![someName isKindOfClass:[GSSName class]])
-        @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:[NSString stringWithFormat:@"-[GSSContext setTargetName:...] requires a NSString, NSURL or GSSName"]
-                                     userInfo:nil];
+    if (someName) {
+        if ([someName isKindOfClass:[NSString class]])
+            someName = [GSSName nameWithHostBasedService:someName];
+        else if ([someName isKindOfClass:[NSURL class]])
+            someName = [GSSName nameWithURL:someName];
+        else if (![someName isKindOfClass:[GSSName class]])
+            @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                           reason:[NSString stringWithFormat:@"-[GSSContext setTargetName:...] requires a NSString, NSURL or GSSName (got %@)", [someName class]]
+                                         userInfo:nil];
+    }
 
 #if __has_feature(objc_arc)
     _targetName = ((GSSName *)someName);
@@ -277,8 +257,6 @@
         dispatch_release(_queue);
     [_finalMechanism release];
     [_delegatedCredentials release];
-    if (_queue)
-        dispatch_release(_queue);
     if (_window)
         [_window release];
 
@@ -366,6 +344,7 @@
     self.requestFlags = flags;
     self.queue = someQueue;
     
+    _ctx = GSS_C_NO_CONTEXT;
     _isInitiator = initiator;
     _major = GSS_S_FAILURE;
     
@@ -598,6 +577,61 @@
     return YES;
 }
 
+- (NSString *)description
+{
+    NSString *description;
+    
+    description = [NSString stringWithFormat:@"<GSSContext %p{isInitator = %@, isContextEstablished = %@, initiatorName = \"%@\", "
+                                              "acceptorName = \"%@\", mechanism = \"%@\", flags = %08x, lastError = %@}>",
+                   self,
+                   self.isInitiator ? @"YES" : @"NO",
+                   self.isContextEstablished ? @"YES" : @"NO",
+                   self.initiatorName,
+                   self.acceptorName,
+                   self.isContextEstablished ? self.finalMechanism : self.mechanism,
+                   self.isContextEstablished ? self.finalFlags : self.requestFlags,
+                   self.lastError];
+    
+    return description;
+}
+
+- (NSData *)exportContext
+{
+    NSData *data;
+    OM_uint32 major, minor;
+    gss_buffer_desc exportContext = GSS_C_EMPTY_BUFFER;
+    
+    major = gss_export_sec_context(&minor, &_ctx, &exportContext);
+    if (GSS_ERROR(major))
+        return nil;
+    
+    data = [NSData dataWithBytes:exportContext.value length:exportContext.length];
+    gss_release_buffer(&minor, &exportContext);
+    
+    return data;
+}
+
+- (BOOL)importContext:(NSData *)data
+{
+    OM_uint32 major, minor;
+    gss_buffer_desc exportContext;
+    void *context = GSS_C_NO_CONTEXT;
+    
+    if (!data.length)
+        return NO;
+    
+    exportContext.length = data.length;
+    exportContext.value = (void *)data.bytes;
+    
+    major = gss_import_sec_context(&minor, &exportContext, (gss_ctx_id_t *)&context);
+    if (GSS_ERROR(major))
+        return NO;
+    
+    self.context = context;
+    
+    return YES;
+}
+
 - (void)setContext:(void *)aContext
 {
     if (aContext != _ctx) {
@@ -610,6 +644,60 @@
 - (void *)context
 {
     return _ctx;
+}
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:_major] forKey:@"major"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:_minor] forKey:@"minor"];
+    [coder encodeObject:_targetName forKey:@"target-name"];
+    [coder encodeObject:self.exportContext forKey:@"export-context"];
+    [coder encodeObject:[NSDate dateWithTimeIntervalSince1970:_expiryTime] forKey:@"expiry-time"];
+    
+    [coder encodeObject:_mechanism forKey:@"mechanism"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.requestFlags] forKey:@"req-flags"];
+    [coder encodeObject:_credential forKey:@"credential"];
+    [coder encodeObject:_channelBindings forKey:@"channel-bindings"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.encoding] forKey:@"encoding"];
+    [coder encodeObject:_finalMechanism forKey:@"final-mechanism"];
+    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.finalFlags] forKey:@"final-flags"];
+    [coder encodeObject:self.delegatedCredentials forKey:@"delegated-credential"];
+    [coder encodeObject:[NSNumber numberWithBool:self.isInitiator] forKey:@"initiator"];
+    [coder encodeObject:[NSNumber numberWithBool:self.promptForCredentials] forKey:@"prompt"];
+    [coder encodeObject:self.window forKey:@"window"];
+}
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    self = [[[self class] alloc] init];
+
+    _major = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"major"] unsignedIntValue];
+    _minor = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"minor"] unsignedIntValue];
+    self.targetName = [coder decodeObjectOfClass:[GSSName class] forKey:@"target-name"];
+    [self importContext:[coder decodeObjectOfClass:[NSData class] forKey:@"export-context"]];
+    _expiryTime = [[coder decodeObjectOfClass:[NSDate class] forKey:@"expiry-time"] timeIntervalSince1970];
+    
+    self.mechanism = [coder decodeObjectOfClass:[GSSMechanism class] forKey:@"mechanism"];
+    self.requestFlags = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"req-flags"] unsignedIntValue];
+    self.credential = [coder decodeObjectOfClass:[GSSCredential class] forKey:@"credential"];
+    self.channelBindings = [coder decodeObjectOfClass:[GSSChannelBindings class] forKey:@"channel-bindings"];
+    self.encoding = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"encoding"] unsignedIntValue];
+    self.finalMechanism = [coder decodeObjectOfClass:[GSSMechanism class] forKey:@"final-mechanism"];
+    _finalFlags = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"final-flags"] unsignedIntValue];
+    self.delegatedCredentials = [coder decodeObjectOfClass:[GSSCredential class] forKey:@"delegated-credential"];
+    _isInitiator = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"initiator"] boolValue];
+    self.promptForCredentials = [[coder decodeObjectOfClass:[NSNumber class] forKey:@"prompt"] boolValue];
+
+    Class windowClass = NSClassFromString(@"NSWindow"); // XXX don't want to link againt AppKit
+    if (windowClass)
+        self.window = [coder decodeObjectOfClass:windowClass forKey:@"window"];
+
+    return self;
 }
 
 @end

@@ -36,15 +36,15 @@ der_put_oid (unsigned char *p, size_t len,
 void
 der_free_oid (heim_oid *k);
 
-@interface GSSConcreteMechanism : GSSMechanism
-{
-    gss_const_OID _oid;
-    gss_OID_desc _oidBuffer;
-    NSData *_data;
-}
-@end
-
 @implementation GSSMechanism
+
++ allocWithZone:(NSZone *)zone
+{
+    if ([self class] == [GSSMechanism class])
+        return [GSSConcreteMechanism allocWithZone:zone];
+    else
+        return [super allocWithZone:zone];
+}
 
 + (GSSMechanism *)defaultMechanism
 {
