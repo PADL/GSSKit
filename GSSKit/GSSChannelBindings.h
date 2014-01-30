@@ -7,7 +7,7 @@
 //
 
 __attribute__((visibility("default")))
-@interface GSSChannelBindings : NSObject
+@interface GSSChannelBindings : NSObject <NSSecureCoding>
 {
     uint32_t _initiatorAddressType;
     NSData *_initiatorAddress;
