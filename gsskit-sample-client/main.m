@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
                                                 error:&err];
     if (!initiatorCred) {
         NSLog(@"failed to acquire cred - %@", [err description]);
-        exit([err code]);
+        exit((int)[err code]);
     }
 
     initiatorCtx = [[GSSContext alloc] initWithRequestFlags:0 //GSS_C_MUTUAL_FLAG
@@ -67,5 +67,5 @@ int main(int argc, char *argv[])
 
     NSLog(@"Initiator status %ld acceptor status %ld", [[initiatorCtx lastError] code], [[acceptorCtx lastError] code]);
     
-    exit([[initiatorCtx lastError] code]);
+    exit((int)[[initiatorCtx lastError] code]);
 }

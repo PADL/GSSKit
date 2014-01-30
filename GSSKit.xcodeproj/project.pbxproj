@@ -58,7 +58,32 @@
 		D336E2EA182D0B6E009271CD /* NSArray+GSSOIDHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D336E2E8182D0B6E009271CD /* NSArray+GSSOIDHelper.m */; };
 		D39EB1041872D6B500C43A24 /* Heimdal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D39EB1031872D6B500C43A24 /* Heimdal.framework */; };
 		D3B0942E1877CFB3006DB1DE /* mechqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = D3B0942D1877CFB3006DB1DE /* mechqueue.h */; };
+		D3BBF5961899F68400A4B99F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3BBF5951899F68400A4B99F /* Foundation.framework */; };
+		D3BBF5991899F68400A4B99F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D3BBF5981899F68400A4B99F /* main.m */; };
+		D3BBF5A31899F6D100A4B99F /* GSSKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D336E229182AE174009271CD /* GSSKit.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D3BBF5A11899F6CB00A4B99F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D336E220182AE174009271CD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D336E228182AE174009271CD;
+			remoteInfo = GSSKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D3BBF5921899F68400A4B99F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D30C96C3182E0CBE0036FD8C /* GSSCFName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSCFName.h; sourceTree = "<group>"; };
@@ -121,6 +146,10 @@
 		D336E2E8182D0B6E009271CD /* NSArray+GSSOIDHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+GSSOIDHelper.m"; sourceTree = "<group>"; };
 		D39EB1031872D6B500C43A24 /* Heimdal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Heimdal.framework; path = ../../../../../System/Library/PrivateFrameworks/Heimdal.framework; sourceTree = "<group>"; };
 		D3B0942D1877CFB3006DB1DE /* mechqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mechqueue.h; sourceTree = "<group>"; };
+		D3BBF5941899F68400A4B99F /* gsskit-sample-client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gsskit-sample-client"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3BBF5951899F68400A4B99F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D3BBF5981899F68400A4B99F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D3BBF59B1899F68400A4B99F /* gsskit-sample-client-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "gsskit-sample-client-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +162,15 @@
 				D336E264182AE3D1009271CD /* GSS.framework in Frameworks */,
 				D336E262182AE3B5009271CD /* CoreFoundation.framework in Frameworks */,
 				D336E260182AE3B5009271CD /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3BBF5911899F68400A4B99F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3BBF5A31899F6D100A4B99F /* GSSKit.framework in Frameworks */,
+				D3BBF5961899F68400A4B99F /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +191,7 @@
 			children = (
 				D32E7BEB187ED2DB00F5BDF0 /* CoreFoundation */,
 				D336E232182AE174009271CD /* GSSKit */,
+				D3BBF5971899F68400A4B99F /* gsskit-sample-client */,
 				D336E22B182AE174009271CD /* Frameworks */,
 				D336E22A182AE174009271CD /* Products */,
 			);
@@ -162,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				D336E229182AE174009271CD /* GSSKit.framework */,
+				D3BBF5941899F68400A4B99F /* gsskit-sample-client */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -175,6 +215,7 @@
 				D336E261182AE3B5009271CD /* CoreFoundation.framework */,
 				D336E22C182AE174009271CD /* Cocoa.framework */,
 				D336E241182AE174009271CD /* XCTest.framework */,
+				D3BBF5951899F68400A4B99F /* Foundation.framework */,
 				D336E22E182AE174009271CD /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -253,6 +294,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		D3BBF5971899F68400A4B99F /* gsskit-sample-client */ = {
+			isa = PBXGroup;
+			children = (
+				D3BBF5981899F68400A4B99F /* main.m */,
+				D3BBF59A1899F68400A4B99F /* Supporting Files */,
+			);
+			path = "gsskit-sample-client";
+			sourceTree = "<group>";
+		};
+		D3BBF59A1899F68400A4B99F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D3BBF59B1899F68400A4B99F /* gsskit-sample-client-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -308,6 +366,24 @@
 			productReference = D336E229182AE174009271CD /* GSSKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		D3BBF5931899F68400A4B99F /* gsskit-sample-client */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D3BBF5A01899F68400A4B99F /* Build configuration list for PBXNativeTarget "gsskit-sample-client" */;
+			buildPhases = (
+				D3BBF5901899F68400A4B99F /* Sources */,
+				D3BBF5911899F68400A4B99F /* Frameworks */,
+				D3BBF5921899F68400A4B99F /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D3BBF5A21899F6CB00A4B99F /* PBXTargetDependency */,
+			);
+			name = "gsskit-sample-client";
+			productName = "gsskit-sample-client";
+			productReference = D3BBF5941899F68400A4B99F /* gsskit-sample-client */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -330,6 +406,7 @@
 			projectRoot = "";
 			targets = (
 				D336E228182AE174009271CD /* GSSKit */,
+				D3BBF5931899F68400A4B99F /* gsskit-sample-client */,
 			);
 		};
 /* End PBXProject section */
@@ -374,7 +451,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D3BBF5901899F68400A4B99F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3BBF5991899F68400A4B99F /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D3BBF5A21899F6CB00A4B99F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D336E228182AE174009271CD /* GSSKit */;
+			targetProxy = D3BBF5A11899F6CB00A4B99F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D336E235182AE174009271CD /* InfoPlist.strings */ = {
@@ -513,6 +606,31 @@
 			};
 			name = Release;
 		};
+		D3BBF59E1899F68400A4B99F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "gsskit-sample-client/gsskit-sample-client-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D3BBF59F1899F68400A4B99F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "gsskit-sample-client/gsskit-sample-client-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -533,6 +651,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		D3BBF5A01899F68400A4B99F /* Build configuration list for PBXNativeTarget "gsskit-sample-client" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D3BBF59E1899F68400A4B99F /* Debug */,
+				D3BBF59F1899F68400A4B99F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
