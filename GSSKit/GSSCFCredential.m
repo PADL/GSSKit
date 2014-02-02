@@ -120,6 +120,11 @@ CF_CLASSIMPLEMENTATION(GSSCFCredential)
     return (gss_cred_id_t)self;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    return [self retain];
+}
+
 @end
 
 BOOL

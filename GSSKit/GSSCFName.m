@@ -85,4 +85,17 @@ CF_CLASSIMPLEMENTATION(GSSCFName)
     return (gss_name_t)self;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    OM_uint32 major, minor;
+    gss_name_t copyName = nil;
+
+    /* XXX would it be simpler to return [self retain]? */
+    major = gss_duplicate_name(&minor, (__bridge gss_name_t)self, &copyName);
+    if (GSS_ERROR(major))
+        return nil;
+
+    return (__bridge id)copyName;
+}
+
 @end
