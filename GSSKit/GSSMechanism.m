@@ -341,6 +341,14 @@ der_free_oid (heim_oid *k);
     return mech;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+#if !__has_feature(objc_arc)
+    [self retain];
+#endif
+    return self;
+}
+
 @end
 
 @implementation GSSConcreteMechanism

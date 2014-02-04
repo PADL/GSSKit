@@ -202,9 +202,4 @@ CF_CLASSIMPLEMENTATION(GSSCFItem)
     return GSSItemGetValue((GSSItemRef)self, (CFStringRef)key);
 }
 
-- (id)copyWithZone:(NSZone *)zone
-{
-    return [self retain];
-}
-
 @end

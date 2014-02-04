@@ -7,7 +7,8 @@
 //
 
 __attribute__((visibility("default")))
-@interface GSSName : NSObject <NSSecureCoding>
+@interface GSSName : NSObject <NSSecureCoding, NSCopying>
+
 + (GSSName *)nameWithHostBasedService:(NSString *)name;
 + (GSSName *)nameWithHostBasedService: (NSString *)service withHostName: (NSString *)hostname;
 + (GSSName *)nameWithUserName: (NSString *)username;

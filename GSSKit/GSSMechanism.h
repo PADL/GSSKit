@@ -7,7 +7,7 @@
 //
 
 __attribute__((visibility("default")))
-@interface GSSMechanism : NSObject <NSSecureCoding>
+@interface GSSMechanism : NSObject <NSSecureCoding, NSCopying>
 
 + (GSSMechanism *)defaultMechanism;
 + (GSSMechanism *)SPNEGOMechanism;

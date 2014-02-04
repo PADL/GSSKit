@@ -45,4 +45,27 @@
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    GSSChannelBindings *copy = [[[self class] allocWithZone:zone] init];
+
+    copy.initiatorAddressType = self.initiatorAddressType;
+    copy.initiatorAddress = self.initiatorAddress;
+    copy.acceptorAddressType = self.acceptorAddressType;
+    copy.acceptorAddress = self.acceptorAddress;
+    copy.applicationData = self.applicationData;
+
+    return copy;
+}
+
+#if !__has_feature(objc_arc)
+- (void)dealloc
+{
+    [_initiatorAddress release];
+    [_acceptorAddress release];
+    [_applicationData release];
+    [super dealloc];
+}
+#endif
+
 @end

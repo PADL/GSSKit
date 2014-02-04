@@ -86,6 +86,27 @@
     return [self valueForKey:key];
 }
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+}
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    NSRequestConcreteImplementation(self, _cmd, [GSSItem class]);
+    return nil;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    return [self retain];
+}
+
 @end
 
 @implementation GSSItem (Private)

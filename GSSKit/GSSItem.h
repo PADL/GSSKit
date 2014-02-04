@@ -7,7 +7,7 @@
 //
 
 __attribute__((visibility("default")))
-@interface GSSItem : NSObject
+@interface GSSItem : NSObject <NSSecureCoding, NSCopying>
 
 + (GSSItem *)add:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error;
 + (BOOL)update:(NSDictionary *)query withAttributes:(NSDictionary *)attributes error:(NSError * __autoreleasing *)error;
