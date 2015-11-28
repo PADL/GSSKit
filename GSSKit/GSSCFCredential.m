@@ -298,7 +298,13 @@ GSSAcquireCredFunnel(GSSName *desiredName,
     if (GSS_ERROR(major))
         goto cleanup;
 
-    __GSSMechanismCredentialPatch(credHandle);
+    /* OS X 10.9.2 and above don't need this */
+    NSProcessInfo *processInfo = [NSProcessInfo processInfo];
+    NSOperatingSystemVersion osVersion = { 10, 9, 2 };
+
+    if (![processInfo respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] ||
+	![processInfo isOperatingSystemAtLeastVersion:osVersion])
+	__GSSMechanismCredentialPatch(credHandle);
     
     if ([attributes objectForKey:GSSICVerifyCredential]) {
         NSError *error = nil;
