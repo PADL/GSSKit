@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     
     queue = dispatch_queue_create("com.padl.gsskit-sample-client.worker-queue", DISPATCH_QUEUE_SERIAL);
  
-    initiatorCred = [GSSCredential credentialWithName:@"lukeh@DE.PADL.COM"
+    initiatorCred = [GSSCredential credentialWithName:@"lukeh@HEIMDAL.DE.PADL.COM"
                                             mechanism:[GSSMechanism kerberosMechanism]
                                            attributes:attrs
                                                 error:&err];
@@ -26,14 +26,15 @@ int main(int argc, char *argv[])
                                                       queue:queue
                                                 isInitiator:YES];
     
-    initiatorCtx.targetName = @"host@win-vqv9ffpvu3b.de.padl.com";
+    initiatorCtx.targetName = @"host@rand";
     initiatorCtx.credential = initiatorCred;
+    initiatorCtx.mechanism = [GSSMechanism SPNEGOMechanism];
     
     acceptorCtx = [[GSSContext alloc] initWithRequestFlags:0
                                                      queue:queue
                                                isInitiator:NO];
     
-    acceptorCtx.credential = [GSSCredential credentialWithName:@"host@rand.mit.de.padl.com"
+    acceptorCtx.credential = [GSSCredential credentialWithName:@"host@rand"
                                                      mechanism:[GSSMechanism kerberosMechanism]
                                                     attributes:@{GSSCredentialUsage : GSSCredentialUsageAccept}
                                                          error:&err];
