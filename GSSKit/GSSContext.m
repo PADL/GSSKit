@@ -663,7 +663,7 @@
     [coder encodeObject:[NSNumber numberWithUnsignedInt:self.requestFlags]  forKey:@"req-flags"];
     [coder encodeObject:_credential                                         forKey:@"credential"];
     [coder encodeObject:_channelBindings                                    forKey:@"channel-bindings"];
-    [coder encodeObject:[NSNumber numberWithUnsignedInt:self.encoding]      forKey:@"encoding"];
+    [coder encodeObject:[NSNumber numberWithUnsignedLong:self.encoding]     forKey:@"encoding"];
     [coder encodeObject:_finalMechanism                                     forKey:@"final-mechanism"];
     [coder encodeObject:[NSNumber numberWithUnsignedInt:self.finalFlags]    forKey:@"final-flags"];
     [coder encodeObject:self.delegatedCredentials                           forKey:@"delegated-credential"];
@@ -685,7 +685,7 @@
     self.requestFlags           = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"req-flags"] unsignedIntValue];
     self.credential             =  [coder decodeObjectOfClass:[GSSCredential class] forKey:@"credential"];
     self.channelBindings        =  [coder decodeObjectOfClass:[GSSChannelBindings class] forKey:@"channel-bindings"];
-    self.encoding               = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"encoding"] unsignedIntValue];
+    self.encoding               = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"encoding"] unsignedLongValue];
     self.finalMechanism         =  [coder decodeObjectOfClass:[GSSMechanism class]  forKey:@"final-mechanism"];
     _finalFlags                 = [[coder decodeObjectOfClass:[NSNumber class]      forKey:@"final-flags"] unsignedIntValue];
     self.delegatedCredentials   =  [coder decodeObjectOfClass:[GSSCredential class] forKey:@"delegated-credential"];

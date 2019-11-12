@@ -11,20 +11,13 @@
 static const gss_OID_desc GSSBrowserIDAes128MechDesc =
 { 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x18\x01\x11" };
 
-static const gss_OID_desc GSSBrowserIDAes256MechDesc =
-{ 10, "\x2B\x06\x01\x04\x01\xA9\x4A\x18\x01\x12" };
-
 static const gss_OID_desc GSSEapAes128MechDesc =
 { 9, "\x2B\x06\x01\x05\x05\x0f\x01\x01\x11" };
-
-static const gss_OID_desc GSSEapAes256MechDesc =
-{ 9, "\x2B\x06\x01\x05\x05\x0f\x01\x01\x12" };
 
 typedef struct heim_oid {
     size_t length;
     unsigned *components;
 } heim_oid;
-
 
 int
 der_parse_heim_oid (const char *str, const char *sep, heim_oid *data);

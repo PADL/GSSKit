@@ -73,7 +73,10 @@ __GSSCreateName(CFAllocatorRef allocator)
 
 #pragma mark Bridging
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 CF_CLASSIMPLEMENTATION(GSSCFName)
+#pragma clang diagnostic pop
 
 - (CFTypeID)_cfTypeID
 {

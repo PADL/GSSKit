@@ -59,7 +59,10 @@ static void __GSSItemSetKeys(GSSCFItem *__item, NSDictionary *keys)
 
 #pragma mark Bridging
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 CF_CLASSIMPLEMENTATION(GSSCFItem)
+#pragma clang diagnostic pop
 
 - (CFTypeID)_cfTypeID
 {
